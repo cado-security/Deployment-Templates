@@ -291,8 +291,8 @@ resource "aws_efs_mount_target" "efs_mount_target" {
 resource "aws_efs_access_point" "efs_access_point" {
   file_system_id = aws_efs_file_system.efs_fs.id
   posix_user {
-    uid = 100
-    gid = 1000
+    uid = 0
+    gid = 0
   }
   root_directory {
     path = "/process"
