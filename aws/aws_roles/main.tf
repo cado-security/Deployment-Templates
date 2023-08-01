@@ -319,7 +319,6 @@ resource "aws_iam_role_policy" "policy" {
 				"ec2:DescribeTags",
 				"ec2:DescribeVolumes",
 				"ec2:DetachVolume",
-				"ec2:DetachVolume",
 				"ec2:GetConsoleOutput",
 				"ec2:GetConsoleScreenshot",
 				"ec2:ImportImage",
