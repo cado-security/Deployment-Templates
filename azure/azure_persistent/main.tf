@@ -1,29 +1,29 @@
 // Variables
 
 variable "resource_group" {
-  type = string
+  type        = string
   description = "resource group name"
 }
 
 variable "region" {
-  type = string
+  type        = string
   description = "Region to deploy in"
 }
 
 variable "share_size" {
-  type = number
+  type        = number
   description = "Size of network file share"
 }
 
 variable "main_data_size" {
-  type = number
+  type        = number
   description = "Size of main instance persistent disk"
-  default = 30
+  default     = 30
 }
 
 variable "tags" {
-    type = map(string)
-    default = {}
+  type    = map(string)
+  default = {}
 }
 // Resources
 
@@ -31,9 +31,9 @@ data "azurerm_subscription" "subscription" {
 }
 
 resource "azurerm_resource_group" "group" {
-  name = var.resource_group
+  name     = var.resource_group
   location = var.region
-  tags = var.tags
+  tags     = var.tags
 }
 
 // Network
@@ -42,7 +42,7 @@ resource "azurerm_public_ip" "public_ip" {
   name                = "cado-public-ip"
   location            = azurerm_resource_group.group.location
   resource_group_name = azurerm_resource_group.group.name
-  allocation_method   = "Static"   // Static required for provisioner, workaround possibl https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/public_ip#example-usage-retrieve-the-dynamic-public-ip-of-a-new-vm
+  allocation_method   = "Static" // Static required for provisioner, workaround possibl https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/public_ip#example-usage-retrieve-the-dynamic-public-ip-of-a-new-vm
 }
 
 // Storage
@@ -65,7 +65,7 @@ resource "azurerm_storage_container" "container" {
 resource "azurerm_storage_share" "share" {
   name                 = "cadoshare"
   storage_account_name = azurerm_storage_account.storage.name
-  quota                = var.share_size  # TODO increase to 2TB
+  quota                = var.share_size # TODO increase to 2TB
 }
 
 resource "azurerm_managed_disk" "data_disk" {
@@ -82,7 +82,7 @@ resource "azurerm_managed_disk" "data_disk" {
 resource "azurerm_role_assignment" "role_assignment_group" {
   // Contributor inside our own resource group
   scope                = azurerm_resource_group.group.id
-  role_definition_name = "Contributor" 
+  role_definition_name = "Contributor"
   principal_id         = azurerm_user_assigned_identity.identity.principal_id
 }
 
@@ -90,34 +90,33 @@ resource "azurerm_role_assignment" "role_assignment_group" {
 resource "azurerm_role_assignment" "role_assignment_storage" {
   // Storage Account Contributor for entire subscription
   scope                = data.azurerm_subscription.subscription.id
-  role_definition_name = "Storage Account Contributor" 
+  role_definition_name = "Storage Account Contributor"
   principal_id         = azurerm_user_assigned_identity.identity.principal_id
 }
 
 resource "azurerm_role_assignment" "role_assignment_snapshots" {
   // Disk Snapshot Contributor for entire subscription
   scope                = data.azurerm_subscription.subscription.id
-  role_definition_name = "Disk Snapshot Contributor" 
+  role_definition_name = "Disk Snapshot Contributor"
   principal_id         = azurerm_user_assigned_identity.identity.principal_id
 }
 
 resource "azurerm_role_assignment" "role_assignment_vm" {
   // Virtual Machine Contributor for entire subscription - needed to list disks
   scope                = data.azurerm_subscription.subscription.id
-  role_definition_name = "Virtual Machine Contributor" 
+  role_definition_name = "Virtual Machine Contributor"
   principal_id         = azurerm_user_assigned_identity.identity.principal_id
 }
 
 resource "azurerm_role_assignment" "role_assignment_aks" {
   // Azure Kubernetes Service Contributor for entire subscription - needed to list cluster credentials
-  scope = data.azurerm_subscription.subscription.id
+  scope                = data.azurerm_subscription.subscription.id
   role_definition_name = "Azure Kubernetes Service Cluster Admin Role"
-  principal_id = azurerm_user_assigned_identity.identity.principal_id
+  principal_id         = azurerm_user_assigned_identity.identity.principal_id
 }
 
 resource "azurerm_user_assigned_identity" "identity" {
   resource_group_name = azurerm_resource_group.group.name
   location            = azurerm_resource_group.group.location
-
-  name = "cado-identity"
+  name                = "cado-identity"
 }

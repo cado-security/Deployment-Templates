@@ -2,32 +2,32 @@
 // Variables
 
 variable "image_id" {
-  type = string
+  type        = string
   description = "Cado Response VHD blobstore URL"
-  default = ""
+  default     = ""
 }
 
 variable "ip_pattern_https" {
-  type = list(string)
+  type        = list(string)
   description = "Incoming IPs permitted to access https. CIDR or source IP range or * to match any IP."
   # default = [] # empty list not accepted
 }
 
 variable "ip_pattern_all" {
-  type = list(string)
+  type        = list(string)
   description = "Incoming IPs permitted to access https and ssh. CIDR or source IP range or * to match any IP."
   # default = $(dig +short myip.opendns.com @resolver1.opendns.com)
 }
 
 variable "instance_type" {
-  type = string
+  type        = string
   description = "Instance type to use for main"
-  default = "Standard_D2ds_v4"  // 2cpu 8gb - WARNING not enough memory for elastic!!! 
+  default     = "Standard_D2ds_v4" // 2cpu 8gb - WARNING not enough memory for elastic!!! 
   // Standard_D8ds_v4 8cpu 32gb
 }
 
 variable "resource_group" {
-  type = string
+  type        = string
   description = "resource group name"
 }
 
@@ -36,45 +36,45 @@ variable "feature_flag_platform_upgrade" {
 }
 
 variable "main_size" {
-  type = number
+  type        = number
   description = "Size of main instance local disk"
-  default = 30
+  default     = 30
 }
 
 variable "processing_mode" {
-  type = string
+  type        = string
   description = "Processing mode to start in"
-  default = "scalable-vm"
+  default     = "scalable-vm"
 }
 
 variable "ssh_key_public" {
-  type = string
+  type        = string
   description = "Path to SSH public key"
-  default = "~/.ssh/id_rsa.pub"
+  default     = "~/.ssh/id_rsa.pub"
 }
 
 variable "ssh_key_private" {
-  type = string
+  type        = string
   description = "Path to SSH private key"
-  default = "~/.ssh/id_rsa"
+  default     = "~/.ssh/id_rsa"
 }
 
 variable "finalize_cmd" {
-  type = string
+  type        = string
   description = "Finalize command"
-  default = "sudo /home/admin/processor/release/finalize.sh --main"
+  default     = "sudo /home/admin/processor/release/finalize.sh --main"
 }
 
 variable "worker_vm_type" {
-    type = string
-    description = "Default worker vm size"
-    default = "Standard_D8ds_v4"
+  type        = string
+  description = "Default worker vm size"
+  default     = "Standard_D8ds_v4"
 }
 
 variable "tags" {
-    type = map(string)
-    description = "Tags to apply to main vm and any spwaned workers"
-    default = {}
+  type        = map(string)
+  description = "Tags to apply to main vm and any spwaned workers"
+  default     = {}
 }
 
 // Resources
@@ -131,7 +131,7 @@ resource "azurerm_network_security_group" "nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "443"
-    source_address_prefixes      = var.ip_pattern_https
+    source_address_prefixes    = var.ip_pattern_https
     destination_address_prefix = "*"
   }
 
@@ -143,7 +143,7 @@ resource "azurerm_network_security_group" "nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "443"
-    source_address_prefixes      = var.ip_pattern_all
+    source_address_prefixes    = var.ip_pattern_all
     destination_address_prefix = "*"
   }
 
@@ -155,7 +155,7 @@ resource "azurerm_network_security_group" "nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefixes      = var.ip_pattern_all
+    source_address_prefixes    = var.ip_pattern_all
     destination_address_prefix = "*"
   }
 }
@@ -186,13 +186,13 @@ resource "azurerm_network_interface" "nic" {
 // Storage
 
 data "azurerm_storage_account" "storage" {
-  name                     = "cadostorage${substr(sha256("${var.resource_group}x"), 0, 13)}"
-  resource_group_name      = data.azurerm_resource_group.group.name
+  name                = "cadostorage${substr(sha256("${var.resource_group}x"), 0, 13)}"
+  resource_group_name = data.azurerm_resource_group.group.name
 }
 
 data "azurerm_storage_container" "container" {
-  name                  = "cadoevidence"
-  storage_account_name  = data.azurerm_storage_account.storage.name
+  name                 = "cadoevidence"
+  storage_account_name = data.azurerm_storage_account.storage.name
 }
 
 data "azurerm_storage_share" "share" {
@@ -201,13 +201,13 @@ data "azurerm_storage_share" "share" {
 }
 
 data "azurerm_managed_disk" "data_disk" {
-  name                 = "cado-main-vm-disk"
-  resource_group_name  = data.azurerm_resource_group.group.name
+  name                = "cado-main-vm-disk"
+  resource_group_name = data.azurerm_resource_group.group.name
 }
 
 
 data "azurerm_user_assigned_identity" "identity" {
-  name = "cado-identity"
+  name                = "cado-identity"
   resource_group_name = data.azurerm_resource_group.group.name
 }
 
@@ -218,7 +218,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   name                = "cado-main-vm"
   resource_group_name = data.azurerm_resource_group.group.name
   location            = data.azurerm_resource_group.group.location
-  size                = "${var.instance_type}"  // 2cpu 8gb 
+  size                = var.instance_type // 2cpu 8gb 
   admin_username      = "adminuser"
   network_interface_ids = [
     azurerm_network_interface.nic.id,
@@ -236,8 +236,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 
   identity {
-    type = "UserAssigned"
-    identity_ids = [ "${data.azurerm_user_assigned_identity.identity.id}" ]
+    type         = "UserAssigned"
+    identity_ids = ["${data.azurerm_user_assigned_identity.identity.id}"]
   }
 
   tags = var.tags
@@ -256,20 +256,20 @@ resource "azurerm_linux_virtual_machine" "vm" {
       "echo azure_storage_share = ${data.azurerm_storage_share.share.name} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo feature_flag_platform_upgrade = ${var.feature_flag_platform_upgrade} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo bucket = ${data.azurerm_storage_container.container.name} | sudo tee -a /home/admin/processor/first_run.cfg"
-    ],
-    [
-        for k, v in var.tags:
+      ],
+      [
+        for k, v in var.tags :
         "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
-    ],
-    [
-      "${var.finalize_cmd} 2>&1 | sudo tee /home/admin/processor/init_out"
+      ],
+      [
+        "${var.finalize_cmd} 2>&1 | sudo tee /home/admin/processor/init_out"
     ])
 
     connection {
-      type = "ssh"
-      user = "adminuser"
+      type        = "ssh"
+      user        = "adminuser"
       private_key = file(var.ssh_key_private)
-      host = data.azurerm_public_ip.public_ip.ip_address
+      host        = data.azurerm_public_ip.public_ip.ip_address
     }
   }
 }
@@ -287,41 +287,16 @@ resource "random_string" "cado" {
   special = false
 }
 
-
-
 resource "azurerm_resource_group" "keyvault" {
   name     = "cado-kv-rg-${data.azurerm_resource_group.group.name}"
   location = data.azurerm_resource_group.group.location
-  tags = var.tags
+  tags     = var.tags
 }
 
 resource "azurerm_key_vault_access_policy" "bitbucket" {
-   key_vault_id = azurerm_key_vault.keyvault.id
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
-
-    key_permissions = [
-      "Get",
-      "Create",
-      "Delete",
-      "List",
-
-    ]
-
-    secret_permissions = [
-      "Get",
-      "Set",
-      "Delete",
-      "List",
-    ]
-
-}
-
-resource "azurerm_key_vault_access_policy" "cado" {
   key_vault_id = azurerm_key_vault.keyvault.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azurerm_user_assigned_identity.identity.principal_id
-
+  object_id    = data.azurerm_client_config.current.object_id
 
   key_permissions = [
     "Get",
@@ -340,15 +315,33 @@ resource "azurerm_key_vault_access_policy" "cado" {
 
 }
 
+resource "azurerm_key_vault_access_policy" "cado" {
+  key_vault_id = azurerm_key_vault.keyvault.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azurerm_user_assigned_identity.identity.principal_id
+
+  key_permissions = [
+    "Get",
+    "Create",
+    "Delete",
+    "List",
+  ]
+
+  secret_permissions = [
+    "Get",
+    "Set",
+    "Delete",
+    "List",
+  ]
+}
+
 
 
 resource "azurerm_key_vault" "keyvault" {
-  name                        = "cado-${random_string.cado.result}" 
+  name                        = "cado-${random_string.cado.result}"
   location                    = azurerm_resource_group.keyvault.location
   resource_group_name         = data.azurerm_resource_group.group.name
   enabled_for_disk_encryption = true
   tenant_id                   = data.azurerm_client_config.current.tenant_id
-  sku_name = "standard"
-
-
+  sku_name                    = "standard"
 }
