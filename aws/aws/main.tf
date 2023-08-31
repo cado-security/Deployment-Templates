@@ -308,6 +308,12 @@ resource "aws_efs_access_point" "efs_access_point" {
 resource "aws_s3_bucket" "bucket" {
   bucket_prefix = "cadoresponse"
   acl           = "private"
+  force_destroy = true
+  tags = merge(
+    var.tags,
+    {
+      Name = "CadoResponseBucket"
+  })
   lifecycle_rule {
     id      = "CadoGlacierRule"
     prefix  = "glacier"
