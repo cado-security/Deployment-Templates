@@ -340,7 +340,8 @@ resource "aws_iam_role_policy" "policy" {
 				"cloudwatch:GetMetricData",
 				"iam:GetRolePolicy",
 				"cloudtrail:ListTrails",
-				"cloudtrail:GetTrailStatus"
+				"cloudtrail:GetTrailStatus",
+				"iam:SimulatePrincipalPolicy"
 			],
 			"Resource": "*"
 		},
