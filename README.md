@@ -1,4 +1,4 @@
-# Deplopyment Templates
+# Deployment Templates
 
 Contains a copy of the Terraform deployment templates for Cado Response with a [Release](https://github.com/cado-security/Deployment-Templates/releases) for each new version.
 
