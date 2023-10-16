@@ -17,13 +17,16 @@ resource "google_project_iam_custom_role" "custom_role" {
   description = "CadoResponse Role"
   permissions = [
     // Instance Acquisition
+    "cloudbuild.builds.get",
     "cloudbuild.builds.create",
     "compute.disks.get",
     "compute.disks.use",
+    "compute.disks.useReadOnly",
     "compute.globalOperations.get",
     "compute.images.create",
     "compute.instances.get",
     "compute.instances.list",
+    "compute.images.delete",
 
     // Compute Management
     "compute.disks.create",
