@@ -16,6 +16,11 @@ provider "google" {
   region      = var.region
 }
 
+module "configure" {
+  source     = "./modules/configure"
+  project_id = var.project_id
+}
+
 module "networking" {
   source        = "./modules/networking"
   region        = var.region

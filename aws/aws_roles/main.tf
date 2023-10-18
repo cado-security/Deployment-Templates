@@ -379,7 +379,20 @@ resource "aws_iam_role_policy" "policy" {
 				"s3:PutObject"
 			],
 			"Resource": "arn:aws:s3:::cadologsupload/*"
-		}	
+		},
+		{
+			"Sid": "RequiredForFirstTimeKMSDefaultencryptedImportCanBeDeletedAfter",
+			"Effect": "Allow",
+			"Action": [
+				"iam:CreateServiceLinkedRole"
+			],
+			"Resource": "arn:aws:iam::*:role/aws-service-role/kms.amazonaws.com/*CadoResponse*",
+			"Condition": {
+				"StringLike": {
+					"iam:AWSServiceName": "kms.amazonaws.com"
+				}
+			}
+		}
 	]
 }
   EOF
