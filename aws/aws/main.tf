@@ -123,11 +123,6 @@ resource "aws_subnet" "subnet_b" {
   availability_zone = data.aws_availability_zones.available.names[1]
 }
 
-resource "aws_cloudwatch_log_group" "logs" {
-  name_prefix       = "CadoLogGroupAlt"
-  retention_in_days = 7
-}
-
 resource "aws_lb_target_group" "target_group" {
   count            = var.feature_flag_deploy_with_alb == true ? 1 : 0
   name             = "CadoTargetGroup"

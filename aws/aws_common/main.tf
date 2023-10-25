@@ -86,11 +86,6 @@ resource "aws_subnet" "subnet_c" {
   availability_zone = data.aws_availability_zones.available.names[2]
 }
 
-resource "aws_cloudwatch_log_group" "logs" {
-  name_prefix       = "CadoLogGroupAlt"
-  retention_in_days = 7
-}
-
 resource "aws_security_group" "security_group" {
   name        = "CadoSecGroupAlt"
   description = "Allow SSH and HTTPS Connections"

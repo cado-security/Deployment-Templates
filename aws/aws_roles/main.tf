@@ -303,7 +303,6 @@ resource "aws_iam_role_policy" "policy" {
 				"ec2:CreateTags",
 				"ec2:CreateVolume",
 				"ec2:DeleteTags",								
-				"ec2:DeregisterImage",
 				"ec2:DescribeAccountAttributes",
 				"ec2:DescribeAddresses",
 				"ec2:DescribeAvailabilityZones",
@@ -331,6 +330,19 @@ resource "aws_iam_role_policy" "policy" {
 				"iam:GetInstanceProfile"
 			],
 			"Resource": "*"
+		},
+		{
+			"Sid": "RequiredForAmiImports",
+			"Effect": "Allow",
+			"Action": [
+				"ec2:DeregisterImage"
+			],
+			"Resource": "*",
+			"Condition": {
+				"StringLike": {
+					"aws:ResourceTag/Name": "CadoResponse*"
+				}
+			}
 		},
 		{
 			"Sid": "RequiredForHealthChecks",
