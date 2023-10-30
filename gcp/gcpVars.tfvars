@@ -5,7 +5,7 @@ unique_name      = "unique-deployment-name"              # Unique name for deplo
 credentials_file = "local/path/to/your/credentials.json" # Specify the local path to your GCP credentials file.
 project_id       = "your-gcp-project-id"                 # Provide the ID of your GCP project.
 region           = "us-central1"                         # Specify the region where you'd like to deploy.
-image            = "cado-response-image-link"            # VM image link you'd like to use.
+image            = "cado-response"                       # VM image link you'd like to use.
 
 # Tags to identify deployed resources.
 tags = {

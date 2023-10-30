@@ -321,7 +321,6 @@ resource "aws_iam_role_policy" "policy" {
 				"ec2:GetConsoleOutput",
 				"ec2:GetConsoleScreenshot",
 				"ec2:ImportImage",
-				"ec2:ModifyInstanceAttribute",
 				"ec2:ModifySnapshotAttribute",
 				"ec2:RunInstances",
 				"ec2:DescribeFlowLogs",
@@ -330,6 +329,35 @@ resource "aws_iam_role_policy" "policy" {
 				"iam:GetInstanceProfile"
 			],
 			"Resource": "*"
+		},
+		{
+			"Sid": "RequiredForEc2ImportAndAmiImport2",
+			"Effect": "Allow",
+			"Action": [
+				"ec2:ModifyInstanceAttribute"
+			],
+			"Resource": "*",
+			"Condition": {
+				"StringLike": {
+					"aws:ResourceTag/Name": "CadoResponse*"
+				},
+				"StringEquals": {
+					"ec2:Attribute": "BlockDeviceMapping"
+				}
+			}
+		},
+		{
+			"Sid": "RequiredForResponseActionIsolateEc2",
+			"Effect": "Allow",
+			"Action": [
+				"ec2:ModifyInstanceAttribute"
+			],
+			"Resource": "*",
+			"Condition": {
+				"StringEquals": {
+					"ec2:Attribute": "GroupId"
+				}
+			}
 		},
 		{
 			"Sid": "RequiredForAmiImports",
