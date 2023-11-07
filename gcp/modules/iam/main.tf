@@ -38,6 +38,7 @@ resource "google_project_iam_custom_role" "custom_role" {
     "compute.instances.setMetadata",
     "compute.instances.setServiceAccount",
     "compute.machineTypes.list",
+    "compute.machineTypes.get",
     "compute.regions.get",
     "compute.subnetworks.use",
     "compute.subnetworks.useExternalIp",

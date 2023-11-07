@@ -150,6 +150,7 @@ resource "aws_iam_role_policy" "policy" {
 				"ec2:DeleteSnapshot",
 				"ec2:TerminateInstances",
 				"ec2:AttachVolume",
+				"ec2:DescribeInstanceTypes",
 				"ec2:DetachVolume",
 				"ec2:StopInstances",
 				"ec2:StartInstances",
