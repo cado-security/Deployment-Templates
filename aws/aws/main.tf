@@ -48,7 +48,7 @@ variable "certificate_arn" {
 
 variable "vm_size" {
   type    = string
-  default = "t3a.2xlarge"
+  default = "m5.4xlarge"
 }
 
 variable "vol_size" {

@@ -1,0 +1,151 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "RequiredForEC2Import",
+			"Effect": "Allow",
+			"Action": [
+				"ec2:DeleteVolume",
+				"ec2:DeleteSnapshot",
+				"ec2:TerminateInstances",
+				"ec2:AttachVolume",
+				"ec2:DetachVolume",
+				"ec2:StopInstances",
+				"ec2:StartInstances",
+				"ec2:DescribeAddresses",
+				"ec2:AssociateAddress"
+			],
+			"Resource": "*",
+			"Condition": {
+				"StringLike": {
+					"aws:ResourceTag/Name": "CadoResponse*"
+				}
+			}
+		},
+		{
+			"Sid": "RequiredForS3Import",
+			"Effect":"Allow",
+			"Action": "s3:ListAllMyBuckets",
+			"Resource":"*"
+		},
+		{
+			"Sid": "RequiredForMemoryForensics",
+			"Effect": "Allow",
+			"Action": [
+				"ssm:SendCommand",
+				"ssm:DescribeInstanceInformation"
+			],
+			"Resource": [
+				"arn:aws:ec2:*:*:instance/*",
+				"arn:aws:ssm:*::document/AWS-RunShellScript",
+				"arn:aws:ssm:*::document/AWS-RunPowerShellScript"
+			]
+		},
+		{
+			"Sid": "RequiredForEc2ImportAndAmiImport",
+			"Effect": "Allow",
+			"Action": [
+				"cloudtrail:LookupEvents",
+				"ec2:CopyImage",
+				"ec2:CopySnapshot",
+				"ec2:CreateSnapshot",
+				"ec2:CreateSnapshots",
+				"ec2:CreateTags",
+				"ec2:DeregisterImage",
+				"ec2:DescribeAccountAttributes",
+				"ec2:DescribeAddresses",
+				"ec2:DescribeAvailabilityZones",
+				"ec2:DescribeImages",
+				"ec2:DescribeInstanceAttribute",
+				"ec2:DescribeInstanceStatus",
+				"ec2:DescribeInstances",
+				"ec2:DescribeRegions",
+				"ec2:DescribeRouteTables",
+				"ec2:DescribeSecurityGroups",
+				"ec2:DescribeSnapshots",
+				"ec2:DescribeSubnets",
+				"ec2:DescribeTags",
+				"ec2:DescribeVolumes",
+				"ec2:GetConsoleOutput",
+				"ec2:GetConsoleScreenshot",
+				"ec2:ModifyInstanceAttribute",
+				"ec2:ModifySnapshotAttribute"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "RequiredForKmsEncryptedEc2Import",
+			"Effect": "Allow",
+			"Action": [
+				"kms:Encrypt",
+				"kms:Decrypt",
+				"kms:ReEncrypt*",
+				"kms:GenerateDataKey*",
+				"kms:CreateGrant"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "RequiredForCrossAccountDefaultKmsEncryptedEc2Import",
+			"Effect": "Allow",
+			"Action": [
+				"kms:CreateKey",
+				"kms:ScheduleKeyDeletion",
+				"kms:DescribeKey",
+				"kms:ListAliases",
+				"kms:ReplicateKey"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "RequiredForLambdaImport",
+			"Effect": "Allow",
+			"Action": [
+				"lambda:GetFunction",
+				"lambda:ListFunctions",
+				"logs:FilterLogEvents",
+				"ecr:GetAuthorizationToken",
+				"ecr:GetDownloadURLForLayer",
+				"ecr:BatchGetImage"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "RequiredForEcsImport",
+			"Effect": "Allow",
+			"Action": [
+				"ecs:ListClusters",
+				"ecs:DescribeClusters",
+				"ecs:ListServices",
+				"ecs:DescribeServices",
+				"ecs:ListTasks",
+				"ecs:DescribeTasks",
+				"ecs:ExecuteCommand"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "RequiredForEKSImport",
+			"Effect": "Allow",
+			"Action": [
+				"eks:ListClusters",
+				"eks:DescribeCluster",
+				"eks:UpdateClusterConfig"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "RequiredForFirstTimeKMSDefaultencryptedImportCanBeDeletedAfter",
+			"Effect": "Allow",
+			"Action": [
+				"iam:CreateServiceLinkedRole"
+			],
+			"Resource": "arn:aws:iam::*:role/aws-service-role/kms.amazonaws.com/*CadoResponse*",
+			"Condition": {
+				"StringLike": {
+					"iam:AWSServiceName": "kms.amazonaws.com"
+				}
+			}
+		}
+	]
+}
