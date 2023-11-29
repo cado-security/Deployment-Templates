@@ -246,12 +246,33 @@ resource "aws_iam_role_policy" "policy" {
 			"Effect": "Allow",
 			"Action": [
 				"kms:CreateKey",
-				"kms:ScheduleKeyDeletion",
+				"kms:CreateAlias",
 				"kms:DescribeKey",
-				"kms:ListAliases",
-				"kms:ReplicateKey"
+				"kms:ListAliases"
 			],
 			"Resource": "*"
+		},
+		{
+			"Sid": "RequiredForOperationsOnTemporaryKMSResourcesduringDefaultEncryptedEc2Import",
+			"Effect": "Allow",
+			"Action": [
+				"kms:DeleteAlias",
+				"kms:ReplicateKey",
+				"kms:ScheduleKeyDeletion"
+			],
+			"Resource": "*",
+			"Condition": {
+  				 "ForAllValues:StringLike": {
+  				   "kms:ResourceAliases": [
+  				     "alias/CadoResponse-KMS-Alias*"
+  				   ]
+  				 },
+  				 "ForAnyValue:StringLike": {
+  				   "kms:ResourceAliases": [
+  				     "alias/CadoResponse-KMS-Alias*"
+  				   ]
+  				 }
+			}
 		},
 		{
 			"Sid": "RequiredForLambdaImport",
