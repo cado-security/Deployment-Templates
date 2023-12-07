@@ -27,7 +27,7 @@ variable "region" {
 variable "image" {
   type        = string
   description = "Cado Response VM image path"
-  default     = "projects/cado-public/global/images/cadoresponse-2-93-0"
+  default     = "projects/cado-public/global/images/cadoresponse-2-94-0"
 }
 
 variable "tags" {

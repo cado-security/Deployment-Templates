@@ -306,8 +306,7 @@ resource "aws_iam_role_policy" "policy" {
 			"Effect": "Allow",
 			"Action": [
 				"eks:ListClusters",
-				"eks:DescribeCluster",
-				"eks:UpdateClusterConfig"
+				"eks:DescribeCluster"
 			],
 			"Resource": "*"
 		},

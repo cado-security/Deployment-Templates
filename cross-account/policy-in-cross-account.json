@@ -129,8 +129,7 @@
 			"Effect": "Allow",
 			"Action": [
 				"eks:ListClusters",
-				"eks:DescribeCluster",
-				"eks:UpdateClusterConfig"
+				"eks:DescribeCluster"
 			],
 			"Resource": "*"
 		},
