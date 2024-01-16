@@ -49,7 +49,7 @@ resource "google_compute_instance" "vm_instance" {
       "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
     ],
     [
-      "${var.finalize_cmd} --main 2>&1 | sudo tee /home/admin/processor/init_out"
+      "${var.finalize_cmd} 2>&1 | sudo tee /home/admin/processor/init_out"
     ], )
   )
 }

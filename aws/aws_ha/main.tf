@@ -350,13 +350,9 @@ resource "aws_launch_template" "launch_template" {
       "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
     ],
     [
-      "${var.finalize_cmd} --main 2>&1 | sudo tee /home/admin/processor/init_out"
-
-    ],
-    [
-      "sudo /home/admin/processor/release/finalize.sh --main 2>&1 | sudo tee /home/admin/processor/init_out"
-  ])))
-
+      "${var.finalize_cmd} 2>&1 | sudo tee /home/admin/processor/init_out"
+    ]
+  )))
 }
 
 resource "aws_elb" "load_balancer" {
