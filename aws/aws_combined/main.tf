@@ -64,6 +64,12 @@ variable "finalize_cmd" {
   default     = "sudo /home/admin/processor/release/finalize.sh --main"
 }
 
+variable "proxy" {
+  type = string
+  description = "Proxy string to use for outbound connections including port number & auth ex. user:pass@1.2.3.4:1234"
+  default = ""
+}
+
 # Configure the AWS Provider
 provider "aws" {
   region = var.region
@@ -95,5 +101,6 @@ module "aws" {
   vpc_id                       = module.aws_vpc.vpc_id
   finalize_cmd                 = var.finalize_cmd
   tags                         = var.tags
+  proxy                       = var.proxy
 }
 

@@ -82,6 +82,12 @@ variable "finalize_cmd" {
   default     = "sudo /home/admin/processor/release/finalize.sh --main"
 }
 
+variable "proxy" {
+  type = string
+  description = "Proxy string to use for outbound connections including port number & auth ex. user:pass@1.2.3.4:1234"
+  default = ""
+}
+
 # Configure the AWS Provider
 provider "aws" {
   region = var.region
@@ -358,7 +364,8 @@ resource "aws_instance" "main" {
     "aws_rds_db=${""}",
     "aws_elastic_endpoint=${""}",
     "aws_elastic_id=${""}",
-    "aws_stack_id=${""}", # not actually a stack id
+    "aws_stack_id=${""}", # not actually a stack id,
+    "feature_flag_http_proxy=${var.proxy}",
     "feature_flag_platform_upgrade='${var.feature_flag_platform_upgrade}'",
     "feature_flag_deploy_with_alb='${var.feature_flag_deploy_with_alb}'",
     "feature_flag_deploy_with_elastic='${""}'",
@@ -374,15 +381,17 @@ resource "aws_instance" "main" {
     "echo external_elastic_hostname = $aws_elastic_endpoint >> /home/admin/processor/first_run.cfg",
     "echo external_elastic_id = $aws_elastic_id >> /home/admin/processor/first_run.cfg",
     "echo aws_stack_id = $aws_stack_id >> /home/admin/processor/first_run.cfg",
+    "echo feature_flag_http_proxy = $feature_flag_http_proxy >> /home/admin/processor/first_run.cfg",
     ],
     [
       for k, v in var.tags :
       "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
     ],
     [
-      "${var.finalize_cmd} 2>&1 | sudo tee /home/admin/processor/init_out"
+      "${var.proxy == "" ? var.finalize_cmd : "${var.finalize_cmd} --proxy ${var.proxy}"} 2>&1 | sudo tee /home/admin/processor/init_out"
 
-    ]
+    ],
+
   ))
 }
 
