@@ -83,9 +83,15 @@ variable "finalize_cmd" {
 }
 
 variable "proxy" {
-  type = string
-  description = "Proxy string to use for outbound connections including port number & auth ex. user:pass@1.2.3.4:1234"
-  default = ""
+  type        = string
+  description = "Proxy URL to use for outbound connections in format / User Pass - https://user:pass@1.2.3.4:1234 | IP Auth - https://1.2.3.4:1234"
+  default     = ""
+}
+
+variable "trust_proxy_cert" {
+  type        = bool
+  description = "Download and trust the proxy certificate"
+  default     = false
 }
 
 # Configure the AWS Provider
@@ -366,6 +372,7 @@ resource "aws_instance" "main" {
     "aws_elastic_id=${""}",
     "aws_stack_id=${""}", # not actually a stack id,
     "feature_flag_http_proxy=${var.proxy}",
+    "trust_proxy_cert=${var.trust_proxy_cert}",
     "feature_flag_platform_upgrade='${var.feature_flag_platform_upgrade}'",
     "feature_flag_deploy_with_alb='${var.feature_flag_deploy_with_alb}'",
     "feature_flag_deploy_with_elastic='${""}'",
@@ -381,7 +388,8 @@ resource "aws_instance" "main" {
     "echo external_elastic_hostname = $aws_elastic_endpoint >> /home/admin/processor/first_run.cfg",
     "echo external_elastic_id = $aws_elastic_id >> /home/admin/processor/first_run.cfg",
     "echo aws_stack_id = $aws_stack_id >> /home/admin/processor/first_run.cfg",
-    "echo feature_flag_http_proxy = $feature_flag_http_proxy >> /home/admin/processor/first_run.cfg",
+    "echo PROXY_url = $feature_flag_http_proxy >> /home/admin/processor/first_run.cfg",
+    "echo PROXY_trust_cert = $trust_proxy_cert >> /home/admin/processor/first_run.cfg",
     ],
     [
       for k, v in var.tags :
