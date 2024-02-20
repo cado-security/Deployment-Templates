@@ -43,6 +43,14 @@ resource "google_compute_instance" "vm_instance" {
     "echo service_account_email = ${var.service_account} >> /home/admin/processor/first_run.cfg",
     "echo processing_mode = scalable-vm >> /home/admin/processor/first_run.cfg",
     "echo feature_flag_platform_upgrade = true >> /home/admin/processor/first_run.cfg",
+    "systemctl disable apt-daily.service",
+    "systemctl stop apt-daily.service",
+    "systemctl disable apt-daily-upgrade.service",
+    "systemctl stop apt-daily-upgrade.service",
+    "systemctl disable apt-daily.timer",
+    "systemctl stop apt-daily.timer",
+    "systemctl disable apt-daily-upgrade.timer",
+    "systemctl stop apt-daily-upgrade.timer",
     ],
     [
       for k, v in var.tags :
@@ -50,7 +58,8 @@ resource "google_compute_instance" "vm_instance" {
     ],
     [
       "${var.finalize_cmd} 2>&1 | sudo tee /home/admin/processor/init_out"
-    ], )
+    ],
+    )
   )
 }
 

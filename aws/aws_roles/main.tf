@@ -453,6 +453,14 @@ resource "aws_iam_role_policy" "policy" {
 					"iam:AWSServiceName": "kms.amazonaws.com"
 				}
 			}
+		},
+		{
+			"Sid": "RequiredForAWSOrganizationsDiscoverAccounts",
+			"Effect": "Allow",
+			"Action": [
+				"organizations:ListAccounts"
+			],
+			"Resource": "*"
 		}
 	]
 }

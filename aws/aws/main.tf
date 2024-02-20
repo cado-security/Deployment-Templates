@@ -88,10 +88,10 @@ variable "proxy" {
   default     = ""
 }
 
-variable "trust_proxy_cert" {
-  type        = bool
-  description = "Download and trust the proxy certificate"
-  default     = false
+variable "proxy_cert_url" {
+  type        = string
+  description = "Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert."
+  default     = ""
 }
 
 # Configure the AWS Provider
@@ -372,7 +372,7 @@ resource "aws_instance" "main" {
     "aws_elastic_id=${""}",
     "aws_stack_id=${""}", # not actually a stack id,
     "feature_flag_http_proxy=${var.proxy}",
-    "trust_proxy_cert=${var.trust_proxy_cert}",
+    "proxy_cert_url=${var.proxy_cert_url}",
     "feature_flag_platform_upgrade='${var.feature_flag_platform_upgrade}'",
     "feature_flag_deploy_with_alb='${var.feature_flag_deploy_with_alb}'",
     "feature_flag_deploy_with_elastic='${""}'",
@@ -389,14 +389,14 @@ resource "aws_instance" "main" {
     "echo external_elastic_id = $aws_elastic_id >> /home/admin/processor/first_run.cfg",
     "echo aws_stack_id = $aws_stack_id >> /home/admin/processor/first_run.cfg",
     "echo PROXY_url = $feature_flag_http_proxy >> /home/admin/processor/first_run.cfg",
-    "echo PROXY_trust_cert = $trust_proxy_cert >> /home/admin/processor/first_run.cfg",
+    "echo PROXY_cert_url = $proxy_cert_url >> /home/admin/processor/first_run.cfg",
     ],
     [
       for k, v in var.tags :
       "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
     ],
     [
-      "${var.proxy == "" ? var.finalize_cmd : "${var.finalize_cmd} --proxy ${var.proxy}"} 2>&1 | sudo tee /home/admin/processor/init_out"
+      "${var.proxy == "" ? var.finalize_cmd : "${var.finalize_cmd} --proxy ${var.proxy} --proxy-cert-url ${var.proxy_cert_url}"} 2>&1 | sudo tee /home/admin/processor/init_out"
 
     ],
 

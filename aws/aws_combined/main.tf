@@ -65,9 +65,15 @@ variable "finalize_cmd" {
 }
 
 variable "proxy" {
-  type = string
+  type        = string
   description = "Proxy string to use for outbound connections including port number & auth ex. user:pass@1.2.3.4:1234"
-  default = ""
+  default     = ""
+}
+
+variable "proxy_cert_url" {
+  type        = string
+  description = "Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert."
+  default     = ""
 }
 
 # Configure the AWS Provider
@@ -101,6 +107,7 @@ module "aws" {
   vpc_id                       = module.aws_vpc.vpc_id
   finalize_cmd                 = var.finalize_cmd
   tags                         = var.tags
-  proxy                       = var.proxy
+  proxy                        = var.proxy
+  proxy_cert_url               = var.proxy_cert_url
 }
 
