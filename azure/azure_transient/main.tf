@@ -256,14 +256,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
       "echo azure_storage_share = ${data.azurerm_storage_share.share.name} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo feature_flag_platform_upgrade = ${var.feature_flag_platform_upgrade} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo bucket = ${data.azurerm_storage_container.container.name} | sudo tee -a /home/admin/processor/first_run.cfg",
-      "sudo systemctl disable apt-daily.service",
-      "sudo systemctl stop apt-daily.service",
-      "sudo systemctl disable apt-daily-upgrade.service",
-      "sudo systemctl stop apt-daily-upgrade.service",
-      "sudo systemctl disable apt-daily.timer",
-      "sudo systemctl stop apt-daily.timer",
-      "sudo systemctl disable apt-daily-upgrade.timer",
-      "sudo systemctl stop apt-daily-upgrade.timer",
       ],
       [
         for k, v in var.tags :

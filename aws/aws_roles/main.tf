@@ -443,17 +443,15 @@ resource "aws_iam_role_policy" "policy" {
 		},
 		{
 			"Sid": "RequiredForFirstTimeKMSDefaultencryptedImportCanBeDeletedAfter",
-			"Effect": "Allow",
-			"Action": [
-				"iam:CreateServiceLinkedRole"
-			],
-			"Resource": "arn:aws:iam::*:role/aws-service-role/kms.amazonaws.com/*CadoResponse*",
-			"Condition": {
-				"StringLike": {
-					"iam:AWSServiceName": "kms.amazonaws.com"
-				}
-			}
-		},
+            "Effect": "Allow",
+            "Action": "iam:CreateServiceLinkedRole",
+            "Resource": "arn:aws:iam::*:role/aws-service-role/mrk.kms.amazonaws.com/AWSServiceRoleForKeyManagementServiceMultiRegionKeys",
+            "Condition": {
+                "StringLike": {
+                    "iam:AWSServiceName": "mrk.kms.amazonaws.com"
+                }
+            }
+        },
 		{
 			"Sid": "RequiredForAWSOrganizationsDiscoverAccounts",
 			"Effect": "Allow",

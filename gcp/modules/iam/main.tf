@@ -21,15 +21,19 @@ resource "google_project_iam_custom_role" "custom_role" {
     "cloudbuild.builds.create",
     "compute.disks.get",
     "compute.disks.use",
+    "compute.disks.list",
     "compute.disks.useReadOnly",
     "compute.globalOperations.get",
     "compute.images.create",
     "compute.instances.get",
     "compute.instances.list",
     "compute.images.delete",
+    "compute.images.get",
+    "compute.instances.getSerialPortOutput",
 
     // Compute Management
     "compute.disks.create",
+    "compute.disks.setLabels",
     "compute.images.useReadOnly",
     "compute.instances.attachDisk",
     "compute.instances.create",
@@ -42,6 +46,11 @@ resource "google_project_iam_custom_role" "custom_role" {
     "compute.regions.get",
     "compute.subnetworks.use",
     "compute.subnetworks.useExternalIp",
+    "compute.networks.get",
+    "compute.networks.list",
+    "compute.zones.list",
+    "compute.zoneOperations.get",
+
 
     // Platform Update
     "compute.addresses.use",
@@ -69,6 +78,7 @@ resource "google_project_iam_custom_role" "custom_role" {
 
     // Project Management
     "resourcemanager.projects.get",
+    "compute.projects.get",
 
     // Secret Management
     "secretmanager.versions.access",

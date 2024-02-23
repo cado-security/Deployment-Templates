@@ -1,7 +1,7 @@
 # Adjust configuration options for your GCP deployment.
 
 # General settings
-unique_name      = "unique-deployment-name"              # Unique name for deployed resources.
+unique_name      = "unique-deployment-name"              # Unique name for deployed resources. (Must be lowercase)
 credentials_file = "local/path/to/your/credentials.json" # Specify the local path to your GCP credentials file.
 project_id       = "your-gcp-project-id"                 # Provide the ID of your GCP project.
 region           = "us-central1"                         # Specify the region where you'd like to deploy.
