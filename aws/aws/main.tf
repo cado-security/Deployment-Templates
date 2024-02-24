@@ -456,3 +456,7 @@ resource "aws_route_table_association" "route_table_assoc_b" {
   subnet_id      = aws_subnet.subnet_b.id
   route_table_id = aws_route_table.route_table.id
 }
+
+output "s3_bucket_id" {
+  value = aws_s3_bucket.bucket.id
+}

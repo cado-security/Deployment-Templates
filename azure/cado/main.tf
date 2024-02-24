@@ -99,6 +99,18 @@ variable "finalize_cmd" {
   default     = "sudo /home/admin/processor/release/finalize.sh --main" # Do not change
 }
 
+variable "proxy" {
+  type        = string
+  description = "Proxy URL to use for outbound connections in format / User Pass - https://user:pass@1.2.3.4:1234 | IP Auth - https://1.2.3.4:1234"
+  default     = ""
+}
+
+variable "proxy_cert_url" {
+  type        = string
+  description = "Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert."
+  default     = ""
+}
+
 variable "worker_vm_type" {
   type        = string
   description = "Default worker vm size"
@@ -133,6 +145,8 @@ module "azure_transient" {
   ssh_key_private               = var.ssh_key_private
   ssh_key_public                = var.ssh_key_public
   finalize_cmd                  = var.finalize_cmd
+  proxy                         = var.proxy
+  proxy_cert_url                = var.proxy_cert_url  
   feature_flag_platform_upgrade = var.feature_flag_platform_upgrade
   depends_on = [
     module.azure_persistent

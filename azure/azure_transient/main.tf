@@ -65,6 +65,18 @@ variable "finalize_cmd" {
   default     = "sudo /home/admin/processor/release/finalize.sh --main"
 }
 
+variable "proxy" {
+  type        = string
+  description = "Proxy URL to use for outbound connections in format / User Pass - https://user:pass@1.2.3.4:1234 | IP Auth - https://1.2.3.4:1234"
+  default     = ""
+}
+
+variable "proxy_cert_url" {
+  type        = string
+  description = "Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert."
+  default     = ""
+}
+
 variable "worker_vm_type" {
   type        = string
   description = "Default worker vm size"
@@ -256,13 +268,15 @@ resource "azurerm_linux_virtual_machine" "vm" {
       "echo azure_storage_share = ${data.azurerm_storage_share.share.name} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo feature_flag_platform_upgrade = ${var.feature_flag_platform_upgrade} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo bucket = ${data.azurerm_storage_container.container.name} | sudo tee -a /home/admin/processor/first_run.cfg",
+      "echo PROXY_url = ${var.proxy} | sudo tee -a /home/admin/processor/first_run.cfg",
+      "echo PROXY_cert_url = ${var.proxy_cert_url} | sudo tee -a /home/admin/processor/first_run.cfg",
       ],
       [
         for k, v in var.tags :
         "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
       ],
       [
-        "${var.finalize_cmd} 2>&1 | sudo tee /home/admin/processor/init_out"
+        "${var.proxy == "" ? var.finalize_cmd : "${var.finalize_cmd} --proxy ${var.proxy} --proxy-cert-url ${var.proxy_cert_url}"} 2>&1 | sudo tee /home/admin/processor/init_out"
       ],
     )
 

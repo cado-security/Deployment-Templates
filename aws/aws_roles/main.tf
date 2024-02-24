@@ -82,6 +82,10 @@ output "instance_role_id" {
   value = aws_iam_role.instance_role.name
 }
 
+variable "s3_bucket_id" {
+  type = string
+}
+
 resource "aws_iam_role_policy" "instance_policy" {
   name_prefix = "myCadoResponseInstanceRole"
   role        = aws_iam_role.instance_role.id
@@ -228,6 +232,14 @@ resource "aws_iam_role_policy" "policy" {
 			"Effect":"Allow",
 			"Action": "s3:ListAllMyBuckets",
 			"Resource":"*"
+		},
+		{
+			"Sid": "RequiredForS3Readiness",
+			"Effect": "Allow",
+			"Action": [
+				"s3:DeleteObject"
+			],
+			"Resource": "arn:aws:s3:::${var.s3_bucket_id}/*"
 		},
 		{
 			"Sid": "RequiredForKmsEncryptedEc2Import",

@@ -289,14 +289,14 @@ output "iam_instance_profile" {
   value = aws_iam_instance_profile.profile.id
 }
 
-output "s3_bucket_id" {
-  value = aws_s3_bucket.bucket.id
-}
-
 output "security_group_id" {
   value = aws_security_group.security_group.id
 }
 
 output "efs_ip_address" {
   value = aws_efs_mount_target.efs_mount_target.ip_address
+}
+
+output "s3_bucket_id" {
+  value = aws_s3_bucket.bucket.id
 }
