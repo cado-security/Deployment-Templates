@@ -94,6 +94,11 @@ variable "proxy_cert_url" {
   default     = ""
 }
 
+variable "instance_worker_type" {
+  type    = string
+  default = "i4i.2xlarge"
+}
+
 # Configure the AWS Provider
 provider "aws" {
   region = var.region
@@ -246,11 +251,12 @@ resource "aws_security_group" "alb_security_group" {
   description = "Allow ALB Connections"
   vpc_id      = data.aws_vpc.vpc.id
 
+  # HTTPS
   ingress {
     protocol    = "tcp"
-    from_port   = 0
-    to_port     = 65535
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 443
+    to_port     = 443
+    cidr_blocks = var.http_location
   }
 
   egress {
@@ -390,6 +396,7 @@ resource "aws_instance" "main" {
     "echo aws_stack_id = $aws_stack_id >> /home/admin/processor/first_run.cfg",
     "echo PROXY_url = $feature_flag_http_proxy >> /home/admin/processor/first_run.cfg",
     "echo PROXY_cert_url = $proxy_cert_url >> /home/admin/processor/first_run.cfg",
+    "echo worker_instance = ${var.instance_worker_type} >> /home/admin/processor/first_run.cfg",
     ],
     [
       for k, v in var.tags :

@@ -76,14 +76,19 @@ variable "proxy_cert_url" {
   default     = ""
 }
 
+variable "instance_worker_type" {
+  type    = string
+  default = "i4i.2xlarge"
+}
+
 # Configure the AWS Provider
 provider "aws" {
   region = var.region
 }
 
 module "aws_roles" {
-  source = "./../aws_roles"
-  region = var.region
+  source       = "./../aws_roles"
+  region       = var.region
   s3_bucket_id = module.aws.s3_bucket_id
 }
 
@@ -100,6 +105,7 @@ module "aws" {
   ssh_location                 = var.ssh_location
   http_location                = var.http_location
   vm_size                      = var.vm_size
+  instance_worker_type         = var.instance_worker_type
   vol_size                     = var.vol_size
   feature_flag_deploy_with_alb = var.feature_flag_deploy_with_alb
   certificate_arn              = var.certificate_arn
