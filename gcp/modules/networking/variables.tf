@@ -15,3 +15,8 @@ variable "inbound_ports" {
   description = "The list of ports to open"
   type        = list(string)
 }
+
+variable "local_ports" {
+  description = "The list of ports to open to speak on the local subnet"
+  type        = list(string)
+}

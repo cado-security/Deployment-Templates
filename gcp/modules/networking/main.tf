@@ -25,6 +25,19 @@ resource "google_compute_firewall" "firewall_rule" {
   source_ranges = concat(var.allowed_ips, [google_compute_subnetwork.custom_subnetwork.ip_cidr_range])
 }
 
+resource "google_compute_firewall" "loca_firewall_rule" {
+  name = "cadoresponse-fw-${var.unique_name}-local"
+  network = google_compute_network.vpc_network.name
+
+  allow {
+    protocol = "tcp"
+    ports    = var.local_ports
+  }
+
+  source_ranges = [google_compute_subnetwork.custom_subnetwork.ip_cidr_range]
+}
+
+
 output "vpc_network" {
   description = "The self link of the created VPC network"
   value       = google_compute_network.vpc_network.self_link

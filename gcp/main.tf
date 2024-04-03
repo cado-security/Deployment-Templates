@@ -17,6 +17,7 @@ provider "google" {
 }
 
 module "configure" {
+  count      = var.create_cloud_build_role_service_account ? 1 : 0
   source     = "./modules/configure"
   project_id = var.project_id
 }
@@ -27,6 +28,7 @@ module "networking" {
   unique_name   = var.unique_name
   allowed_ips   = var.allowed_ips
   inbound_ports = var.inbound_ports
+  local_ports   = var.local_ports
 }
 
 module "iam" {

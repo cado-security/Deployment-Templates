@@ -67,12 +67,25 @@ variable "allowed_ips" {
 variable "inbound_ports" {
   description = "The list of ports to open"
   type        = list(string)
-  default     = ["22", "443", "5432", "9200", "6379"] # DO NOT CHANGE
-  # 22: SSH, 443: HTTPS, 5432: PostgreSQL, 9200: Elasticsearch, 6379: Redis
+  default     = ["22", "443"] # DO NOT CHANGE
+  # 22: SSH, 443: HTTPS
+}
+
+variable "local_ports" {
+  description = "The list of ports to open to speak on the local subnet"
+  type        = list(string)
+  default     = ["5432", "9200", "6379"]  # DO NOT CHANGE
+  #  5432: PostgreSQL, 9200: Elasticsearch, 6379: Redis
 }
 
 variable "role" {
   description = "The role to assign to the service account"
   type        = string
   default     = "" # DO NOT CHANGE
+}
+
+variable "create_cloud_build_role_service_account" {
+  description = "Create a custom Cloud Build role"
+  type        = bool
+  default     = true
 }
