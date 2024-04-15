@@ -46,6 +46,7 @@
 			"Effect": "Allow",
 			"Action": [
 				"cloudtrail:LookupEvents",
+				"ec2:DescribeVolumesModifications",
 				"ec2:CopyImage",
 				"ec2:CopySnapshot",
 				"ec2:CreateSnapshot",
