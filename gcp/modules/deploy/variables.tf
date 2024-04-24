@@ -54,3 +54,13 @@ variable "project_id" {
   description = "Value of the project id to deploy to"
   type        = string
 }
+
+variable "proxy" {
+  type        = string
+  description = "Proxy URL to use for outbound connections in format / User Pass - https://user:pass@1.2.3.4:1234 | IP Auth - https://1.2.3.4:1234"
+}
+
+variable "proxy_cert_url" {
+  type        = string
+  description = "Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert."
+}

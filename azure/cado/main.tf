@@ -3,7 +3,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.9.0"
+      version = "~> 3.100.0"
     }
   }
   # Optional: add a backend to store tf state in Azure. Otherwise, make sure to keep your tfstate!
@@ -146,7 +146,7 @@ module "azure_transient" {
   ssh_key_public                = var.ssh_key_public
   finalize_cmd                  = var.finalize_cmd
   proxy                         = var.proxy
-  proxy_cert_url                = var.proxy_cert_url  
+  proxy_cert_url                = var.proxy_cert_url
   feature_flag_platform_upgrade = var.feature_flag_platform_upgrade
   depends_on = [
     module.azure_persistent

@@ -52,4 +52,6 @@ module "deploy" {
   subnetwork_config = module.networking.custom_subnetwork
   network_name      = module.networking.vpc_network_name
   finalize_cmd      = var.finalize_cmd
+  proxy             = var.proxy
+  proxy_cert_url    = var.proxy_cert_url
 }

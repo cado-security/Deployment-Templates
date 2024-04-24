@@ -43,13 +43,20 @@ resource "google_compute_instance" "vm_instance" {
     "echo service_account_email = ${var.service_account} >> /home/admin/processor/first_run.cfg",
     "echo processing_mode = scalable-vm >> /home/admin/processor/first_run.cfg",
     "echo feature_flag_platform_upgrade = true >> /home/admin/processor/first_run.cfg",
+    "echo PROXY_url = ${var.proxy} >> /home/admin/processor/first_run.cfg",
+    "echo PROXY_cert_url = ${var.proxy_cert_url} >> /home/admin/processor/first_run.cfg",
     ],
     [
       for k, v in var.tags :
       "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
     ],
     [
-      "${var.finalize_cmd} 2>&1 | sudo tee /home/admin/processor/init_out"
+      join(" ", concat([
+        "${var.finalize_cmd}",
+        var.proxy != "" ? " --proxy ${var.proxy}" : "",
+        var.proxy_cert_url != "" ? " --proxy-cert-url ${var.proxy_cert_url}" : "",
+        "2>&1 | sudo tee /home/admin/processor/init_out"
+      ]))
     ],
     )
   )
