@@ -22,3 +22,11 @@ vol_size = 100              # Desired disk volume size in GB. Default is 100.
 
 # Network settings
 allowed_ips = ["1.2.3.4/32", "2.3.4.5/32"] # List IPs you wish to whitelist.
+
+# If you'd like to use custom networking, uncomment the following block and provide the necessary information.
+# If you're unsure, leave this section commented out and the deployment will use default networking settings.
+
+# custom_networking = {
+#   vpc_name           = "vpc-12345"
+#   public_subnet_name = "subnet-12345"
+# }

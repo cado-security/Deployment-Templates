@@ -64,3 +64,8 @@ variable "proxy_cert_url" {
   type        = string
   description = "Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert."
 }
+
+variable "instance_worker_type" {
+  type        = string
+  description = "Set Worker instance type"
+}

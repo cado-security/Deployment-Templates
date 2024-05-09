@@ -23,12 +23,13 @@ module "configure" {
 }
 
 module "networking" {
-  source        = "./modules/networking"
-  region        = var.region
-  unique_name   = var.unique_name
-  allowed_ips   = var.allowed_ips
-  inbound_ports = var.inbound_ports
-  local_ports   = var.local_ports
+  source            = "./modules/networking"
+  region            = var.region
+  unique_name       = var.unique_name
+  allowed_ips       = var.allowed_ips
+  inbound_ports     = var.inbound_ports
+  local_ports       = var.local_ports
+  custom_networking = var.custom_networking
 }
 
 module "iam" {
@@ -39,19 +40,20 @@ module "iam" {
 }
 
 module "deploy" {
-  source            = "./modules/deploy"
-  project_id        = var.project_id
-  region            = var.region
-  unique_name       = var.unique_name
-  vm_size           = var.vm_size
-  vol_size          = var.vol_size
-  tags              = var.tags
-  service_account   = module.iam.service_account
-  boot_disk_image   = var.image
-  network_config    = module.networking.vpc_network
-  subnetwork_config = module.networking.custom_subnetwork
-  network_name      = module.networking.vpc_network_name
-  finalize_cmd      = var.finalize_cmd
-  proxy             = var.proxy
-  proxy_cert_url    = var.proxy_cert_url
+  source               = "./modules/deploy"
+  project_id           = var.project_id
+  region               = var.region
+  unique_name          = var.unique_name
+  vm_size              = var.vm_size
+  vol_size             = var.vol_size
+  tags                 = var.tags
+  service_account      = module.iam.service_account
+  boot_disk_image      = var.image
+  network_config       = module.networking.vpc_network
+  subnetwork_config    = module.networking.custom_subnetwork
+  network_name         = module.networking.vpc_network_name
+  finalize_cmd         = var.finalize_cmd
+  proxy                = var.proxy
+  proxy_cert_url       = var.proxy_cert_url
+  instance_worker_type = var.instance_worker_type
 }

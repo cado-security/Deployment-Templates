@@ -1,0 +1,133 @@
+Version: '2012-10-17'
+Statement:
+- Sid: RequiredForEC2Import
+  Effect: Allow
+  Action:
+  - ec2:DeleteVolume
+  - ec2:DeleteSnapshot
+  - ec2:TerminateInstances
+  - ec2:AttachVolume
+  - ec2:DetachVolume
+  - ec2:StopInstances
+  - ec2:StartInstances
+  - ec2:DescribeAddresses
+  - ec2:AssociateAddress
+  Resource: '*'
+  Condition:
+    StringLike:
+      aws:ResourceTag/Name: CadoResponse*
+- Sid: RequiredForMemoryForensics
+  Effect: Allow
+  Action:
+  - ssm:SendCommand
+  - ssm:DescribeInstanceInformation
+  Resource:
+  - arn:aws:ec2:*:*:instance/*
+  - arn:aws:ssm:*::document/AWS-RunShellScript
+  - arn:aws:ssm:*::document/AWS-RunPowerShellScript
+- Sid: RequiredForS3Import
+  Effect: Allow
+  Action: s3:ListAllMyBuckets
+  Resource: '*'
+- Sid: RequiredForKmsEncryptedEc2Import
+  Effect: Allow
+  Action:
+  - kms:Encrypt
+  - kms:Decrypt
+  - kms:ReEncrypt*
+  - kms:GenerateDataKey*
+  - kms:CreateGrant
+  Resource: '*'
+- Sid: RequiredForCrossAccountDefaultKmsEncryptedEc2Import
+  Effect: Allow
+  Action:
+  - kms:CreateKey
+  - kms:CreateAlias
+  - kms:DescribeKey
+  - kms:ListAliases
+  Resource: '*'
+- Sid: RequiredForLambdaImport
+  Effect: Allow
+  Action:
+  - lambda:GetFunction
+  - lambda:ListFunctions
+  - logs:FilterLogEvents
+  - ecr:GetAuthorizationToken
+  - ecr:GetDownloadURLForLayer
+  - ecr:BatchGetImage
+  Resource: '*'
+- Sid: RequiredForEcsImport
+  Effect: Allow
+  Action:
+  - ecs:ListClusters
+  - ecs:DescribeClusters
+  - ecs:ListServices
+  - ecs:DescribeServices
+  - ecs:ListTasks
+  - ecs:DescribeTasks
+  - ecs:ExecuteCommand
+  Resource: '*'
+- Sid: RequiredForEKSImport
+  Effect: Allow
+  Action:
+  - eks:ListClusters
+  - eks:DescribeCluster
+  Resource: '*'
+- Sid: RequiredForEc2ImportAndAmiImport
+  Effect: Allow
+  Action:
+  - cloudtrail:LookupEvents
+  - ec2:DescribeVolumesModifications
+  - ec2:AssociateAddress
+  - ec2:AttachVolume
+  - ec2:CopyImage
+  - ec2:CopySnapshot
+  - ec2:CreateSnapshot
+  - ec2:CreateSnapshots
+  - ec2:CreateTags
+  - ec2:CreateVolume
+  - ec2:DeleteTags
+  - ec2:DescribeAccountAttributes
+  - ec2:DescribeAddresses
+  - ec2:DescribeAvailabilityZones
+  - ec2:DescribeImages
+  - ec2:DescribeInstanceAttribute
+  - ec2:DescribeInstanceStatus
+  - ec2:DescribeInstances
+  - ec2:DescribeInstanceTypes
+  - ec2:DescribeRegions
+  - ec2:DescribeRouteTables
+  - ec2:DescribeSecurityGroups
+  - ec2:DescribeSnapshots
+  - ec2:DescribeSubnets
+  - ec2:DescribeTags
+  - ec2:DescribeVolumes
+  - ec2:DetachVolume
+  - ec2:GetConsoleOutput
+  - ec2:GetConsoleScreenshot
+  - ec2:ImportImage
+  - ec2:ModifySnapshotAttribute
+  - ec2:RunInstances
+  - ec2:DescribeFlowLogs
+  - ssm:DescribeInstanceInformation
+  - ssm:GetCommandInvocation
+  - iam:GetInstanceProfile
+  Resource: '*'
+- Sid: RequiredForEc2ImportAndAmiImport2
+  Effect: Allow
+  Action:
+  - ec2:ModifyInstanceAttribute
+  Resource: '*'
+  Condition:
+    StringLike:
+      aws:ResourceTag/Name: CadoResponse*
+    StringEquals:
+      ec2:Attribute: BlockDeviceMapping
+- Sid: RequiredForAmiImports
+  Effect: Allow
+  Action:
+  - ec2:DeregisterImage
+  Resource: '*'
+  Condition:
+    StringLike:
+      aws:ResourceTag/Name: CadoResponse*

@@ -101,3 +101,18 @@ variable "proxy_cert_url" {
   description = "Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert."
   default     = ""
 }
+
+variable "instance_worker_type" {
+  type        = string
+  default     = "n2-standard-8"
+  description = "Set Worker instance type"
+}
+
+variable "custom_networking" {
+  description = "Custom networking configuration. Set to null to create new resources."
+  type = object({
+    vpc_name           = string
+    public_subnet_name = string
+  })
+  default = null
+}

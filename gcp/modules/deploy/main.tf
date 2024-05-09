@@ -45,6 +45,7 @@ resource "google_compute_instance" "vm_instance" {
     "echo feature_flag_platform_upgrade = true >> /home/admin/processor/first_run.cfg",
     "echo PROXY_url = ${var.proxy} >> /home/admin/processor/first_run.cfg",
     "echo PROXY_cert_url = ${var.proxy_cert_url} >> /home/admin/processor/first_run.cfg",
+    "echo worker_instance = ${var.instance_worker_type} >> /home/admin/processor/first_run.cfg",
     ],
     [
       for k, v in var.tags :
@@ -93,9 +94,8 @@ resource "google_filestore_instance" "filestore_instance" {
   }
 
   networks {
-    network           = var.network_name
-    modes             = ["MODE_IPV4"]
-    reserved_ip_range = "10.5.2.0/29"
+    network = var.network_name
+    modes   = ["MODE_IPV4"]
   }
   depends_on = [var.network_config]
 }
