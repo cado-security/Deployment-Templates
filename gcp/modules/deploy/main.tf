@@ -37,8 +37,8 @@ resource "google_compute_instance" "vm_instance" {
     "#!/bin/bash -x",
     "storage_bucket=${google_storage_bucket.bucket.name}",
     "echo [FIRST_RUN] > /home/admin/processor/first_run.cfg",
-    "echo filestore_ip = ${google_filestore_instance.filestore_instance.networks[0].ip_addresses[0]} >> /home/admin/processor/first_run.cfg",
-    "echo filestore_name = ${google_filestore_instance.filestore_instance.file_shares[0].name} >> /home/admin/processor/first_run.cfg",
+    "echo filestore_ip = ${local.filestore_instance.networks[0].ip_addresses[0]} >> /home/admin/processor/first_run.cfg",
+    "echo filestore_name = ${local.filestore_instance.file_shares[0].name} >> /home/admin/processor/first_run.cfg",
     "echo bucket = $storage_bucket >> /home/admin/processor/first_run.cfg",
     "echo service_account_email = ${var.service_account} >> /home/admin/processor/first_run.cfg",
     "echo processing_mode = scalable-vm >> /home/admin/processor/first_run.cfg",
@@ -83,7 +83,29 @@ resource "google_compute_attached_disk" "attached_data_disk" {
   device_name = google_compute_disk.data_disk.name
 }
 
+resource "google_filestore_instance" "beta_filestore_instance" {
+  count    = var.use_beta ? 1 : 0
+  provider = google-beta
+  project  = var.project_id
+  name     = "cadoresponse-fileshare-${var.unique_name}"
+  location = var.region
+  tier     = "ENTERPRISE"
+
+  file_shares {
+    capacity_gb = 1024
+    name        = "cado_fileshare"
+  }
+
+  networks {
+    network = var.network_name
+    modes   = ["MODE_IPV4"]
+  }
+  protocol   = "NFS_V4_1"
+  depends_on = [var.network_config]
+}
+
 resource "google_filestore_instance" "filestore_instance" {
+  count    = var.use_beta ? 0 : 1
   name     = "cadoresponse-fileshare-${var.unique_name}"
   location = data.google_compute_zones.available.names[0]
   tier     = "BASIC_HDD"
@@ -98,6 +120,10 @@ resource "google_filestore_instance" "filestore_instance" {
     modes   = ["MODE_IPV4"]
   }
   depends_on = [var.network_config]
+}
+
+locals {
+  filestore_instance = var.use_beta ? google_filestore_instance.beta_filestore_instance[0] : google_filestore_instance.filestore_instance[0]
 }
 
 resource "google_storage_bucket" "bucket" {

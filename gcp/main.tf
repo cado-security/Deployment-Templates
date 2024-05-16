@@ -16,6 +16,10 @@ provider "google" {
   region      = var.region
 }
 
+locals {
+  use_beta = var.nfs_protocol == "NFS_V4_1"
+}
+
 module "configure" {
   count      = var.create_cloud_build_role_service_account ? 1 : 0
   source     = "./modules/configure"
@@ -56,4 +60,5 @@ module "deploy" {
   proxy                = var.proxy
   proxy_cert_url       = var.proxy_cert_url
   instance_worker_type = var.instance_worker_type
+  use_beta             = local.use_beta
 }

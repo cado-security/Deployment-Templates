@@ -69,3 +69,7 @@ variable "instance_worker_type" {
   type        = string
   description = "Set Worker instance type"
 }
+variable "use_beta" {
+  type        = bool
+  description = "Use beta filestore to utilize NFS_V4_1"
+}

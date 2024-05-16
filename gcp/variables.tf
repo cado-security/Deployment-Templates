@@ -90,6 +90,17 @@ variable "create_cloud_build_role_service_account" {
   default     = true
 }
 
+variable "nfs_protocol" {
+  description = "The Filestore NFS Protocol to use"
+  type        = string
+  default     = "NFS_V3"
+
+  validation {
+    condition     = can(regex("^(NFS_V3|NFS_V4_1)$", var.nfs_protocol))
+    error_message = "Invalid Filestore Protocol selected, only allowed: 'NFS_V3', 'NFS_V4_1'. Default 'NFS_V3'"
+  }
+}
+
 variable "proxy" {
   type        = string
   description = "Proxy URL to use for outbound connections in format / User Pass - https://user:pass@1.2.3.4:1234 | IP Auth - https://1.2.3.4:1234"

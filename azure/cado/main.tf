@@ -3,7 +3,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.100.0"
+      version = "~> 3.102.0"
     }
   }
   # Optional: add a backend to store tf state in Azure. Otherwise, make sure to keep your tfstate!
