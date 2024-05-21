@@ -7,6 +7,10 @@ terraform {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
+data "aws_region" "current" {}
+
 variable "region" {
   type    = string
   default = "us-west-1"
@@ -132,6 +136,16 @@ resource "aws_iam_role_policy" "instance_policy" {
 					"aws:ResourceTag/Name": "CadoResponse*"
 				}
 			}
+		},
+		{
+			"Sid": "RequiredForCloudWatchAgent",
+			"Effect": "Allow",
+			"Action": [
+				"logs:CreateLogGroup",
+				"logs:CreateLogStream",
+				"logs:PutLogEvents"
+			],
+			"Resource": "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/var/logs/cado:*"
 		}
 	]
 }

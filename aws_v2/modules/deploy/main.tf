@@ -89,7 +89,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "bucket_lifecycle" {
 }
 
 resource "aws_s3_bucket_public_access_block" "CadoPublicAccessBlockConfiguration" {
-  bucket = aws_s3_bucket.bucket.id
+  bucket                  = aws_s3_bucket.bucket.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
@@ -203,6 +203,18 @@ resource "aws_lb_target_group_attachment" "registered_target" {
   count            = var.public_deployment == true ? 0 : 1
   target_group_arn = var.lb_target_group_arn
   target_id        = aws_instance.main.id
+}
+
+resource "aws_cloudwatch_log_group" "cado_log_group" {
+  count = var.configure_cloudwatch == false ? 0 : 1
+  name  = "/var/logs/cado"
+}
+
+resource "aws_cloudwatch_log_stream" "cado_log_stream" {
+  count          = var.configure_cloudwatch == false ? 0 : 1
+  name           = "cado-logs-all"
+  log_group_name = aws_cloudwatch_log_group.cado_log_group[0].name
+  depends_on     = [aws_cloudwatch_log_group.cado_log_group[0]]
 }
 
 output "s3_bucket_id" {

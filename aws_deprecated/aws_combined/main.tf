@@ -81,6 +81,11 @@ variable "instance_worker_type" {
   default = "i4i.2xlarge"
 }
 
+variable "configure_cloudwatch" {
+  type    = bool
+  default = true
+}
+
 # Configure the AWS Provider
 provider "aws" {
   region = var.region
@@ -116,5 +121,6 @@ module "aws" {
   tags                         = var.tags
   proxy                        = var.proxy
   proxy_cert_url               = var.proxy_cert_url
+  configure_cloudwatch         = var.configure_cloudwatch
 }
 

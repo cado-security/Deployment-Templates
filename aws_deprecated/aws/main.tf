@@ -7,6 +7,7 @@ terraform {
   }
 }
 
+
 # Should be updated 
 
 variable "region" {
@@ -97,6 +98,11 @@ variable "proxy_cert_url" {
 variable "instance_worker_type" {
   type    = string
   default = "i4i.2xlarge"
+}
+
+variable "configure_cloudwatch" {
+  type    = bool
+  default = true
 }
 
 # Configure the AWS Provider
@@ -466,6 +472,18 @@ resource "aws_route_table_association" "route_table_assoc" {
 resource "aws_route_table_association" "route_table_assoc_b" {
   subnet_id      = aws_subnet.subnet_b.id
   route_table_id = aws_route_table.route_table.id
+}
+
+resource "aws_cloudwatch_log_group" "cado_log_group" {
+  count = var.configure_cloudwatch == false ? 0 : 1
+  name  = "/var/logs/cado"
+}
+
+resource "aws_cloudwatch_log_stream" "cado_log_stream" {
+  count          = var.configure_cloudwatch == false ? 0 : 1
+  name           = "cado-logs-all"
+  log_group_name = aws_cloudwatch_log_group.cado_log_group[0].name
+  depends_on     = [aws_cloudwatch_log_group.cado_log_group[0]]
 }
 
 output "s3_bucket_id" {

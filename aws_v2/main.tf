@@ -47,4 +47,5 @@ module "deploy" {
   instance_role_name            = module.iam.instance_role_name
   proxy                         = var.proxy
   proxy_cert_url                = var.proxy_cert_url
+  configure_cloudwatch          = var.configure_cloudwatch
 }

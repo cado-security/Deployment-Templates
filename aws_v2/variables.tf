@@ -103,3 +103,9 @@ variable "instance_worker_type" {
   default     = "i4i.2xlarge"
   description = "Set Worker instance type"
 }
+
+variable "configure_cloudwatch" {
+  description = "Create resources enabling Cado logs to be viewed in CloudWatch"
+  type        = bool
+  default     = true
+}

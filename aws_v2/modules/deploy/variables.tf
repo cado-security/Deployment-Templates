@@ -66,3 +66,8 @@ variable "lb_target_group_arn" {
 variable "instance_worker_type" {
   type = string
 }
+
+variable "configure_cloudwatch" {
+  type    = bool
+  default = true
+}
