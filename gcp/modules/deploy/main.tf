@@ -13,7 +13,7 @@ resource "google_compute_instance" "vm_instance" {
   boot_disk {
     initialize_params {
       image = var.boot_disk_image
-      size  = 20
+      size  = 30
     }
   }
 
