@@ -307,12 +307,6 @@ resource "random_string" "cado" {
   special = false
 }
 
-resource "azurerm_resource_group" "keyvault" {
-  name     = "cado-kv-rg-${data.azurerm_resource_group.group.name}"
-  location = data.azurerm_resource_group.group.location
-  tags     = var.tags
-}
-
 resource "azurerm_key_vault_access_policy" "bitbucket" {
   key_vault_id = azurerm_key_vault.keyvault.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
@@ -359,7 +353,7 @@ resource "azurerm_key_vault_access_policy" "cado" {
 
 resource "azurerm_key_vault" "keyvault" {
   name                        = "cado-${random_string.cado.result}"
-  location                    = azurerm_resource_group.keyvault.location
+  location                    = data.azurerm_resource_group.group.location
   resource_group_name         = data.azurerm_resource_group.group.name
   enabled_for_disk_encryption = true
   tenant_id                   = data.azurerm_client_config.current.tenant_id

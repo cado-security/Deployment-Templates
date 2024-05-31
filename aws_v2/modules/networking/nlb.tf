@@ -81,13 +81,14 @@ resource "aws_subnet" "subnet_public_b" {
 }
 
 resource "aws_lb" "load_balancer" {
-  count              = var.public_deployment == true ? 0 : 1
-  name_prefix        = "CadoLB"
-  internal           = var.private_load_balancer
-  load_balancer_type = "application"
-  ip_address_type    = "ipv4"
-  subnets            = [local.subnet_a_id, local.subnet_b_id]
-  security_groups    = [aws_security_group.alb_security_group[0].id]
+  count                      = var.public_deployment == true ? 0 : 1
+  name_prefix                = "CadoLB"
+  internal                   = var.private_load_balancer
+  load_balancer_type         = "application"
+  drop_invalid_header_fields = true
+  ip_address_type            = "ipv4"
+  subnets                    = [local.subnet_a_id, local.subnet_b_id]
+  security_groups            = [aws_security_group.alb_security_group[0].id]
   tags = merge(
     var.tags,
     {
@@ -120,7 +121,7 @@ resource "aws_lb_listener" "load_balancer_listener" {
   load_balancer_arn = aws_lb.load_balancer[0].arn
   port              = "443"
   protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
   certificate_arn   = var.certificate_arn
   default_action {
     type             = "forward"
