@@ -191,6 +191,7 @@ resource "aws_ebs_volume" "data_volume" {
       Name = "CadoResponseDataVolume"
     }
   )
+  type = "gp3"
 }
 
 resource "aws_volume_attachment" "ebs_att" {
