@@ -12,21 +12,24 @@ provider "aws" {
 }
 
 module "networking" {
-  source                = "./modules/networking"
-  http_location         = var.http_location
-  ssh_location          = var.ssh_location
-  public_deployment     = var.public_deployment
-  private_load_balancer = var.private_load_balancer
-  certificate_arn       = var.certificate_arn
-  custom_networking     = var.custom_networking
-  tags                  = var.tags
+  source                                = "./modules/networking"
+  http_location                         = var.http_location
+  ssh_location                          = var.ssh_location
+  public_deployment                     = var.public_deployment
+  private_load_balancer                 = var.private_load_balancer
+  certificate_arn                       = var.certificate_arn
+  custom_networking                     = var.custom_networking
+  tags                                  = var.tags
+  s3_bucket_id                          = module.deploy.s3_bucket_id
+  load_balancer_delete_protection       = var.load_balancer_delete_protection
+  load_balancer_access_logs_bucket_name = var.load_balancer_access_logs_bucket_name
 }
 
 module "iam" {
   source       = "./modules/iam"
   region       = var.region
-  s3_bucket_id = module.deploy.s3_bucket_id
   tags         = var.tags
+  s3_bucket_id = module.deploy.s3_bucket_id
 }
 
 module "deploy" {

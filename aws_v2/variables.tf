@@ -46,6 +46,18 @@ variable "certificate_arn" {
   default     = ""
 }
 
+variable "load_balancer_delete_protection" {
+  description = "Enable or disable deletion protection for the load balancer via API (Terraform)"
+  type        = bool
+  default     = true
+}
+
+variable "load_balancer_access_logs_bucket_name" {
+  description = "S3 bucket name to store load balancer access logs. Off by default unless set."
+  type        = string
+  default     = ""
+}
+
 # Sizing options
 
 variable "vm_size" {

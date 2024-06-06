@@ -89,12 +89,21 @@ resource "aws_lb" "load_balancer" {
   ip_address_type            = "ipv4"
   subnets                    = [local.subnet_a_id, local.subnet_b_id]
   security_groups            = [aws_security_group.alb_security_group[0].id]
+  enable_deletion_protection = var.load_balancer_delete_protection
+
+  access_logs {
+    bucket  = var.load_balancer_access_logs_bucket_name
+    prefix  = "cado-lb-access-logs"
+    enabled = var.load_balancer_access_logs_bucket_name == "" ? false : true
+  }
+
   tags = merge(
     var.tags,
     {
       Name = "CadoResponseLoadBalancer"
     }
   )
+  depends_on = [var.s3_bucket_id]
 }
 
 resource "aws_lb_target_group" "target_group" {

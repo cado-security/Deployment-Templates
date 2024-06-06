@@ -16,6 +16,15 @@ Statement:
   Condition:
     StringLike:
       aws:ResourceTag/Name: CadoResponse*
+- Sid: RequiredForAcquireToS3
+  Effect: Allow
+  Action:
+  - s3:PutObject
+  - s3:GetObject
+  - s3:RestoreObject
+  - s3:PutObjectTagging
+  - s3:GetObjectTagging
+  Resource: '*'
 - Sid: RequiredForMemoryForensics
   Effect: Allow
   Action:

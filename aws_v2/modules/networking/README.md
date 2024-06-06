@@ -46,8 +46,11 @@ No modules.
 | <a name="input_certificate_arn"></a> [certificate\_arn](#input\_certificate\_arn) | n/a | `string` | n/a | yes |
 | <a name="input_custom_networking"></a> [custom\_networking](#input\_custom\_networking) | Custom networking configuration. Set to null to create new resources. | <pre>object({<br>    vpc_id             = string<br>    public_subnet_id   = string<br>    private_subnet_id  = string<br>    public_subnet_b_id = string<br>  })</pre> | `null` | no |
 | <a name="input_http_location"></a> [http\_location](#input\_http\_location) | n/a | `list(string)` | n/a | yes |
+| <a name="input_load_balancer_access_logs_bucket_name"></a> [load\_balancer\_access\_logs\_bucket\_name](#input\_load\_balancer\_access\_logs\_bucket\_name) | n/a | `string` | n/a | yes |
+| <a name="input_load_balancer_delete_protection"></a> [load\_balancer\_delete\_protection](#input\_load\_balancer\_delete\_protection) | n/a | `bool` | n/a | yes |
 | <a name="input_private_load_balancer"></a> [private\_load\_balancer](#input\_private\_load\_balancer) | n/a | `bool` | n/a | yes |
 | <a name="input_public_deployment"></a> [public\_deployment](#input\_public\_deployment) | n/a | `bool` | n/a | yes |
+| <a name="input_s3_bucket_id"></a> [s3\_bucket\_id](#input\_s3\_bucket\_id) | n/a | `string` | n/a | yes |
 | <a name="input_ssh_location"></a> [ssh\_location](#input\_ssh\_location) | n/a | `list(string)` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | n/a | `map(string)` | n/a | yes |
 

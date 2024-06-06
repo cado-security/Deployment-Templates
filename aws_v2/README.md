@@ -65,13 +65,16 @@ No resources.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_ami_id"></a> [ami\_id](#input\_ami\_id) | Cado Response AMI ID | `string` | n/a | yes |
-| <a name="input_certificate_arn"></a> [certificate\_arn](#input\_certificate\_arn) | Certificate arn to use for the ALB | `string` | `"not_set"` | no |
+| <a name="input_certificate_arn"></a> [certificate\_arn](#input\_certificate\_arn) | Certificate arn to use for the ALB | `string` | `""` | no |
+| <a name="input_configure_cloudwatch"></a> [configure\_cloudwatch](#input\_configure\_cloudwatch) | Create resources enabling Cado logs to be viewed in CloudWatch | `bool` | `true` | no |
 | <a name="input_custom_networking"></a> [custom\_networking](#input\_custom\_networking) | Custom networking configuration. Set to null to create new resources. | <pre>object({<br>    vpc_id             = string<br>    public_subnet_id   = string<br>    private_subnet_id  = string<br>    public_subnet_b_id = string<br>  })</pre> | `null` | no |
 | <a name="input_feature_flag_platform_upgrade"></a> [feature\_flag\_platform\_upgrade](#input\_feature\_flag\_platform\_upgrade) | n/a | `bool` | `false` | no |
 | <a name="input_finalize_cmd"></a> [finalize\_cmd](#input\_finalize\_cmd) | Finalize command | `string` | `"sudo /home/admin/processor/release/finalize.sh --main"` | no |
 | <a name="input_http_location"></a> [http\_location](#input\_http\_location) | IP address to allow http access from | `list(string)` | n/a | yes |
 | <a name="input_instance_worker_type"></a> [instance\_worker\_type](#input\_instance\_worker\_type) | Set Worker instance type | `string` | `"i4i.2xlarge"` | no |
 | <a name="input_key_name"></a> [key\_name](#input\_key\_name) | n/a | `string` | n/a | yes |
+| <a name="input_load_balancer_access_logs_bucket_name"></a> [load\_balancer\_access\_logs\_bucket\_name](#input\_load\_balancer\_access\_logs\_bucket\_name) | S3 bucket name to store load balancer access logs. Off by default unless set. | `string` | `""` | no |
+| <a name="input_load_balancer_delete_protection"></a> [load\_balancer\_delete\_protection](#input\_load\_balancer\_delete\_protection) | Enable or disable deletion protection for the load balancer via API (Terraform) | `bool` | `true` | no |
 | <a name="input_private_load_balancer"></a> [private\_load\_balancer](#input\_private\_load\_balancer) | To determine if we should deploy an internal load balancer | `bool` | `false` | no |
 | <a name="input_proxy"></a> [proxy](#input\_proxy) | Proxy URL to use for outbound connections in format / User Pass - https://user:pass@1.2.3.4:1234 \| IP Auth - https://1.2.3.4:1234 | `string` | `""` | no |
 | <a name="input_proxy_cert_url"></a> [proxy\_cert\_url](#input\_proxy\_cert\_url) | Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert. | `string` | `""` | no |

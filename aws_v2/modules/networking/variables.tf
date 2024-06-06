@@ -22,6 +22,17 @@ variable "tags" {
   type = map(string)
 }
 
+variable "s3_bucket_id" {
+  type = string
+}
+
+variable "load_balancer_delete_protection" {
+  type = bool
+}
+
+variable "load_balancer_access_logs_bucket_name" {
+  type = string
+}
 
 variable "custom_networking" {
   description = "Custom networking configuration. Set to null to create new resources."
