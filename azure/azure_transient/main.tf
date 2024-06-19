@@ -263,6 +263,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
       "echo elastic_hostname = ${self.private_ip_address}:9200 | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo private_ip = ${self.private_ip_address} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo processing_mode = ${var.processing_mode} | sudo tee -a /home/admin/processor/first_run.cfg",
+      "echo deployment_mode = terraform | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo worker_instance = ${var.worker_vm_type} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo azure_storage_account = ${data.azurerm_storage_account.storage.name} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo azure_storage_share = ${data.azurerm_storage_share.share.name} | sudo tee -a /home/admin/processor/first_run.cfg",

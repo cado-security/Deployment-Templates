@@ -52,8 +52,6 @@ Statement:
   Action:
   - kms:CreateKey
   - kms:CreateAlias
-  - kms:DescribeKey
-  - kms:ListAliases
   Resource: '*'
 - Sid: RequiredForLambdaImport
   Effect: Allow

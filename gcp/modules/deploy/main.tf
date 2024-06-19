@@ -42,6 +42,7 @@ resource "google_compute_instance" "vm_instance" {
     "echo bucket = $storage_bucket >> /home/admin/processor/first_run.cfg",
     "echo service_account_email = ${var.service_account} >> /home/admin/processor/first_run.cfg",
     "echo processing_mode = scalable-vm >> /home/admin/processor/first_run.cfg",
+    "echo deployment_mode = terraform >> /home/admin/processor/first_run.cfg",
     "echo feature_flag_platform_upgrade = true >> /home/admin/processor/first_run.cfg",
     "echo PROXY_url = ${var.proxy} >> /home/admin/processor/first_run.cfg",
     "echo PROXY_cert_url = ${var.proxy_cert_url} >> /home/admin/processor/first_run.cfg",

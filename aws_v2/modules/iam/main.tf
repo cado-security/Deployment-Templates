@@ -238,13 +238,20 @@ resource "aws_iam_role_policy" "policy" {
             "Resource": "*"
         },
         {
+            "Sid": "RequiredForKMSKeyTypeDeterminationDuringEncryptedEc2Import",
+            "Effect": "Allow",
+            "Action": [
+                "kms:DescribeKey",
+                "kms:ListAliases"
+            ],
+            "Resource": "*"
+        },
+        {
             "Sid": "RequiredForCrossAccountDefaultKmsEncryptedEc2Import",
             "Effect": "Allow",
             "Action": [
                 "kms:CreateKey",
-                "kms:CreateAlias",
-                "kms:DescribeKey",
-                "kms:ListAliases"
+                "kms:CreateAlias"
             ],
             "Resource": "*"
         },

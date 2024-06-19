@@ -142,6 +142,7 @@ resource "aws_instance" "main" {
     "echo [FIRST_RUN] > /home/admin/processor/first_run.cfg",
     "echo bucket = $s3bucket >> /home/admin/processor/first_run.cfg",
     "echo processing_mode = scalable-vm >> /home/admin/processor/first_run.cfg",
+    "echo deployment_mode = terraform >> /home/admin/processor/first_run.cfg",
     "echo efs_ip = ${aws_efs_mount_target.efs_mount_target.ip_address} >> /home/admin/processor/first_run.cfg",
     "echo aws_role = $aws_role >> /home/admin/processor/first_run.cfg",
     "echo feature_flag_platform_upgrade = $feature_flag_platform_upgrade >> /home/admin/processor/first_run.cfg",
