@@ -47,6 +47,12 @@ Statement:
   - kms:GenerateDataKey*
   - kms:CreateGrant
   Resource: '*'
+- Sid: RequiredForKMSKeyTypeDeterminationDuringEncryptedEc2Import
+  Effect: Allow
+  Action:
+  - kms:DescribeKey
+  - kms:ListAliases
+  Resource: '*'
 - Sid: RequiredForCrossAccountDefaultKmsEncryptedEc2Import
   Effect: Allow
   Action:
@@ -119,6 +125,9 @@ Statement:
   - ssm:DescribeInstanceInformation
   - ssm:GetCommandInvocation
   - iam:GetInstanceProfile
+  - ebs:ListSnapshotBlocks
+  - ebs:ListChangedBlocks
+  - ebs:GetSnapshotBlock
   Resource: '*'
 - Sid: RequiredForEc2ImportAndAmiImport2
   Effect: Allow

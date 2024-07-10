@@ -348,7 +348,10 @@ resource "aws_iam_role_policy" "policy" {
                 "ec2:DescribeFlowLogs",
                 "ssm:DescribeInstanceInformation",
                 "ssm:GetCommandInvocation",
-                "iam:GetInstanceProfile"
+                "iam:GetInstanceProfile",
+                "ebs:ListSnapshotBlocks",
+                "ebs:ListChangedBlocks",
+                "ebs:GetSnapshotBlock"
             ],
             "Resource": "*"
         },
