@@ -194,7 +194,10 @@ resource "aws_iam_role_policy" "policy" {
                 "s3:GetObject",
                 "s3:RestoreObject",
                 "s3:PutObjectTagging",
-                "s3:GetObjectTagging"
+                "s3:GetObjectTagging",
+                "s3:ListAllMyBuckets",
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
             ],
             "Resource": "arn:aws:s3:::${var.s3_bucket_id}/*"
         },
