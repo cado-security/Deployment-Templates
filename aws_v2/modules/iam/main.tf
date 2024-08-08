@@ -211,6 +211,7 @@ resource "aws_iam_role_policy" "policy" {
             "Action": [
                 "ec2:DeleteVolume",
                 "ec2:DeleteSnapshot",
+                "ec2:DeleteTags",
                 "ec2:TerminateInstances",
                 "ec2:AttachVolume",
                 "ec2:DetachVolume",
@@ -396,7 +397,6 @@ resource "aws_iam_role_policy" "policy" {
                 "ec2:CreateSnapshots",
                 "ec2:CreateTags",
                 "ec2:CreateVolume",
-                "ec2:DeleteTags",
                 "ec2:DescribeAccountAttributes",
                 "ec2:DescribeAddresses",
                 "ec2:DescribeAvailabilityZones",
