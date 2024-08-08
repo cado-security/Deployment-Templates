@@ -66,7 +66,7 @@ resource "aws_iam_role_policy" "instance_policy" {
 {
     "Statement": [
         {
-            "Sid": "Required",
+            "Sid": "IAM",
             "Effect": "Allow",
             "Action": [
                 "sts:AssumeRole",
@@ -79,7 +79,7 @@ resource "aws_iam_role_policy" "instance_policy" {
                 "sts:GetCallerIdentity",
                 "sts:GetSessionToken"
             ],
-            "Resource": "${aws_iam_role.role.arn}"
+            "Resource": "*"
         },
         {
             "Sid": "RequiredForStartup",
@@ -90,7 +90,7 @@ resource "aws_iam_role_policy" "instance_policy" {
             "Resource": "*"
         },
         {
-            "Sid": "RequiredForStartup2",
+            "Sid": "RequiredForSecretsManagement",
             "Effect": "Allow",
             "Action": [
                 "secretsmanager:PutSecretValue",
@@ -104,6 +104,85 @@ resource "aws_iam_role_policy" "instance_policy" {
                     "aws:ResourceTag/Name": "CadoResponse*"
                 }
             }
+        },
+        {
+            "Sid": "RequiredForWorkers",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DeleteVolume",
+                "ec2:DeleteSnapshot",
+                "ec2:TerminateInstances",
+                "ec2:AttachVolume",
+                "ec2:DetachVolume",
+                "ec2:StopInstances",
+                "ec2:StartInstances",
+                "ec2:RunInstances",
+                "ec2:DescribeInstanceStatus",
+                "ec2:CreateTags",
+                "ec2:DescribeAddresses",
+                "ec2:AssociateAddress"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "RequiredForNativeUpdates",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DeleteVolume",
+                "ec2:DeleteSnapshot",
+                "ec2:TerminateInstances",
+                "ec2:AttachVolume",
+                "ec2:DetachVolume",
+                "ec2:StopInstances",
+                "ec2:StartInstances",
+                "ec2:DescribeAddresses",
+                "ec2:AssociateAddress",
+                "ec2:DescribeImages",
+                "ec2:DescribeVolumes",
+                "ec2:DescribeInstanceAttribute"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "RequiredForNativeUpdatesWithALB",
+            "Effect": "Allow",
+            "Action": [
+                "elasticloadbalancing:DescribeTargetHealth",
+                "elasticloadbalancing:DescribeTargetGroups",
+                "elasticloadbalancing:RegisterTargets",
+                "elasticloadbalancing:DeregisterTargets"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "RequiredForCadoHostAndPreservation",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:RestoreObject",
+                "s3:PutObjectTagging",
+                "s3:GetObjectTagging",
+                "s3:ListAllMyBuckets",
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": "arn:aws:s3:::${var.s3_bucket_id}/*"
+        },
+        {
+            "Sid": "RequiredForHealthChecks",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "ec2:DescribeInstanceTypes",
+                "ec2:DescribeSecurityGroups",
+                "cloudtrail:ListTrails",
+                "servicequotas:GetServiceQuota",
+                "cloudwatch:GetMetricData",
+                "cloudtrail:GetTrailStatus",
+                "iam:GetRolePolicy"
+            ],
+            "Resource": "*"
         },
         {
             "Sid": "RequiredForCloudWatchAgent",
@@ -178,16 +257,7 @@ resource "aws_iam_role_policy" "policy" {
             "Resource": "arn:aws:iam::*:role/*CadoResponse*"
         },
         {
-            "Sid": "RequiredToAccessCadoS3Bucket",
-            "Effect": "Allow",
-            "Action": [
-                "s3:GetBucketLocation",
-                "s3:ListBucket"
-            ],
-            "Resource": "arn:aws:s3:::${var.s3_bucket_id}"
-        },
-        {
-            "Sid": "RequiredForAcquireToS3",
+            "Sid": "RequiredForCadoHostAndPreservation",
             "Effect": "Allow",
             "Action": [
                 "s3:PutObject",
