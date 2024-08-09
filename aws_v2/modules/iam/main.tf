@@ -79,7 +79,7 @@ resource "aws_iam_role_policy" "instance_policy" {
                 "sts:GetCallerIdentity",
                 "sts:GetSessionToken"
             ],
-            "Resource": "*"
+            "Resource": "arn:aws:iam::*:role/*CadoResponse*"
         },
         {
             "Sid": "RequiredForStartup",
