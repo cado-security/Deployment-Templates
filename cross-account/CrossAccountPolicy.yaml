@@ -43,12 +43,6 @@ Statement:
   - kms:DescribeKey
   - kms:ListAliases
   Resource: '*'
-- Sid: RequiredForCrossAccountDefaultKmsEncryptedEc2Import
-  Effect: Allow
-  Action:
-  - kms:CreateKey
-  - kms:CreateAlias
-  Resource: '*'
 - Sid: RequiredForLambdaImport
   Effect: Allow
   Action:
