@@ -1,6 +1,6 @@
 Version: '2012-10-17'
 Statement:
-- Sid: RequriedForEC2andAmiImportScoped
+- Sid: RequriedForMarketplaceEC2andAmiImportScoped
   Effect: Allow
   Action:
   - ec2:DeleteSnapshot
@@ -70,12 +70,11 @@ Statement:
   - eks:ListClusters
   - eks:DescribeCluster
   Resource: '*'
-- Sid: RequiredForEc2ImportAndAmiImport
+- Sid: RequiredForEc2ImportAndAmiImportScoped
   Effect: Allow
   Action:
   - cloudtrail:LookupEvents
   - ec2:DescribeVolumesModifications
-  - ec2:AssociateAddress
   - ec2:AttachVolume
   - ec2:CopyImage
   - ec2:CopySnapshot
@@ -98,12 +97,8 @@ Statement:
   - ec2:DescribeSubnets
   - ec2:DescribeTags
   - ec2:DescribeVolumes
-  - ec2:DetachVolume
-  - ec2:GetConsoleOutput
-  - ec2:GetConsoleScreenshot
   - ec2:ImportImage
   - ec2:ModifySnapshotAttribute
-  - ec2:RunInstances
   - ec2:DescribeFlowLogs
   - ssm:DescribeInstanceInformation
   - ssm:GetCommandInvocation

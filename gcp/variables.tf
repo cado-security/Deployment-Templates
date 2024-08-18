@@ -74,8 +74,8 @@ variable "inbound_ports" {
 variable "local_ports" {
   description = "The list of ports to open to speak on the local subnet"
   type        = list(string)
-  default     = ["5432", "9200", "6379"] # DO NOT CHANGE
-  #  5432: PostgreSQL, 9200: Elasticsearch, 6379: Redis
+  default     = ["5432", "9200", "6379", "24224"] # DO NOT CHANGE
+  #  5432: PostgreSQL, 9200: Elasticsearch, 6379: Redis, 24224: Fluent-bit
 }
 
 variable "role" {

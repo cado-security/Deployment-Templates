@@ -108,6 +108,12 @@ resource "aws_security_group" "security_group" {
   }
   ingress {
     protocol    = "tcp"
+    from_port   = 24224
+    to_port     = 24224
+    cidr_blocks = [data.aws_vpc.selected_vpc_id.cidr_block]
+  }
+  ingress {
+    protocol    = "tcp"
     from_port   = 9200
     to_port     = 9200
     cidr_blocks = [data.aws_vpc.selected_vpc_id.cidr_block]

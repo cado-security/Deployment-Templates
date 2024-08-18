@@ -162,12 +162,19 @@ resource "aws_iam_role_policy" "instance_policy" {
                 "s3:GetObject",
                 "s3:RestoreObject",
                 "s3:PutObjectTagging",
-                "s3:GetObjectTagging",
+                "s3:GetObjectTagging"
+            ],
+            "Resource": "arn:aws:s3:::${var.s3_bucket_id}/*"
+        },
+        {
+            "Sid": "RequiredForCadoHostAndPreservation2",
+            "Effect": "Allow",
+            "Action": [
                 "s3:ListAllMyBuckets",
                 "s3:ListBucket",
                 "s3:GetBucketLocation"
             ],
-            "Resource": "arn:aws:s3:::${var.s3_bucket_id}/*"
+            "Resource": "arn:aws:s3:::${var.s3_bucket_id}"
         },
         {
             "Sid": "RequiredForHealthChecks",
@@ -265,12 +272,19 @@ resource "aws_iam_role_policy" "policy" {
                 "s3:GetObject",
                 "s3:RestoreObject",
                 "s3:PutObjectTagging",
-                "s3:GetObjectTagging",
+                "s3:GetObjectTagging"
+            ],
+            "Resource": "arn:aws:s3:::${var.s3_bucket_id}/*"
+        },
+        {
+            "Sid": "RequiredForCadoHostAndPreservation2",
+            "Effect": "Allow",
+            "Action": [
                 "s3:ListAllMyBuckets",
                 "s3:ListBucket",
                 "s3:GetBucketLocation"
             ],
-            "Resource": "arn:aws:s3:::${var.s3_bucket_id}/*"
+            "Resource": "arn:aws:s3:::${var.s3_bucket_id}"
         },
         {
             "Sid": "RequiredForS3Readiness",
@@ -413,8 +427,6 @@ resource "aws_iam_role_policy" "policy" {
                 "ec2:DescribeTags",
                 "ec2:DescribeVolumes",
                 "ec2:DetachVolume",
-                "ec2:GetConsoleOutput",
-                "ec2:GetConsoleScreenshot",
                 "ec2:ImportImage",
                 "ec2:ModifySnapshotAttribute",
                 "ec2:RunInstances",
