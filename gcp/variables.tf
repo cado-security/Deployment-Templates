@@ -127,3 +127,9 @@ variable "custom_networking" {
   })
   default = null
 }
+
+variable "deploy_nfs" {
+  description = "Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files."
+  type        = bool
+  default     = true
+}

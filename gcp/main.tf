@@ -61,4 +61,5 @@ module "deploy" {
   proxy_cert_url       = var.proxy_cert_url
   instance_worker_type = var.instance_worker_type
   use_beta             = local.use_beta
+  deploy_nfs           = var.deploy_nfs
 }

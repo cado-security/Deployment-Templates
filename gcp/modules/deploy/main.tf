@@ -37,8 +37,8 @@ resource "google_compute_instance" "vm_instance" {
     "#!/bin/bash -x",
     "storage_bucket=${google_storage_bucket.bucket.name}",
     "echo [FIRST_RUN] > /home/admin/processor/first_run.cfg",
-    "echo filestore_ip = ${local.filestore_instance.networks[0].ip_addresses[0]} >> /home/admin/processor/first_run.cfg",
-    "echo filestore_name = ${local.filestore_instance.file_shares[0].name} >> /home/admin/processor/first_run.cfg",
+    var.deploy_nfs ? "echo filestore_ip = ${local.filestore_instance.networks[0].ip_addresses[0]} >> /home/admin/processor/first_run.cfg" : "",
+    var.deploy_nfs ? "echo filestore_name = ${local.filestore_instance.file_shares[0].name} >> /home/admin/processor/first_run.cfg" : "",
     "echo bucket = $storage_bucket >> /home/admin/processor/first_run.cfg",
     "echo service_account_email = ${var.service_account} >> /home/admin/processor/first_run.cfg",
     "echo processing_mode = scalable-vm >> /home/admin/processor/first_run.cfg",
@@ -85,7 +85,7 @@ resource "google_compute_attached_disk" "attached_data_disk" {
 }
 
 resource "google_filestore_instance" "beta_filestore_instance" {
-  count    = var.use_beta ? 1 : 0
+  count    = (var.use_beta && var.deploy_nfs) ? 1 : 0
   provider = google-beta
   project  = var.project_id
   name     = "cadoresponse-fileshare-${var.unique_name}"
@@ -106,7 +106,7 @@ resource "google_filestore_instance" "beta_filestore_instance" {
 }
 
 resource "google_filestore_instance" "filestore_instance" {
-  count    = var.use_beta ? 0 : 1
+  count    = (var.use_beta && var.deploy_nfs) ? 0 : 1
   name     = "cadoresponse-fileshare-${var.unique_name}"
   location = data.google_compute_zones.available.names[0]
   tier     = "BASIC_HDD"
@@ -124,8 +124,11 @@ resource "google_filestore_instance" "filestore_instance" {
 }
 
 locals {
-  filestore_instance = var.use_beta ? google_filestore_instance.beta_filestore_instance[0] : google_filestore_instance.filestore_instance[0]
+  filestore_instance = var.use_beta ? google_filestore_instance.beta_filestore_instance[0] : (
+    var.deploy_nfs ? google_filestore_instance.filestore_instance[0] : null
+  )
 }
+
 
 resource "google_storage_bucket" "bucket" {
   name                        = "cadoresponse-bucket-${var.unique_name}"

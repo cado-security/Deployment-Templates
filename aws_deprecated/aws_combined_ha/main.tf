@@ -76,8 +76,8 @@ provider "aws" {
 }
 
 module "aws_roles" {
-  source = "./../aws_roles"
-  region = var.region
+  source       = "./../aws_roles"
+  region       = var.region
   s3_bucket_id = module.aws_common.s3_bucket_id
 }
 

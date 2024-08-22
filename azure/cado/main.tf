@@ -15,6 +15,12 @@ provider "azurerm" {
 
 // default variables enclosed in < > should be updated
 
+variable "deploy_nfs" {
+  type        = bool
+  description = "Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files."
+  default     = true
+}
+
 variable "image_id" {
   type        = string
   description = "Cado Response VHD blobstore URL"
@@ -137,6 +143,7 @@ module "azure_transient" {
   resource_group                = var.resource_group
   image_id                      = var.image_id
   ip_pattern_https              = var.ip_pattern_https
+  deploy_nfs                    = var.deploy_nfs
   ip_pattern_all                = var.ip_pattern_all
   instance_type                 = var.instance_type
   main_size                     = var.main_size

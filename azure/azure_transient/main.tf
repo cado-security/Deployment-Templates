@@ -1,6 +1,12 @@
 
 // Variables
 
+variable "deploy_nfs" {
+  type        = bool
+  description = "Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files."
+  default     = true
+}
+
 variable "image_id" {
   type        = string
   description = "Cado Response VHD blobstore URL"
@@ -208,6 +214,7 @@ data "azurerm_storage_container" "container" {
 }
 
 data "azurerm_storage_share" "share" {
+  count                = var.deploy_nfs ? 1 : 0
   name                 = "cadoshare"
   storage_account_name = data.azurerm_storage_account.storage.name
 }
@@ -265,13 +272,15 @@ resource "azurerm_linux_virtual_machine" "vm" {
       "echo processing_mode = ${var.processing_mode} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo deployment_mode = terraform | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo worker_instance = ${var.worker_vm_type} | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo azure_storage_account = ${data.azurerm_storage_account.storage.name} | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo azure_storage_share = ${data.azurerm_storage_share.share.name} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo feature_flag_platform_upgrade = ${var.feature_flag_platform_upgrade} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo bucket = ${data.azurerm_storage_container.container.name} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo PROXY_url = ${var.proxy} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo PROXY_cert_url = ${var.proxy_cert_url} | sudo tee -a /home/admin/processor/first_run.cfg",
       ],
+      var.deploy_nfs ? [
+        "echo azure_storage_share = ${data.azurerm_storage_share.share[0].name} | sudo tee -a /home/admin/processor/first_run.cfg",
+        "echo azure_storage_account = ${data.azurerm_storage_account.storage.name} | sudo tee -a /home/admin/processor/first_run.cfg"
+      ] : [],
       [
         for k, v in var.tags :
         "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"

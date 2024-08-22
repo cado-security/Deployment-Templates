@@ -73,3 +73,8 @@ variable "use_beta" {
   type        = bool
   description = "Use beta filestore to utilize NFS_V4_1"
 }
+
+variable "deploy_nfs" {
+  description = "Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files."
+  type        = bool
+}

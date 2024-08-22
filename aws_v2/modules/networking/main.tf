@@ -87,6 +87,7 @@ resource "aws_security_group" "security_group" {
   name        = "CadoSecGroupAlt"
   description = "Allow SSH and HTTPS Connections"
   vpc_id      = data.aws_vpc.selected_vpc_id.id
+  tags        = var.tags
 
   ingress {
     protocol    = "tcp"
