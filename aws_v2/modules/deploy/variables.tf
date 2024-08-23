@@ -68,6 +68,9 @@ variable "instance_worker_type" {
 }
 
 variable "configure_cloudwatch" {
-  type    = bool
-  default = true
+  type = bool
+}
+
+variable "deploy_nfs" {
+  type = bool
 }

@@ -7,7 +7,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.63.0 |
 
 ## Modules
 
@@ -41,7 +41,8 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_ami_id"></a> [ami\_id](#input\_ami\_id) | n/a | `string` | n/a | yes |
-| <a name="input_configure_cloudwatch"></a> [configure\_cloudwatch](#input\_configure\_cloudwatch) | n/a | `bool` | `true` | no |
+| <a name="input_configure_cloudwatch"></a> [configure\_cloudwatch](#input\_configure\_cloudwatch) | n/a | `bool` | n/a | yes |
+| <a name="input_deploy_nfs"></a> [deploy\_nfs](#input\_deploy\_nfs) | n/a | `bool` | n/a | yes |
 | <a name="input_feature_flag_platform_upgrade"></a> [feature\_flag\_platform\_upgrade](#input\_feature\_flag\_platform\_upgrade) | n/a | `bool` | n/a | yes |
 | <a name="input_finalize_cmd"></a> [finalize\_cmd](#input\_finalize\_cmd) | n/a | `string` | n/a | yes |
 | <a name="input_instance_role_name"></a> [instance\_role\_name](#input\_instance\_role\_name) | n/a | `string` | n/a | yes |

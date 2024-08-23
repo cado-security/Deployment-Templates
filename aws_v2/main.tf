@@ -51,4 +51,5 @@ module "deploy" {
   proxy                         = var.proxy
   proxy_cert_url                = var.proxy_cert_url
   configure_cloudwatch          = var.configure_cloudwatch
+  deploy_nfs                    = var.deploy_nfs
 }

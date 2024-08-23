@@ -68,6 +68,7 @@ No resources.
 | <a name="input_certificate_arn"></a> [certificate\_arn](#input\_certificate\_arn) | Certificate arn to use for the ALB | `string` | `""` | no |
 | <a name="input_configure_cloudwatch"></a> [configure\_cloudwatch](#input\_configure\_cloudwatch) | Create resources enabling Cado logs to be viewed in CloudWatch | `bool` | `true` | no |
 | <a name="input_custom_networking"></a> [custom\_networking](#input\_custom\_networking) | Custom networking configuration. Set to null to create new resources. | <pre>object({<br>    vpc_id             = string<br>    public_subnet_id   = string<br>    private_subnet_id  = string<br>    public_subnet_b_id = string<br>  })</pre> | `null` | no |
+| <a name="input_deploy_nfs"></a> [deploy\_nfs](#input\_deploy\_nfs) | Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files. | `bool` | `true` | no |
 | <a name="input_feature_flag_platform_upgrade"></a> [feature\_flag\_platform\_upgrade](#input\_feature\_flag\_platform\_upgrade) | n/a | `bool` | `false` | no |
 | <a name="input_finalize_cmd"></a> [finalize\_cmd](#input\_finalize\_cmd) | Finalize command | `string` | `"sudo /home/admin/processor/release/finalize.sh --main"` | no |
 | <a name="input_http_location"></a> [http\_location](#input\_http\_location) | IP address to allow http access from | `list(string)` | n/a | yes |

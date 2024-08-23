@@ -121,3 +121,9 @@ variable "configure_cloudwatch" {
   type        = bool
   default     = true
 }
+
+variable "deploy_nfs" {
+  type        = bool
+  default     = true
+  description = "Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files."
+}

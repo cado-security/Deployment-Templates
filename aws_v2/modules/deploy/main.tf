@@ -13,6 +13,7 @@ resource "aws_iam_instance_profile" "profile" {
 }
 
 resource "aws_efs_file_system" "efs_fs" {
+  count            = var.deploy_nfs == false ? 0 : 1
   encrypted        = true
   performance_mode = "generalPurpose"
   tags = merge(
@@ -27,13 +28,15 @@ resource "aws_efs_file_system" "efs_fs" {
 }
 
 resource "aws_efs_mount_target" "efs_mount_target" {
-  file_system_id  = aws_efs_file_system.efs_fs.id
+  count           = var.deploy_nfs == false ? 0 : 1
+  file_system_id  = aws_efs_file_system.efs_fs[0].id
   subnet_id       = var.primary_subnet.id
   security_groups = [var.security_group_id]
 }
 
 resource "aws_efs_access_point" "efs_access_point" {
-  file_system_id = aws_efs_file_system.efs_fs.id
+  count          = var.deploy_nfs == false ? 0 : 1
+  file_system_id = aws_efs_file_system.efs_fs[0].id
   posix_user {
     uid = 0
     gid = 0
@@ -142,7 +145,7 @@ resource "aws_instance" "main" {
     "echo bucket = $s3bucket >> /home/admin/processor/first_run.cfg",
     "echo processing_mode = scalable-vm >> /home/admin/processor/first_run.cfg",
     "echo deployment_mode = terraform >> /home/admin/processor/first_run.cfg",
-    "echo efs_ip = ${aws_efs_mount_target.efs_mount_target.ip_address} >> /home/admin/processor/first_run.cfg",
+    var.deploy_nfs ? "echo efs_ip = ${aws_efs_mount_target.efs_mount_target[0].ip_address} >> /home/admin/processor/first_run.cfg" : "",
     "echo aws_role = $aws_role >> /home/admin/processor/first_run.cfg",
     "echo worker_instance = ${var.instance_worker_type} >> /home/admin/processor/first_run.cfg",
     "echo feature_flag_platform_upgrade = $feature_flag_platform_upgrade >> /home/admin/processor/first_run.cfg",

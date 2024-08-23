@@ -25,6 +25,9 @@ vol_size = 100          # Desired disk volume size in GB. Default is 100.
 ssh_location  = ["1.2.3.4/32"] # List IPs you wish to whitelist for SSH access (Public Deployments Only)
 http_location = ["2.3.4.5/32"] # List IPs you wish to whitelist for HTTP access
 
+# storage settings
+deploy_nfs = true # Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files.
+
 
 # If you'd like to use custom networking, uncomment the following block and provide the necessary information.
 # If you're unsure, leave this section commented out and the deployment will use default networking settings.
