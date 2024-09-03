@@ -432,6 +432,8 @@ resource "aws_iam_role_policy" "policy" {
                 "ec2:RunInstances",
                 "ec2:DescribeFlowLogs",
                 "ssm:DescribeInstanceInformation",
+                "ssm:StartSession",
+                "ssm:TerminateSession",
                 "ssm:GetCommandInvocation",
                 "iam:GetInstanceProfile",
                 "ebs:ListSnapshotBlocks",

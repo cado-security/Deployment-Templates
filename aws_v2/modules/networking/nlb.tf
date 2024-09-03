@@ -90,6 +90,7 @@ resource "aws_lb" "load_balancer" {
   subnets                    = [local.subnet_a_id, local.subnet_b_id]
   security_groups            = [aws_security_group.alb_security_group[0].id]
   enable_deletion_protection = var.load_balancer_delete_protection
+  idle_timeout               = 305
 
   access_logs {
     bucket  = var.load_balancer_access_logs_bucket_name

@@ -101,6 +101,8 @@ Statement:
   - ec2:ModifySnapshotAttribute
   - ec2:DescribeFlowLogs
   - ssm:DescribeInstanceInformation
+  - ssm:StartSession
+  - ssm:TerminateSession
   - ssm:GetCommandInvocation
   - iam:GetInstanceProfile
   - ebs:ListSnapshotBlocks
