@@ -127,3 +127,9 @@ variable "deploy_nfs" {
   default     = true
   description = "Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files."
 }
+
+variable "local_workers" {
+  type        = bool
+  default     = false
+  description = "Deploy without scalable workers. Only limited acquisition types will be available"
+}

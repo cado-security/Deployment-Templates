@@ -81,11 +81,6 @@ variable "main_data_size" {
   default     = 30 # "<ENTER SIZE FOR PERSISTANCE DISK>"
 }
 
-variable "processing_mode" {
-  type        = string
-  description = "Processing mode to start in"
-  default     = "scalable-vm" # Do not change
-}
 
 variable "ssh_key_public" {
   type        = string
@@ -147,7 +142,6 @@ module "azure_transient" {
   ip_pattern_all                = var.ip_pattern_all
   instance_type                 = var.instance_type
   main_size                     = var.main_size
-  processing_mode               = var.processing_mode
   worker_vm_type                = var.worker_vm_type
   ssh_key_private               = var.ssh_key_private
   ssh_key_public                = var.ssh_key_public

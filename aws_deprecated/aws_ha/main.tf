@@ -334,7 +334,6 @@ resource "aws_launch_template" "launch_template" {
     "chown -R cado:cado /home/admin/processor/envars/",
     "echo [FIRST_RUN] > /home/admin/processor/first_run.cfg",
     "echo bucket = $s3bucket >> /home/admin/processor/first_run.cfg",
-    "echo processing_mode = scalable-vm >> /home/admin/processor/first_run.cfg",
     "echo efs_ip = ${var.efs_ip_address} >> /home/admin/processor/first_run.cfg",
     "echo aws_role = $aws_role >> /home/admin/processor/first_run.cfg",
     "echo feature_flag_platform_upgrade = $feature_flag_platform_upgrade >> /home/admin/processor/first_run.cfg",

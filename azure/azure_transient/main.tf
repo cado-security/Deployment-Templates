@@ -47,11 +47,6 @@ variable "main_size" {
   default     = 30
 }
 
-variable "processing_mode" {
-  type        = string
-  description = "Processing mode to start in"
-  default     = "scalable-vm"
-}
 
 variable "ssh_key_public" {
   type        = string
@@ -269,7 +264,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
       "echo [FIRST_RUN] | sudo tee /home/admin/processor/first_run.cfg",
       "echo elastic_hostname = ${self.private_ip_address}:9200 | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo private_ip = ${self.private_ip_address} | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo processing_mode = ${var.processing_mode} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo deployment_mode = terraform | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo worker_instance = ${var.worker_vm_type} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo feature_flag_platform_upgrade = ${var.feature_flag_platform_upgrade} | sudo tee -a /home/admin/processor/first_run.cfg",

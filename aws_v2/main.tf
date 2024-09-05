@@ -52,4 +52,5 @@ module "deploy" {
   proxy_cert_url                = var.proxy_cert_url
   configure_cloudwatch          = var.configure_cloudwatch
   deploy_nfs                    = var.deploy_nfs
+  local_workers                 = var.local_workers
 }

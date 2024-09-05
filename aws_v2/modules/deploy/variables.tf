@@ -74,3 +74,7 @@ variable "configure_cloudwatch" {
 variable "deploy_nfs" {
   type = bool
 }
+
+variable "local_workers" {
+  type = bool
+}
