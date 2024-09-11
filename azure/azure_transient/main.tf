@@ -270,6 +270,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
       "echo bucket = ${data.azurerm_storage_container.container.name} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo PROXY_url = ${var.proxy} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo PROXY_cert_url = ${var.proxy_cert_url} | sudo tee -a /home/admin/processor/first_run.cfg",
+      "echo -n ${azurerm_key_vault.keyvault.vault_uri} | sudo tee -a /home/admin/processor/envars/KEYVAULT_URI",
       ],
       var.deploy_nfs ? [
         "echo azure_storage_share = ${data.azurerm_storage_share.share[0].name} | sudo tee -a /home/admin/processor/first_run.cfg",
@@ -311,39 +312,10 @@ resource "random_string" "cado" {
   special = false
 }
 
-resource "azurerm_key_vault_access_policy" "bitbucket" {
-  key_vault_id = azurerm_key_vault.keyvault.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azurerm_client_config.current.object_id
-
-  key_permissions = [
-    "Get",
-    "Create",
-    "Delete",
-    "List",
-
-  ]
-
-  secret_permissions = [
-    "Get",
-    "Set",
-    "Delete",
-    "List",
-  ]
-
-}
-
 resource "azurerm_key_vault_access_policy" "cado" {
   key_vault_id = azurerm_key_vault.keyvault.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = data.azurerm_user_assigned_identity.identity.principal_id
-
-  key_permissions = [
-    "Get",
-    "Create",
-    "Delete",
-    "List",
-  ]
 
   secret_permissions = [
     "Get",
