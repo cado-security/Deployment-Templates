@@ -116,6 +116,10 @@ resource "aws_instance" "main" {
   metadata_options {
     http_tokens = "required"
   }
+
+  root_block_device {
+    encrypted = true
+  }
   ebs_block_device {
     device_name = "/dev/xvda"
     encrypted   = true
