@@ -133,3 +133,9 @@ variable "deploy_nfs" {
   type        = bool
   default     = true
 }
+
+variable "use_secrets_manager" {
+  description = "Use GCP Secret Manager for storing secrets"
+  type        = bool
+  default     = true
+}

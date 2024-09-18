@@ -90,6 +90,12 @@ variable "tags" {
   default     = {}
 }
 
+variable "use_secrets_manager" {
+  type        = bool
+  description = "Use Azure Key Vault for storing secrets"
+  default     = true
+}
+
 // Resources
 
 data "azurerm_subscription" "subscription" {
@@ -279,6 +285,9 @@ resource "azurerm_linux_virtual_machine" "vm" {
       [
         for k, v in var.tags :
         "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
+      ],
+      [
+        "sudo echo -n ${var.use_secrets_manager} > /home/admin/processor/envars/USE_SECRETS_MANAGER"
       ],
       [
         join(" ", concat([

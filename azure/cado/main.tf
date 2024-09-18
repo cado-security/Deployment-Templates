@@ -123,6 +123,11 @@ variable "tags" {
   default = {}
 }
 
+variable "use_secrets_manager" {
+  type        = bool
+  description = "Use Azure Key Vault for storing secrets"
+}
+
 // Resources
 module "azure_persistent" {
   source         = "./../azure_persistent"
@@ -149,6 +154,7 @@ module "azure_transient" {
   proxy                         = var.proxy
   proxy_cert_url                = var.proxy_cert_url
   feature_flag_platform_upgrade = var.feature_flag_platform_upgrade
+  use_secrets_manager           = var.use_secrets_manager
   depends_on = [
     module.azure_persistent
   ]

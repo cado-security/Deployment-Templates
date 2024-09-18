@@ -78,3 +78,8 @@ variable "deploy_nfs" {
   description = "Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files."
   type        = bool
 }
+
+variable "use_secrets_manager" {
+  description = "Use GCP Secret Manager for storing secrets"
+  type        = bool
+}

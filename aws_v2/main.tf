@@ -53,4 +53,5 @@ module "deploy" {
   configure_cloudwatch          = var.configure_cloudwatch
   deploy_nfs                    = var.deploy_nfs
   local_workers                 = var.local_workers
+  use_secrets_manager           = var.use_secrets_manager
 }

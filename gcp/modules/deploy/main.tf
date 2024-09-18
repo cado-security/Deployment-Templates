@@ -52,6 +52,9 @@ resource "google_compute_instance" "vm_instance" {
       "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
     ],
     [
+      "echo -n ${var.use_secrets_manager} > /home/admin/processor/envars/USE_SECRETS_MANAGER"
+    ],
+    [
       join(" ", concat([
         "${var.finalize_cmd}",
         var.proxy != "" ? " --proxy ${var.proxy}" : "",

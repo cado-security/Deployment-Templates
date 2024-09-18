@@ -62,4 +62,5 @@ module "deploy" {
   instance_worker_type = var.instance_worker_type
   use_beta             = local.use_beta
   deploy_nfs           = var.deploy_nfs
+  use_secrets_manager  = var.use_secrets_manager
 }

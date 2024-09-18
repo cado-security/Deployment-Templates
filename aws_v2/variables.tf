@@ -133,3 +133,9 @@ variable "local_workers" {
   default     = false
   description = "Deploy without scalable workers. Only limited acquisition types will be available"
 }
+
+variable "use_secrets_manager" {
+  type        = bool
+  default     = true
+  description = "Use AWS Secrets Manager for storing secrets"
+}

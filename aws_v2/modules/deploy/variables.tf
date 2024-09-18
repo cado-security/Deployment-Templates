@@ -78,3 +78,7 @@ variable "deploy_nfs" {
 variable "local_workers" {
   type = bool
 }
+
+variable "use_secrets_manager" {
+  type = bool
+}
