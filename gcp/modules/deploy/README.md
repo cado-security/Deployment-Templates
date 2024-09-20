@@ -7,8 +7,8 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | 5.41.0 |
-| <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | 5.41.0 |
+| <a name="provider_google"></a> [google](#provider\_google) | n/a |
+| <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | n/a |
 
 ## Modules
 
@@ -46,6 +46,7 @@ No modules.
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to main vm and any spawned workers | `map(string)` | n/a | yes |
 | <a name="input_unique_name"></a> [unique\_name](#input\_unique\_name) | n/a | `string` | n/a | yes |
 | <a name="input_use_beta"></a> [use\_beta](#input\_use\_beta) | Use beta filestore to utilize NFS\_V4\_1 | `bool` | n/a | yes |
+| <a name="input_use_secrets_manager"></a> [use\_secrets\_manager](#input\_use\_secrets\_manager) | Use GCP Secret Manager for storing secrets | `bool` | n/a | yes |
 | <a name="input_vm_size"></a> [vm\_size](#input\_vm\_size) | The size of the VM to deploy | `string` | n/a | yes |
 | <a name="input_vol_size"></a> [vol\_size](#input\_vol\_size) | The size of the volume to attach to the VM | `number` | n/a | yes |
 

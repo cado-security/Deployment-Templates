@@ -63,7 +63,7 @@ No resources.
 | <a name="input_finalize_cmd"></a> [finalize\_cmd](#input\_finalize\_cmd) | Command to run on the VM after deployment | `string` | `"sudo /home/admin/processor/release/finalize.sh --main"` | no |
 | <a name="input_image"></a> [image](#input\_image) | Cado Response VM image path | `string` | `"projects/cado-public/global/images/cadoresponse"` | no |
 | <a name="input_inbound_ports"></a> [inbound\_ports](#input\_inbound\_ports) | The list of ports to open | `list(string)` | <pre>[<br>  "22",<br>  "443"<br>]</pre> | no |
-| <a name="input_instance_worker_type"></a> [instance\_worker\_type](#input\_instance\_worker\_type) | Set Worker instance type | `string` | `"n2-standard-8"` | no |
+| <a name="input_instance_worker_type"></a> [instance\_worker\_type](#input\_instance\_worker\_type) | Set Worker instance type | `string` | `"n2-highmem-8"` | no |
 | <a name="input_local_ports"></a> [local\_ports](#input\_local\_ports) | The list of ports to open to speak on the local subnet | `list(string)` | <pre>[<br>  "5432",<br>  "9200",<br>  "6379",<br>  "24224"<br>]</pre> | no |
 | <a name="input_nfs_protocol"></a> [nfs\_protocol](#input\_nfs\_protocol) | The Filestore NFS Protocol to use | `string` | `"NFS_V3"` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project id to deploy to | `string` | n/a | yes |
@@ -73,6 +73,7 @@ No resources.
 | <a name="input_role"></a> [role](#input\_role) | The role to assign to the service account | `string` | `""` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to main vm and any spawned workers | `map(string)` | `{}` | no |
 | <a name="input_unique_name"></a> [unique\_name](#input\_unique\_name) | Unique name part for GCP deployments | `string` | n/a | yes |
+| <a name="input_use_secrets_manager"></a> [use\_secrets\_manager](#input\_use\_secrets\_manager) | Use GCP Secret Manager for storing secrets | `bool` | `true` | no |
 | <a name="input_vm_size"></a> [vm\_size](#input\_vm\_size) | Vm size to deploy | `string` | `"e2-standard-4"` | no |
 | <a name="input_vol_size"></a> [vol\_size](#input\_vol\_size) | The volume size to deploy | `number` | `100` | no |
 

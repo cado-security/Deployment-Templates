@@ -115,7 +115,7 @@ variable "proxy_cert_url" {
 
 variable "instance_worker_type" {
   type        = string
-  default     = "n2-standard-8"
+  default     = "n2-highmem-8"
   description = "Set Worker instance type"
 }
 

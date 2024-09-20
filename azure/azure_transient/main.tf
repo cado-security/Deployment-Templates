@@ -287,7 +287,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
         "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
       ],
       [
-        "sudo echo -n ${var.use_secrets_manager} > /home/admin/processor/envars/USE_SECRETS_MANAGER"
+        "echo -n ${var.use_secrets_manager} | sudo tee -a /home/admin/processor/envars/USE_SECRETS_MANAGER"
       ],
       [
         join(" ", concat([

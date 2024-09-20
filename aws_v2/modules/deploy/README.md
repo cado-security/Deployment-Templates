@@ -7,7 +7,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.63.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
 
 ## Modules
 
@@ -49,6 +49,7 @@ No modules.
 | <a name="input_instance_worker_type"></a> [instance\_worker\_type](#input\_instance\_worker\_type) | n/a | `string` | n/a | yes |
 | <a name="input_key_name"></a> [key\_name](#input\_key\_name) | n/a | `string` | n/a | yes |
 | <a name="input_lb_target_group_arn"></a> [lb\_target\_group\_arn](#input\_lb\_target\_group\_arn) | n/a | `string` | n/a | yes |
+| <a name="input_local_workers"></a> [local\_workers](#input\_local\_workers) | n/a | `bool` | n/a | yes |
 | <a name="input_primary_subnet"></a> [primary\_subnet](#input\_primary\_subnet) | Subnet object containing various attributes | <pre>object({<br>    id                = string<br>    cidr_block        = string<br>    availability_zone = string<br>  })</pre> | n/a | yes |
 | <a name="input_proxy"></a> [proxy](#input\_proxy) | n/a | `string` | n/a | yes |
 | <a name="input_proxy_cert_url"></a> [proxy\_cert\_url](#input\_proxy\_cert\_url) | n/a | `string` | n/a | yes |
@@ -56,6 +57,7 @@ No modules.
 | <a name="input_role_name"></a> [role\_name](#input\_role\_name) | n/a | `string` | n/a | yes |
 | <a name="input_security_group_id"></a> [security\_group\_id](#input\_security\_group\_id) | n/a | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | n/a | `map(string)` | n/a | yes |
+| <a name="input_use_secrets_manager"></a> [use\_secrets\_manager](#input\_use\_secrets\_manager) | n/a | `bool` | n/a | yes |
 | <a name="input_vm_size"></a> [vm\_size](#input\_vm\_size) | n/a | `string` | n/a | yes |
 | <a name="input_vol_size"></a> [vol\_size](#input\_vol\_size) | n/a | `number` | n/a | yes |
 

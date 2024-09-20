@@ -126,6 +126,7 @@ variable "tags" {
 variable "use_secrets_manager" {
   type        = bool
   description = "Use Azure Key Vault for storing secrets"
+  default     = true
 }
 
 // Resources

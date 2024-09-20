@@ -76,6 +76,7 @@ No resources.
 | <a name="input_key_name"></a> [key\_name](#input\_key\_name) | n/a | `string` | n/a | yes |
 | <a name="input_load_balancer_access_logs_bucket_name"></a> [load\_balancer\_access\_logs\_bucket\_name](#input\_load\_balancer\_access\_logs\_bucket\_name) | S3 bucket name to store load balancer access logs. Off by default unless set. | `string` | `""` | no |
 | <a name="input_load_balancer_delete_protection"></a> [load\_balancer\_delete\_protection](#input\_load\_balancer\_delete\_protection) | Enable or disable deletion protection for the load balancer via API (Terraform) | `bool` | `true` | no |
+| <a name="input_local_workers"></a> [local\_workers](#input\_local\_workers) | Deploy without scalable workers. Only limited acquisition types will be available | `bool` | `false` | no |
 | <a name="input_private_load_balancer"></a> [private\_load\_balancer](#input\_private\_load\_balancer) | To determine if we should deploy an internal load balancer | `bool` | `false` | no |
 | <a name="input_proxy"></a> [proxy](#input\_proxy) | Proxy URL to use for outbound connections in format / User Pass - https://user:pass@1.2.3.4:1234 \| IP Auth - https://1.2.3.4:1234 | `string` | `""` | no |
 | <a name="input_proxy_cert_url"></a> [proxy\_cert\_url](#input\_proxy\_cert\_url) | Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert. | `string` | `""` | no |
@@ -83,6 +84,7 @@ No resources.
 | <a name="input_region"></a> [region](#input\_region) | Region to deploy to | `string` | `"us-west-1"` | no |
 | <a name="input_ssh_location"></a> [ssh\_location](#input\_ssh\_location) | IP address to allow ssh access from | `list(string)` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to main vm and any spawned workers | `map(string)` | `{}` | no |
+| <a name="input_use_secrets_manager"></a> [use\_secrets\_manager](#input\_use\_secrets\_manager) | Use AWS Secrets Manager for storing secrets | `bool` | `true` | no |
 | <a name="input_vm_size"></a> [vm\_size](#input\_vm\_size) | VM size to deploy | `string` | `"m5.4xlarge"` | no |
 | <a name="input_vol_size"></a> [vol\_size](#input\_vol\_size) | Volume size to deploy | `number` | `100` | no |
 

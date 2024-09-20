@@ -17,14 +17,16 @@ tags = {
 # VM and storage settings
 # These options help you determine the size and scale of your deployment.
 # (You can leave them as defaults if unsure.)
-vm_size  = "n2d-standard-8" # Choose your desired VM size. Default is "n2d-standard-8".
-vol_size = 100              # Desired disk volume size in GB. Default is 100.
+vm_size              = "n2-standard-16" # Choose your desired VM size. Default is "n2-standard-16".
+vol_size             = 100              # Desired disk volume size in GB. Default is 100.
+instance_worker_type = "n2-highmem-8"   # Choose your desired worker VM size. Default is "n2-highmem-8".
 
 # Network settings
 allowed_ips = ["1.2.3.4/32", "2.3.4.5/32"] # List IPs you wish to whitelist.
 
-nfs_protocol = "NFS_V3" # Choose the NFS protocol version. Default is "NFS_V3". "NFS_V4_1" is in GCP beta.
-deploy_nfs   = true     # Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files.
+nfs_protocol        = "NFS_V3" # Choose the NFS protocol version. Default is "NFS_V3". "NFS_V4_1" is in GCP beta.
+deploy_nfs          = true     # Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files.
+use_secrets_manager = true     # Use GCP Secret Manager for storing secrets, set to false to store on disk.
 
 # If you'd like to use custom networking, uncomment the following block and provide the necessary information.
 # If you're unsure, leave this section commented out and the deployment will use default networking settings.
