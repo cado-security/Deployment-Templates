@@ -15,6 +15,12 @@ Statement:
   Condition:
     StringLike:
       aws:ResourceTag/Name: CadoResponse*
+- Sid: RequiredToCheckPolicy
+  Action:
+  - iam:GetPolicy
+  - iam:GetPolicyVersion
+  Resource: arn:aws:iam::*:policy/*CadoResponse*
+  Effect: Allow
 - Sid: RequiredForMemoryForensics
   Effect: Allow
   Action:
