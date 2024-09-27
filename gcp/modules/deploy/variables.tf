@@ -83,3 +83,8 @@ variable "use_secrets_manager" {
   description = "Use GCP Secret Manager for storing secrets"
   type        = bool
 }
+
+variable "local_workers" {
+  type        = bool
+  description = "Deploy without scalable workers. Only limited acquisition types will be available"
+}

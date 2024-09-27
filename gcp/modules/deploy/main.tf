@@ -46,6 +46,7 @@ resource "google_compute_instance" "vm_instance" {
     "echo PROXY_url = ${var.proxy} >> /home/admin/processor/first_run.cfg",
     "echo PROXY_cert_url = ${var.proxy_cert_url} >> /home/admin/processor/first_run.cfg",
     "echo worker_instance = ${var.instance_worker_type} >> /home/admin/processor/first_run.cfg",
+    "echo local_workers = ${var.local_workers} >> /home/admin/processor/first_run.cfg",
     ],
     [
       for k, v in var.tags :

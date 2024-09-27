@@ -65,6 +65,7 @@ No resources.
 | <a name="input_inbound_ports"></a> [inbound\_ports](#input\_inbound\_ports) | The list of ports to open | `list(string)` | <pre>[<br>  "22",<br>  "443"<br>]</pre> | no |
 | <a name="input_instance_worker_type"></a> [instance\_worker\_type](#input\_instance\_worker\_type) | Set Worker instance type | `string` | `"n2-highmem-8"` | no |
 | <a name="input_local_ports"></a> [local\_ports](#input\_local\_ports) | The list of ports to open to speak on the local subnet | `list(string)` | <pre>[<br>  "5432",<br>  "9200",<br>  "6379",<br>  "24224"<br>]</pre> | no |
+| <a name="input_local_workers"></a> [local\_workers](#input\_local\_workers) | Deploy without scalable workers. Only limited acquisition types will be available | `bool` | `false` | no |
 | <a name="input_nfs_protocol"></a> [nfs\_protocol](#input\_nfs\_protocol) | The Filestore NFS Protocol to use | `string` | `"NFS_V3"` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project id to deploy to | `string` | n/a | yes |
 | <a name="input_proxy"></a> [proxy](#input\_proxy) | Proxy URL to use for outbound connections in format / User Pass - https://user:pass@1.2.3.4:1234 \| IP Auth - https://1.2.3.4:1234 | `string` | `""` | no |

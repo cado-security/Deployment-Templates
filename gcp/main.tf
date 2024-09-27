@@ -63,4 +63,5 @@ module "deploy" {
   use_beta             = local.use_beta
   deploy_nfs           = var.deploy_nfs
   use_secrets_manager  = var.use_secrets_manager
+  local_workers        = var.local_workers
 }

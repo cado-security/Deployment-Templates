@@ -134,6 +134,12 @@ variable "deploy_nfs" {
   default     = true
 }
 
+variable "local_workers" {
+  type        = bool
+  default     = false
+  description = "Deploy without scalable workers. Only limited acquisition types will be available"
+}
+
 variable "use_secrets_manager" {
   description = "Use GCP Secret Manager for storing secrets"
   type        = bool

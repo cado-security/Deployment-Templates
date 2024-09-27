@@ -102,6 +102,7 @@ resource "aws_s3_bucket_public_access_block" "CadoPublicAccessBlockConfiguration
 resource "aws_network_interface" "network_interface" {
   subnet_id       = var.primary_subnet.id
   security_groups = [var.security_group_id]
+  depends_on      = [var.security_group_id]
 }
 
 resource "aws_instance" "main" {
@@ -179,6 +180,7 @@ resource "aws_instance" "main" {
       ]))
     ],
   ))
+  depends_on = [var.security_group_id]
 }
 
 resource "aws_eip" "ip" {

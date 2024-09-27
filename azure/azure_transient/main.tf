@@ -96,6 +96,18 @@ variable "use_secrets_manager" {
   default     = true
 }
 
+variable "local_workers" {
+  type        = bool
+  default     = false
+  description = "Deploy without scalable workers. Only limited acquisition types will be available"
+}
+
+variable "deploy_acquisition_permissions" {
+  type        = bool
+  description = "If set to true, permissions are added at the subscription level, allowing same subscription acquisition."
+  default     = true
+}
+
 // Resources
 
 data "azurerm_subscription" "subscription" {
@@ -277,6 +289,9 @@ resource "azurerm_linux_virtual_machine" "vm" {
       "echo PROXY_url = ${var.proxy} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo PROXY_cert_url = ${var.proxy_cert_url} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo -n ${azurerm_key_vault.keyvault.vault_uri} | sudo tee -a /home/admin/processor/envars/KEYVAULT_URI",
+      "echo -n ${var.use_secrets_manager} | sudo tee -a /home/admin/processor/envars/USE_SECRETS_MANAGER",
+      "echo local_workers = ${var.local_workers} | sudo tee -a /home/admin/processor/first_run.cfg",
+      "echo minimum_role_deployment = ${!var.deploy_acquisition_permissions} | sudo tee -a /home/admin/processor/first_run.cfg",
       ],
       var.deploy_nfs ? [
         "echo azure_storage_share = ${data.azurerm_storage_share.share[0].name} | sudo tee -a /home/admin/processor/first_run.cfg",
@@ -285,9 +300,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
       [
         for k, v in var.tags :
         "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
-      ],
-      [
-        "echo -n ${var.use_secrets_manager} | sudo tee -a /home/admin/processor/envars/USE_SECRETS_MANAGER"
       ],
       [
         join(" ", concat([

@@ -25,6 +25,12 @@ variable "tags" {
   type    = map(string)
   default = {}
 }
+
+variable "deploy_acquisition_permissions" {
+  type        = bool
+  description = "If set to true, permissions are added at the subscription level, allowing same subscription acquisition."
+  default     = true
+}
 // Resources
 
 data "azurerm_subscription" "subscription" {
@@ -91,28 +97,32 @@ resource "azurerm_role_assignment" "role_assignment_group" {
 
 
 resource "azurerm_role_assignment" "role_assignment_storage" {
-  // Storage Account Contributor for entire subscription
+  // If allowing local acquisition: Storage Account Contributor for entire subscription
+  count                = var.deploy_acquisition_permissions ? 1 : 0
   scope                = data.azurerm_subscription.subscription.id
   role_definition_name = "Storage Account Contributor"
   principal_id         = azurerm_user_assigned_identity.identity.principal_id
 }
 
 resource "azurerm_role_assignment" "role_assignment_snapshots" {
-  // Disk Snapshot Contributor for entire subscription
+  // If allowing local acquisition: Disk Snapshot Contributor for entire subscription
+  count                = var.deploy_acquisition_permissions ? 1 : 0
   scope                = data.azurerm_subscription.subscription.id
   role_definition_name = "Disk Snapshot Contributor"
   principal_id         = azurerm_user_assigned_identity.identity.principal_id
 }
 
 resource "azurerm_role_assignment" "role_assignment_vm" {
-  // Virtual Machine Contributor for entire subscription - needed to list disks
+  // If allowing local acquisition: Virtual Machine Contributor for entire subscription - needed to list disks
+  count                = var.deploy_acquisition_permissions ? 1 : 0
   scope                = data.azurerm_subscription.subscription.id
   role_definition_name = "Virtual Machine Contributor"
   principal_id         = azurerm_user_assigned_identity.identity.principal_id
 }
 
 resource "azurerm_role_assignment" "role_assignment_aks" {
-  // Azure Kubernetes Service Contributor for entire subscription - needed to list cluster credentials
+  // If allowing local acquisition: Azure Kubernetes Service Contributor for entire subscription - needed to list cluster credentials
+  count                = var.deploy_acquisition_permissions ? 1 : 0
   scope                = data.azurerm_subscription.subscription.id
   role_definition_name = "Azure Kubernetes Service Cluster Admin Role"
   principal_id         = azurerm_user_assigned_identity.identity.principal_id

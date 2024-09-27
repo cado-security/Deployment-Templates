@@ -21,6 +21,12 @@ variable "deploy_nfs" {
   default     = true
 }
 
+variable "deploy_acquisition_permissions" {
+  type        = bool
+  description = "If set to true, permissions are added at the subscription level, allowing same subscription acquisition."
+  default     = true
+}
+
 variable "image_id" {
   type        = string
   description = "Cado Response VHD blobstore URL"
@@ -129,35 +135,44 @@ variable "use_secrets_manager" {
   default     = true
 }
 
+variable "local_workers" {
+  type        = bool
+  default     = false
+  description = "Deploy without scalable workers. Only limited acquisition types will be available"
+}
+
 // Resources
 module "azure_persistent" {
-  source         = "./../azure_persistent"
-  resource_group = var.resource_group
-  region         = var.region
-  share_size     = var.share_size
-  main_data_size = var.main_data_size
-  tags           = var.tags
+  source                         = "./../azure_persistent"
+  resource_group                 = var.resource_group
+  region                         = var.region
+  share_size                     = var.share_size
+  main_data_size                 = var.main_data_size
+  tags                           = var.tags
+  deploy_acquisition_permissions = var.deploy_acquisition_permissions
 }
 
 module "azure_transient" {
-  source                        = "./../azure_transient"
-  resource_group                = var.resource_group
-  image_id                      = var.image_id
-  ip_pattern_https              = var.ip_pattern_https
-  deploy_nfs                    = var.deploy_nfs
-  ip_pattern_all                = var.ip_pattern_all
-  instance_type                 = var.instance_type
-  main_size                     = var.main_size
-  worker_vm_type                = var.worker_vm_type
-  ssh_key_private               = var.ssh_key_private
-  ssh_key_public                = var.ssh_key_public
-  finalize_cmd                  = var.finalize_cmd
-  proxy                         = var.proxy
-  proxy_cert_url                = var.proxy_cert_url
-  feature_flag_platform_upgrade = var.feature_flag_platform_upgrade
-  use_secrets_manager           = var.use_secrets_manager
+  source                         = "./../azure_transient"
+  resource_group                 = var.resource_group
+  image_id                       = var.image_id
+  ip_pattern_https               = var.ip_pattern_https
+  deploy_nfs                     = var.deploy_nfs
+  ip_pattern_all                 = var.ip_pattern_all
+  instance_type                  = var.instance_type
+  main_size                      = var.main_size
+  worker_vm_type                 = var.worker_vm_type
+  ssh_key_private                = var.ssh_key_private
+  ssh_key_public                 = var.ssh_key_public
+  finalize_cmd                   = var.finalize_cmd
+  proxy                          = var.proxy
+  proxy_cert_url                 = var.proxy_cert_url
+  feature_flag_platform_upgrade  = var.feature_flag_platform_upgrade
+  use_secrets_manager            = var.use_secrets_manager
+  deploy_acquisition_permissions = var.deploy_acquisition_permissions
   depends_on = [
     module.azure_persistent
   ]
-  tags = var.tags
+  tags          = var.tags
+  local_workers = var.local_workers
 }

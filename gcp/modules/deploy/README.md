@@ -35,6 +35,7 @@ No modules.
 | <a name="input_deploy_nfs"></a> [deploy\_nfs](#input\_deploy\_nfs) | Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files. | `bool` | n/a | yes |
 | <a name="input_finalize_cmd"></a> [finalize\_cmd](#input\_finalize\_cmd) | Command to run on the VM after deployment | `string` | n/a | yes |
 | <a name="input_instance_worker_type"></a> [instance\_worker\_type](#input\_instance\_worker\_type) | Set Worker instance type | `string` | n/a | yes |
+| <a name="input_local_workers"></a> [local\_workers](#input\_local\_workers) | Deploy without scalable workers. Only limited acquisition types will be available | `bool` | n/a | yes |
 | <a name="input_network_config"></a> [network\_config](#input\_network\_config) | The network configuration for the VM | `string` | n/a | yes |
 | <a name="input_network_name"></a> [network\_name](#input\_network\_name) | The name of the VPC network | `any` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Value of the project id to deploy to | `string` | n/a | yes |
