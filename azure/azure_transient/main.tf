@@ -292,10 +292,10 @@ resource "azurerm_linux_virtual_machine" "vm" {
       "echo -n ${var.use_secrets_manager} | sudo tee -a /home/admin/processor/envars/USE_SECRETS_MANAGER",
       "echo local_workers = ${var.local_workers} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo minimum_role_deployment = ${!var.deploy_acquisition_permissions} | sudo tee -a /home/admin/processor/first_run.cfg",
+      "echo azure_storage_account = ${data.azurerm_storage_account.storage.name} | sudo tee -a /home/admin/processor/first_run.cfg"
       ],
       var.deploy_nfs ? [
         "echo azure_storage_share = ${data.azurerm_storage_share.share[0].name} | sudo tee -a /home/admin/processor/first_run.cfg",
-        "echo azure_storage_account = ${data.azurerm_storage_account.storage.name} | sudo tee -a /home/admin/processor/first_run.cfg"
       ] : [],
       [
         for k, v in var.tags :

@@ -135,13 +135,25 @@ variable "deploy_nfs" {
 }
 
 variable "local_workers" {
+  description = "Deploy without scalable workers. Only limited acquisition types will be available"
   type        = bool
   default     = false
-  description = "Deploy without scalable workers. Only limited acquisition types will be available"
 }
 
 variable "use_secrets_manager" {
   description = "Use GCP Secret Manager for storing secrets"
+  type        = bool
+  default     = true
+}
+
+variable "deploy_acquisition_permissions" {
+  description = "Deploy instance with permissions needed for same project acquisitions"
+  type        = bool
+  default     = true
+}
+
+variable "enable_platform_updates" {
+  description = "Enable platform updates, False requires updates via Terraform"
   type        = bool
   default     = true
 }

@@ -37,31 +37,37 @@ module "networking" {
 }
 
 module "iam" {
-  source      = "./modules/iam"
-  project_id  = var.project_id
-  unique_name = var.unique_name
-  role        = var.role
+  source                         = "./modules/iam"
+  project_id                     = var.project_id
+  unique_name                    = var.unique_name
+  role                           = var.role
+  use_secrets_manager            = var.use_secrets_manager
+  local_workers                  = var.local_workers
+  deploy_acquisition_permissions = var.deploy_acquisition_permissions
+  enable_platform_updates        = var.enable_platform_updates
 }
 
 module "deploy" {
-  source               = "./modules/deploy"
-  project_id           = var.project_id
-  region               = var.region
-  unique_name          = var.unique_name
-  vm_size              = var.vm_size
-  vol_size             = var.vol_size
-  tags                 = var.tags
-  service_account      = module.iam.service_account
-  boot_disk_image      = var.image
-  network_config       = module.networking.vpc_network
-  subnetwork_config    = module.networking.custom_subnetwork
-  network_name         = module.networking.vpc_network_name
-  finalize_cmd         = var.finalize_cmd
-  proxy                = var.proxy
-  proxy_cert_url       = var.proxy_cert_url
-  instance_worker_type = var.instance_worker_type
-  use_beta             = local.use_beta
-  deploy_nfs           = var.deploy_nfs
-  use_secrets_manager  = var.use_secrets_manager
-  local_workers        = var.local_workers
+  source                         = "./modules/deploy"
+  project_id                     = var.project_id
+  region                         = var.region
+  unique_name                    = var.unique_name
+  vm_size                        = var.vm_size
+  vol_size                       = var.vol_size
+  tags                           = var.tags
+  service_account                = module.iam.service_account
+  boot_disk_image                = var.image
+  network_config                 = module.networking.vpc_network
+  subnetwork_config              = module.networking.custom_subnetwork
+  network_name                   = module.networking.vpc_network_name
+  finalize_cmd                   = var.finalize_cmd
+  proxy                          = var.proxy
+  proxy_cert_url                 = var.proxy_cert_url
+  instance_worker_type           = var.instance_worker_type
+  use_beta                       = local.use_beta
+  deploy_nfs                     = var.deploy_nfs
+  use_secrets_manager            = var.use_secrets_manager
+  local_workers                  = var.local_workers
+  deploy_acquisition_permissions = var.deploy_acquisition_permissions
+  enable_platform_updates        = var.enable_platform_updates
 }

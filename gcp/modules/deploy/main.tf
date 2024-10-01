@@ -42,18 +42,17 @@ resource "google_compute_instance" "vm_instance" {
     "echo bucket = $storage_bucket >> /home/admin/processor/first_run.cfg",
     "echo service_account_email = ${var.service_account} >> /home/admin/processor/first_run.cfg",
     "echo deployment_mode = terraform >> /home/admin/processor/first_run.cfg",
-    "echo feature_flag_platform_upgrade = true >> /home/admin/processor/first_run.cfg",
+    "echo feature_flag_platform_upgrade = ${var.enable_platform_updates} >> /home/admin/processor/first_run.cfg",
     "echo PROXY_url = ${var.proxy} >> /home/admin/processor/first_run.cfg",
     "echo PROXY_cert_url = ${var.proxy_cert_url} >> /home/admin/processor/first_run.cfg",
     "echo worker_instance = ${var.instance_worker_type} >> /home/admin/processor/first_run.cfg",
     "echo local_workers = ${var.local_workers} >> /home/admin/processor/first_run.cfg",
+    "echo minimum_role_deployment = ${!var.deploy_acquisition_permissions} >> /home/admin/processor/first_run.cfg",
+    "echo -n ${var.use_secrets_manager} > /home/admin/processor/envars/USE_SECRETS_MANAGER"
     ],
     [
       for k, v in var.tags :
       "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
-    ],
-    [
-      "echo -n ${var.use_secrets_manager} > /home/admin/processor/envars/USE_SECRETS_MANAGER"
     ],
     [
       join(" ", concat([
@@ -109,7 +108,7 @@ resource "google_filestore_instance" "beta_filestore_instance" {
 }
 
 resource "google_filestore_instance" "filestore_instance" {
-  count    = (var.use_beta && var.deploy_nfs) ? 0 : 1
+  count    = (!var.use_beta && var.deploy_nfs) ? 1 : 0
   name     = "cadoresponse-fileshare-${var.unique_name}"
   location = data.google_compute_zones.available.names[0]
   tier     = "BASIC_HDD"

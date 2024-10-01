@@ -88,3 +88,13 @@ variable "local_workers" {
   type        = bool
   description = "Deploy without scalable workers. Only limited acquisition types will be available"
 }
+
+variable "deploy_acquisition_permissions" {
+  description = "Whether to deploy the acquisition permissions"
+  type        = bool
+}
+
+variable "enable_platform_updates" {
+  description = "Enable platform updates, False requires updates via Terraform"
+  type        = bool
+}

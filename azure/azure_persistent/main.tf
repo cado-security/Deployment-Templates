@@ -5,6 +5,12 @@ variable "resource_group" {
   description = "resource group name"
 }
 
+variable "deploy_nfs" {
+  type        = bool
+  description = "Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files."
+  default     = true
+}
+
 variable "region" {
   type        = string
   description = "Region to deploy in"
@@ -72,6 +78,7 @@ resource "azurerm_storage_container" "container" {
 }
 
 resource "azurerm_storage_share" "share" {
+  count                = var.deploy_nfs ? 1 : 0
   name                 = "cadoshare"
   storage_account_name = azurerm_storage_account.storage.name
   quota                = var.share_size # TODO increase to 2TB

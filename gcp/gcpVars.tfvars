@@ -24,9 +24,12 @@ instance_worker_type = "n2-highmem-8"   # Choose your desired worker VM size. De
 # Network settings
 allowed_ips = ["1.2.3.4/32", "2.3.4.5/32"] # List IPs you wish to whitelist.
 
-nfs_protocol        = "NFS_V3" # Choose the NFS protocol version. Default is "NFS_V3". "NFS_V4_1" is in GCP beta.
-deploy_nfs          = true     # Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files.
-use_secrets_manager = true     # Use GCP Secret Manager for storing secrets, set to false to store on disk.
+nfs_protocol                   = "NFS_V3" # Choose the NFS protocol version. Default is "NFS_V3". "NFS_V4_1" is in GCP beta.
+deploy_nfs                     = true     # Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files.
+use_secrets_manager            = true     # Use GCP Secret Manager for storing secrets, set to false to store on disk.
+local_workers                  = false    # Deploy without scalable workers. Only limited acquisition types will be available.
+deploy_acquisition_permissions = true     # Deploy instance with permissions needed for same project acquisitions.
+enable_platform_updates        = true     # Enable platform updates. False requires updates via Terraform.
 
 # If you'd like to use custom networking, uncomment the following block and provide the necessary information.
 # If you're unsure, leave this section commented out and the deployment will use default networking settings.

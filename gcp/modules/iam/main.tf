@@ -4,18 +4,69 @@ locals {
   account_id_suffix = length(local.split_unique_name) > 1 ? "-${local.split_unique_name[length(local.split_unique_name) - 1]}" : ""
 }
 
-resource "google_service_account" "user_service_account" {
-  account_id   = "sa-${local.split_unique_name[0]}${local.account_id_suffix}"
-  display_name = "CadoResponse Service Account ${var.unique_name}"
-  project      = var.project_id
-}
+locals {
+  base_permissions = [
+    // Minimal Permissions To Run
+    "iam.serviceAccounts.actAs",
+    "iam.serviceAccounts.get",
+    "iam.serviceAccounts.getAccessToken",
+    "iam.serviceAccounts.getIamPolicy",
 
-resource "google_project_iam_custom_role" "custom_role" {
-  count       = var.role == "" ? 1 : 0
-  role_id     = replace("myCadoResponseRole_${var.unique_name}", "-", "_")
-  title       = "myCadoResponseRole-${var.unique_name}"
-  description = "CadoResponse Role"
-  permissions = [
+    // Cado Host
+    "iam.serviceAccounts.signBlob",
+
+    // Bucket Acquisition
+    "storage.buckets.get",
+    "storage.buckets.list",
+    "storage.objects.create",
+    "storage.objects.delete",
+    "storage.objects.get",
+    "storage.objects.list",
+  ]
+
+  workers_permissions = [
+    // Worker Permissions
+    "compute.disks.create",
+    "compute.instances.create",
+    "compute.instances.setMetadata",
+    "compute.instances.setServiceAccount",
+    "compute.addresses.use",
+    "compute.instances.addAccessConfig",
+    "compute.instances.delete",
+    "compute.instances.setLabels",
+    "compute.subnetworks.use",
+    "compute.networks.get",
+    "compute.networks.list",
+
+    // Adjusting Settings
+    "compute.machineTypes.get",
+    "compute.machineTypes.list",
+    "compute.regions.get",
+  ]
+
+  upgrade_permissions = [
+    // Upgrade Permissions
+    "compute.disks.create",
+    "compute.instances.attachDisk",
+    "compute.images.useReadOnly",
+    "compute.instances.create",
+    "compute.addresses.use",
+    "compute.instances.detachDisk",
+    "compute.instances.deleteAccessConfig",
+    "compute.zoneOperations.get",
+    "compute.subnetworks.useExternalIp",
+  ]
+
+  secretmanager_permissions = [
+    // Secret Management
+    "secretmanager.secrets.create",
+    "secretmanager.versions.access",
+    "secretmanager.versions.add"
+  ]
+
+  acquisition_permissions = [
+    "resourcemanager.projects.get",
+
     // Instance Acquisition
     "cloudbuild.builds.get",
     "cloudbuild.builds.create",
@@ -30,33 +81,7 @@ resource "google_project_iam_custom_role" "custom_role" {
     "compute.images.delete",
     "compute.images.get",
     "compute.instances.getSerialPortOutput",
-
-    // Compute Management
-    "compute.disks.create",
-    "compute.disks.setLabels",
-    "compute.images.useReadOnly",
-    "compute.instances.attachDisk",
-    "compute.instances.create",
-    "compute.instances.delete",
-    "compute.instances.setLabels",
-    "compute.instances.setMetadata",
-    "compute.instances.setServiceAccount",
-    "compute.machineTypes.list",
-    "compute.machineTypes.get",
-    "compute.regions.get",
-    "compute.subnetworks.use",
-    "compute.subnetworks.useExternalIp",
-    "compute.networks.get",
-    "compute.networks.list",
-    "compute.zones.list",
-    "compute.zoneOperations.get",
-
-
-    // Platform Update
-    "compute.addresses.use",
-    "compute.instances.addAccessConfig",
-    "compute.instances.detachDisk",
-    "compute.instances.deleteAccessConfig",
+    "compute.projects.get",
 
     // GKE Acquisition
     "container.clusters.get",
@@ -64,35 +89,31 @@ resource "google_project_iam_custom_role" "custom_role" {
     "container.pods.exec",
     "container.pods.get",
     "container.pods.list",
-
-    // IAM & Authentication
-    "iam.serviceAccounts.actAs",
-    "iam.serviceAccounts.create",
-    "iam.serviceAccounts.enable",
-    "iam.serviceAccounts.get",
-    "iam.serviceAccounts.getAccessToken",
-    "iam.serviceAccounts.getIamPolicy",
-    "iam.serviceAccounts.implicitDelegation",
-    "iam.serviceAccounts.list",
-    "iam.serviceAccounts.signBlob",
-
-    // Project Management
-    "resourcemanager.projects.get",
-    "compute.projects.get",
-
-    // Secret Management
-    "secretmanager.versions.access",
-    "secretmanager.versions.add",
-    "secretmanager.secrets.create",
-
-    // Bucket Acquisition
-    "storage.buckets.get",
-    "storage.buckets.list",
-    "storage.objects.create",
-    "storage.objects.delete",
-    "storage.objects.get",
-    "storage.objects.list",
   ]
+
+
+  # Generate the full list of permissions
+  permissions = concat(
+    local.base_permissions,
+    var.deploy_acquisition_permissions ? local.acquisition_permissions : [],
+    var.use_secrets_manager ? local.secretmanager_permissions : [],
+    var.enable_platform_updates ? local.upgrade_permissions : [],
+    !var.local_workers ? local.workers_permissions : []
+  )
+}
+
+resource "google_service_account" "user_service_account" {
+  account_id   = "sa-${local.split_unique_name[0]}${local.account_id_suffix}"
+  display_name = "CadoResponse Service Account ${var.unique_name}"
+  project      = var.project_id
+}
+
+resource "google_project_iam_custom_role" "custom_role" {
+  count       = var.role == "" ? 1 : 0
+  role_id     = replace("myCadoResponseRole_${var.unique_name}", "-", "_")
+  title       = "myCadoResponseRole-${var.unique_name}"
+  description = "CadoResponse Role"
+  permissions = local.permissions
 }
 
 resource "google_project_iam_member" "project_iam_member_cado" {
