@@ -53,6 +53,7 @@ No modules.
 | <a name="input_primary_subnet"></a> [primary\_subnet](#input\_primary\_subnet) | Subnet object containing various attributes | <pre>object({<br>    id                = string<br>    cidr_block        = string<br>    availability_zone = string<br>  })</pre> | n/a | yes |
 | <a name="input_proxy"></a> [proxy](#input\_proxy) | n/a | `string` | n/a | yes |
 | <a name="input_proxy_cert_url"></a> [proxy\_cert\_url](#input\_proxy\_cert\_url) | n/a | `string` | n/a | yes |
+| <a name="input_proxy_whitelist"></a> [proxy\_whitelist](#input\_proxy\_whitelist) | n/a | `list(string)` | n/a | yes |
 | <a name="input_public_deployment"></a> [public\_deployment](#input\_public\_deployment) | n/a | `bool` | n/a | yes |
 | <a name="input_role_name"></a> [role\_name](#input\_role\_name) | n/a | `string` | n/a | yes |
 | <a name="input_security_group_id"></a> [security\_group\_id](#input\_security\_group\_id) | n/a | `string` | n/a | yes |

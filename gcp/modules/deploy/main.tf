@@ -45,6 +45,7 @@ resource "google_compute_instance" "vm_instance" {
     "echo feature_flag_platform_upgrade = ${var.enable_platform_updates} >> /home/admin/processor/first_run.cfg",
     "echo PROXY_url = ${var.proxy} >> /home/admin/processor/first_run.cfg",
     "echo PROXY_cert_url = ${var.proxy_cert_url} >> /home/admin/processor/first_run.cfg",
+    "echo PROXY_whitelist = ${join(",", var.proxy_whitelist)} >> /home/admin/processor/first_run.cfg",
     "echo worker_instance = ${var.instance_worker_type} >> /home/admin/processor/first_run.cfg",
     "echo local_workers = ${var.local_workers} >> /home/admin/processor/first_run.cfg",
     "echo minimum_role_deployment = ${!var.deploy_acquisition_permissions} >> /home/admin/processor/first_run.cfg",
@@ -59,6 +60,7 @@ resource "google_compute_instance" "vm_instance" {
         "${var.finalize_cmd}",
         var.proxy != "" ? " --proxy ${var.proxy}" : "",
         var.proxy_cert_url != "" ? " --proxy-cert-url ${var.proxy_cert_url}" : "",
+        length(var.proxy_whitelist) > 0 ? " --proxy-whitelist ${join(",", var.proxy_whitelist)}" : "",
         "2>&1 | sudo tee /home/admin/processor/init_out"
       ]))
     ],

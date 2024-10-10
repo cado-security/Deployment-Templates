@@ -17,9 +17,12 @@ Statement:
       aws:ResourceTag/Name: CadoResponse*
 - Sid: RequiredToCheckPolicy
   Action:
+  - iam:ListRolePolicies
   - iam:GetPolicy
+  - iam:GetRolePolicy
   - iam:GetPolicyVersion
-  Resource: arn:aws:iam::*:policy/*CadoResponse*
+  - iam:SimulatePrincipalPolicy
+  Resource: '*'
   Effect: Allow
 - Sid: RequiredForMemoryForensics
   Effect: Allow

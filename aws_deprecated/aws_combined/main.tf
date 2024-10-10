@@ -76,6 +76,12 @@ variable "proxy_cert_url" {
   default     = ""
 }
 
+variable "proxy_whitelist" {
+  type        = list(string)
+  description = "List of IPs/domains to be included in the no_proxy environment variable"
+  default     = []
+}
+
 variable "instance_worker_type" {
   type    = string
   default = "i4i.2xlarge"
@@ -121,6 +127,7 @@ module "aws" {
   tags                         = var.tags
   proxy                        = var.proxy
   proxy_cert_url               = var.proxy_cert_url
+  proxy_whitelist              = var.proxy_whitelist
   configure_cloudwatch         = var.configure_cloudwatch
 }
 

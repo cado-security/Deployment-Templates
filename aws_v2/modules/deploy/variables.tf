@@ -47,6 +47,10 @@ variable "proxy_cert_url" {
   type = string
 }
 
+variable "proxy_whitelist" {
+  type = list(string)
+}
+
 variable "vol_size" {
   type = number
 }

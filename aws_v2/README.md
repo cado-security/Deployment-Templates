@@ -80,6 +80,7 @@ No resources.
 | <a name="input_private_load_balancer"></a> [private\_load\_balancer](#input\_private\_load\_balancer) | To determine if we should deploy an internal load balancer | `bool` | `false` | no |
 | <a name="input_proxy"></a> [proxy](#input\_proxy) | Proxy URL to use for outbound connections in format / User Pass - https://user:pass@1.2.3.4:1234 \| IP Auth - https://1.2.3.4:1234 | `string` | `""` | no |
 | <a name="input_proxy_cert_url"></a> [proxy\_cert\_url](#input\_proxy\_cert\_url) | Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert. | `string` | `""` | no |
+| <a name="input_proxy_whitelist"></a> [proxy\_whitelist](#input\_proxy\_whitelist) | List of IPs/domains to be included in the no\_proxy environment variable | `list(string)` | `[]` | no |
 | <a name="input_public_deployment"></a> [public\_deployment](#input\_public\_deployment) | To determine if we should deploy without a public IP | `bool` | `false` | no |
 | <a name="input_region"></a> [region](#input\_region) | Region to deploy to | `string` | `"us-west-1"` | no |
 | <a name="input_ssh_location"></a> [ssh\_location](#input\_ssh\_location) | IP address to allow ssh access from | `list(string)` | n/a | yes |

@@ -90,6 +90,12 @@ variable "proxy_cert_url" {
   default     = ""
 }
 
+variable "proxy_whitelist" {
+  type        = list(string)
+  description = "List of IPs/domains to be included in the no_proxy environment variable"
+  default     = []
+}
+
 # DO NOT CHANGE
 
 variable "finalize_cmd" {

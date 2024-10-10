@@ -241,10 +241,13 @@ resource "aws_iam_role_policy" "policy" {
         {
             "Sid": "RequiredToCheckPolicy",
             "Action": [
+                "iam:ListRolePolicies",
                 "iam:GetPolicy",
-                "iam:GetPolicyVersion"
+                "iam:GetRolePolicy",
+                "iam:GetPolicyVersion",
+                "iam:SimulatePrincipalPolicy"
             ],
-            "Resource": "arn:aws:iam::*:policy/*CadoResponse*",
+            "Resource": "*",
             "Effect": "Allow"
         },
         {

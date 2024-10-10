@@ -43,6 +43,7 @@ No modules.
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Value of the project id to deploy to | `string` | n/a | yes |
 | <a name="input_proxy"></a> [proxy](#input\_proxy) | Proxy URL to use for outbound connections in format / User Pass - https://user:pass@1.2.3.4:1234 \| IP Auth - https://1.2.3.4:1234 | `string` | n/a | yes |
 | <a name="input_proxy_cert_url"></a> [proxy\_cert\_url](#input\_proxy\_cert\_url) | Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert. | `string` | n/a | yes |
+| <a name="input_proxy_whitelist"></a> [proxy\_whitelist](#input\_proxy\_whitelist) | List of IPs/domains to be included in the no\_proxy environment variable | `list(string)` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The zone where the VM will be deployed | `string` | n/a | yes |
 | <a name="input_service_account"></a> [service\_account](#input\_service\_account) | The service account to use for the VM | `string` | n/a | yes |
 | <a name="input_subnetwork_config"></a> [subnetwork\_config](#input\_subnetwork\_config) | The subnetwork configuration for the VM | `any` | n/a | yes |

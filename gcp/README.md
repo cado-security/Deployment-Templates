@@ -72,6 +72,7 @@ No resources.
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project id to deploy to | `string` | n/a | yes |
 | <a name="input_proxy"></a> [proxy](#input\_proxy) | Proxy URL to use for outbound connections in format / User Pass - https://user:pass@1.2.3.4:1234 \| IP Auth - https://1.2.3.4:1234 | `string` | `""` | no |
 | <a name="input_proxy_cert_url"></a> [proxy\_cert\_url](#input\_proxy\_cert\_url) | Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert. | `string` | `""` | no |
+| <a name="input_proxy_whitelist"></a> [proxy\_whitelist](#input\_proxy\_whitelist) | List of IPs/domains to be included in the no\_proxy environment variable | `list(string)` | `[]` | no |
 | <a name="input_region"></a> [region](#input\_region) | Region to deploy to | `string` | `"us-central1"` | no |
 | <a name="input_role"></a> [role](#input\_role) | The role to assign to the service account | `string` | `""` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to main vm and any spawned workers | `map(string)` | `{}` | no |

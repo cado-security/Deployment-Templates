@@ -95,6 +95,13 @@ variable "proxy_cert_url" {
   default     = ""
 }
 
+variable "proxy_whitelist" {
+  type        = list(string)
+  description = "List of IPs/domains to be included in the no_proxy environment variable"
+  default     = []
+
+}
+
 variable "instance_worker_type" {
   type    = string
   default = "i4i.2xlarge"
@@ -385,6 +392,7 @@ resource "aws_instance" "main" {
     "aws_stack_id=${""}", # not actually a stack id,
     "feature_flag_http_proxy=${var.proxy}",
     "proxy_cert_url=${var.proxy_cert_url}",
+    "proxy_whitelist=${join(",", var.proxy_whitelist)}",
     "feature_flag_platform_upgrade='${var.feature_flag_platform_upgrade}'",
     "feature_flag_deploy_with_alb='${var.feature_flag_deploy_with_alb}'",
     "feature_flag_deploy_with_elastic='${""}'",
@@ -401,6 +409,7 @@ resource "aws_instance" "main" {
     "echo aws_stack_id = $aws_stack_id >> /home/admin/processor/first_run.cfg",
     "echo PROXY_url = $feature_flag_http_proxy >> /home/admin/processor/first_run.cfg",
     "echo PROXY_cert_url = $proxy_cert_url >> /home/admin/processor/first_run.cfg",
+    "echo PROXY_whitelist = $proxy_whitelist >> /home/admin/processor/first_run.cfg",
     "echo worker_instance = ${var.instance_worker_type} >> /home/admin/processor/first_run.cfg",
     ],
     [
@@ -412,6 +421,8 @@ resource "aws_instance" "main" {
         "${var.finalize_cmd}",
         var.proxy != "" ? " --proxy ${var.proxy}" : "",
         var.proxy_cert_url != "" ? " --proxy-cert-url ${var.proxy_cert_url}" : "",
+        length(var.proxy_whitelist) > 0 ? " --proxy-whitelist ${join(",", var.proxy_whitelist)}" : "",
+
         "2>&1 | sudo tee /home/admin/processor/init_out"
       ]))
     ],

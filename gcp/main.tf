@@ -63,6 +63,7 @@ module "deploy" {
   finalize_cmd                   = var.finalize_cmd
   proxy                          = var.proxy
   proxy_cert_url                 = var.proxy_cert_url
+  proxy_whitelist                = var.proxy_whitelist
   instance_worker_type           = var.instance_worker_type
   use_beta                       = local.use_beta
   deploy_nfs                     = var.deploy_nfs

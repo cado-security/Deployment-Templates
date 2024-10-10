@@ -113,6 +113,12 @@ variable "proxy_cert_url" {
   default     = ""
 }
 
+variable "proxy_whitelist" {
+  type        = list(string)
+  description = "List of IPs/domains to be included in the no_proxy environment variable"
+  default     = []
+}
+
 variable "instance_worker_type" {
   type        = string
   default     = "n2-highmem-8"

@@ -78,6 +78,12 @@ variable "proxy_cert_url" {
   default     = ""
 }
 
+variable "proxy_whitelist" {
+  type        = list(string)
+  description = "List of IPs/domains to be included in the no_proxy environment variable"
+  default     = []
+}
+
 variable "worker_vm_type" {
   type        = string
   description = "Default worker vm size"
@@ -288,6 +294,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
       "echo bucket = ${data.azurerm_storage_container.container.name} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo PROXY_url = ${var.proxy} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo PROXY_cert_url = ${var.proxy_cert_url} | sudo tee -a /home/admin/processor/first_run.cfg",
+      "echo PROXY_whitelist = ${join(",", var.proxy_whitelist)} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo -n ${azurerm_key_vault.keyvault.vault_uri} | sudo tee -a /home/admin/processor/envars/KEYVAULT_URI",
       "echo -n ${var.use_secrets_manager} | sudo tee -a /home/admin/processor/envars/USE_SECRETS_MANAGER",
       "echo local_workers = ${var.local_workers} | sudo tee -a /home/admin/processor/first_run.cfg",
@@ -306,6 +313,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
           "${var.finalize_cmd}",
           var.proxy != "" ? " --proxy ${var.proxy}" : "",
           var.proxy_cert_url != "" ? " --proxy-cert-url ${var.proxy_cert_url}" : "",
+          length(var.proxy_whitelist) > 0 ? " --proxy-whitelist ${join(",", var.proxy_whitelist)}" : "",
           "2>&1 | sudo tee /home/admin/processor/init_out"
         ]))
       ],

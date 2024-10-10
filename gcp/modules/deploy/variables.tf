@@ -65,6 +65,11 @@ variable "proxy_cert_url" {
   description = "Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert."
 }
 
+variable "proxy_whitelist" {
+  type        = list(string)
+  description = "List of IPs/domains to be included in the no_proxy environment variable"
+}
+
 variable "instance_worker_type" {
   type        = string
   description = "Set Worker instance type"

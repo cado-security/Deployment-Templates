@@ -117,6 +117,11 @@ variable "proxy_cert_url" {
   description = "Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert."
   default     = ""
 }
+variable "proxy_whitelist" {
+  type        = list(string)
+  description = "List of IPs/domains to be included in the no_proxy environment variable"
+  default     = []
+}
 
 variable "worker_vm_type" {
   type        = string
@@ -167,6 +172,7 @@ module "azure_transient" {
   finalize_cmd                   = var.finalize_cmd
   proxy                          = var.proxy
   proxy_cert_url                 = var.proxy_cert_url
+  proxy_whitelist                = var.proxy_whitelist
   feature_flag_platform_upgrade  = var.feature_flag_platform_upgrade
   use_secrets_manager            = var.use_secrets_manager
   deploy_acquisition_permissions = var.deploy_acquisition_permissions
