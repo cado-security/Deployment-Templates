@@ -247,14 +247,6 @@ resource "aws_iam_role_policy" "policy" {
 			"Resource":"*"
 		},
 		{
-			"Sid": "RequiredForS3Readiness",
-			"Effect": "Allow",
-			"Action": [
-				"s3:DeleteObject"
-			],
-			"Resource": "arn:aws:s3:::${var.s3_bucket_id}/*"
-		},
-		{
 			"Sid": "RequiredForKmsEncryptedEc2Import",
 			"Effect": "Allow",
 			"Action": [

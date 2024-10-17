@@ -27,7 +27,6 @@ resource "google_compute_instance" "vm_instance" {
     }
 
   }
-
   service_account {
     email  = var.service_account
     scopes = ["cloud-platform"] # TODO This gives default perms, revisit this if we're having auth issues
@@ -49,7 +48,7 @@ resource "google_compute_instance" "vm_instance" {
     "echo worker_instance = ${var.instance_worker_type} >> /home/admin/processor/first_run.cfg",
     "echo local_workers = ${var.local_workers} >> /home/admin/processor/first_run.cfg",
     "echo minimum_role_deployment = ${!var.deploy_acquisition_permissions} >> /home/admin/processor/first_run.cfg",
-    "echo -n ${var.use_secrets_manager} > /home/admin/processor/envars/USE_SECRETS_MANAGER"
+    "echo -n ${var.use_secrets_manager} > /home/admin/processor/envars/USE_SECRETS_MANAGER",
     ],
     [
       for k, v in var.tags :

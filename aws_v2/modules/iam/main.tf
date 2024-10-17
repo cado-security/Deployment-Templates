@@ -290,14 +290,6 @@ resource "aws_iam_role_policy" "policy" {
             "Resource": "arn:aws:s3:::${var.s3_bucket_id}"
         },
         {
-            "Sid": "RequiredForS3Readiness",
-            "Effect": "Allow",
-            "Action": [
-                "s3:DeleteObject"
-            ],
-            "Resource": "arn:aws:s3:::${var.s3_bucket_id}/*"
-        },
-        {
             "Sid": "RequiredForMemoryForensics",
             "Effect": "Allow",
             "Action": [

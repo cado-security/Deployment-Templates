@@ -28,7 +28,7 @@ variable "ip_pattern_all" {
 variable "instance_type" {
   type        = string
   description = "Instance type to use for main"
-  default     = "Standard_D2ds_v4" // 2cpu 8gb - WARNING not enough memory for elastic!!! 
+  default     = "Standard_D2ds_v4" // 2cpu 8gb - WARNING not enough memory for elastic!!!
   // Standard_D8ds_v4 8cpu 32gb
 }
 
@@ -256,7 +256,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   name                = "cado-main-vm"
   resource_group_name = data.azurerm_resource_group.group.name
   location            = data.azurerm_resource_group.group.location
-  size                = var.instance_type // 2cpu 8gb 
+  size                = var.instance_type // 2cpu 8gb
   admin_username      = "adminuser"
   network_interface_ids = [
     azurerm_network_interface.nic.id,
@@ -299,7 +299,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
       "echo -n ${var.use_secrets_manager} | sudo tee -a /home/admin/processor/envars/USE_SECRETS_MANAGER",
       "echo local_workers = ${var.local_workers} | sudo tee -a /home/admin/processor/first_run.cfg",
       "echo minimum_role_deployment = ${!var.deploy_acquisition_permissions} | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo azure_storage_account = ${data.azurerm_storage_account.storage.name} | sudo tee -a /home/admin/processor/first_run.cfg"
+      "echo azure_storage_account = ${data.azurerm_storage_account.storage.name} | sudo tee -a /home/admin/processor/first_run.cfg",
       ],
       var.deploy_nfs ? [
         "echo azure_storage_share = ${data.azurerm_storage_share.share[0].name} | sudo tee -a /home/admin/processor/first_run.cfg",
