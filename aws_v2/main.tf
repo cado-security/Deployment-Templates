@@ -26,10 +26,11 @@ module "networking" {
 }
 
 module "iam" {
-  source       = "./modules/iam"
-  region       = var.region
-  tags         = var.tags
-  s3_bucket_id = module.deploy.s3_bucket_id
+  source                  = "./modules/iam"
+  region                  = var.region
+  tags                    = var.tags
+  s3_bucket_id            = module.deploy.s3_bucket_id
+  minimum_role_deployment = var.minimum_role_deployment
 }
 
 module "deploy" {
@@ -55,4 +56,5 @@ module "deploy" {
   deploy_nfs                    = var.deploy_nfs
   local_workers                 = var.local_workers
   use_secrets_manager           = var.use_secrets_manager
+  minimum_role_deployment       = var.minimum_role_deployment
 }

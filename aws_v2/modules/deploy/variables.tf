@@ -86,3 +86,7 @@ variable "local_workers" {
 variable "use_secrets_manager" {
   type = bool
 }
+
+variable "minimum_role_deployment" {
+  type = bool
+}

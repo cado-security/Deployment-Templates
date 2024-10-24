@@ -1,5 +1,6 @@
 data "aws_iam_role" "role" {
-  name = var.role_name
+  count = var.minimum_role_deployment ? 0 : 1
+  name  = var.role_name
 }
 
 data "aws_iam_role" "instance_role" {
@@ -137,7 +138,7 @@ resource "aws_instance" "main" {
   user_data = join("\n", concat([
     "#!/bin/bash -x",
     "s3bucket=${aws_s3_bucket.bucket.id}",
-    "aws_role=${data.aws_iam_role.role.arn}",
+    var.minimum_role_deployment ? "" : "aws_role=${data.aws_iam_role.role[0].arn}",
     "aws_rds_db=${""}",
     "aws_elastic_endpoint=${""}",
     "aws_elastic_id=${""}",
@@ -164,7 +165,7 @@ resource "aws_instance" "main" {
     "echo PROXY_url = $feature_flag_http_proxy >> /home/admin/processor/first_run.cfg",
     "echo PROXY_cert_url = $proxy_cert_url >> /home/admin/processor/first_run.cfg",
     "echo PROXY_whitelist = $proxy_whitelist >> /home/admin/processor/first_run.cfg",
-    "echo minimum_role_deployment = true >> /home/admin/processor/first_run.cfg",
+    "echo minimum_role_deployment = ${var.minimum_role_deployment} >> /home/admin/processor/first_run.cfg",
     ],
     [
       for k, v in var.tags :

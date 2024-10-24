@@ -37,6 +37,7 @@ locals {
     "compute.subnetworks.use",
     "compute.networks.get",
     "compute.networks.list",
+    "compute.instances.setTags",
 
     // Adjusting Settings
     "compute.machineTypes.get",
@@ -95,10 +96,10 @@ locals {
   # Generate the full list of permissions
   permissions = concat(
     local.base_permissions,
+    local.secretmanager_permissions,
+    local.upgrade_permissions,
+    local.workers_permissions,
     var.deploy_acquisition_permissions ? local.acquisition_permissions : [],
-    var.use_secrets_manager ? local.secretmanager_permissions : [],
-    var.enable_platform_updates ? local.upgrade_permissions : [],
-    !var.local_workers ? local.workers_permissions : []
   )
 }
 

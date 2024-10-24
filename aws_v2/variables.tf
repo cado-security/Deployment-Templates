@@ -145,3 +145,9 @@ variable "use_secrets_manager" {
   default     = true
   description = "Use AWS Secrets Manager for storing secrets"
 }
+
+variable "minimum_role_deployment" {
+  type        = bool
+  default     = false
+  description = "Deploy without an IAM role for acquisitions."
+}

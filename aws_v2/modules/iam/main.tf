@@ -3,6 +3,7 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 resource "aws_iam_role" "role" {
+  count       = var.minimum_role_deployment ? 0 : 1
   name_prefix = "myCadoResponseRole"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -125,6 +126,14 @@ resource "aws_iam_role_policy" "instance_policy" {
             "Resource": "*"
         },
         {
+            "Sid": "RequiredForWorkersAndUpdatesIAM",
+            "Effect": "Allow",
+            "Action": [
+                "iam:PassRole"
+            ],
+            "Resource": "arn:aws:iam::*:role/*CadoResponse*"
+        },
+        {
             "Sid": "RequiredForNativeUpdates",
             "Effect": "Allow",
             "Action": [
@@ -207,8 +216,9 @@ JSON
 }
 
 resource "aws_iam_role_policy" "policy" {
+  count       = var.minimum_role_deployment ? 0 : 1
   name_prefix = "myCadoResponseRolePolicy"
-  role        = aws_iam_role.role.id
+  role = aws_iam_role.role[0].id
   policy = <<JSON
 {
     "Statement": [
@@ -555,7 +565,7 @@ JSON
 }
 
 output "role_name" {
-  value = aws_iam_role.role.name
+  value = var.minimum_role_deployment ? "not-deployed" : aws_iam_role.role[0].name
 }
 
 output "instance_role_name" {
