@@ -315,7 +315,14 @@ resource "aws_iam_role_policy" "policy" {
         {
             "Sid": "RequiredForS3Import",
             "Effect": "Allow",
-            "Action": "s3:ListAllMyBuckets",
+            "Action": [
+                "s3:ListAllMyBuckets",
+                "s3:GetObject",
+                "s3:RestoreObject",
+                "s3:GetObjectTagging",
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
+            ],
             "Resource": "*"
         },
         {
