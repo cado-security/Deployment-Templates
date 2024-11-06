@@ -1,6 +1,5 @@
 
 // Variables
-
 variable "deploy_nfs" {
   type        = bool
   description = "Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files."
@@ -261,6 +260,40 @@ resource "azurerm_linux_virtual_machine" "vm" {
   network_interface_ids = [
     azurerm_network_interface.nic.id,
   ]
+  user_data = base64encode(join("\n", concat([
+    "#!/bin/bash -x",
+    // Set first_run.cfg
+    "echo [FIRST_RUN] | sudo tee /home/admin/processor/first_run.cfg",
+    "echo deployment_mode = terraform | sudo tee -a /home/admin/processor/first_run.cfg",
+    "echo worker_instance = ${var.worker_vm_type} | sudo tee -a /home/admin/processor/first_run.cfg",
+    "echo feature_flag_platform_upgrade = ${var.feature_flag_platform_upgrade} | sudo tee -a /home/admin/processor/first_run.cfg",
+    "echo bucket = ${data.azurerm_storage_container.container.name} | sudo tee -a /home/admin/processor/first_run.cfg",
+    "echo PROXY_url = ${var.proxy} | sudo tee -a /home/admin/processor/first_run.cfg",
+    "echo PROXY_cert_url = ${var.proxy_cert_url} | sudo tee -a /home/admin/processor/first_run.cfg",
+    "echo PROXY_whitelist = ${join(",", var.proxy_whitelist)} | sudo tee -a /home/admin/processor/first_run.cfg",
+    "echo -n ${azurerm_key_vault.keyvault.vault_uri} | sudo tee -a /home/admin/processor/envars/KEYVAULT_URI",
+    "echo -n ${var.use_secrets_manager} | sudo tee -a /home/admin/processor/envars/USE_SECRETS_MANAGER",
+    "echo local_workers = ${var.local_workers} | sudo tee -a /home/admin/processor/first_run.cfg",
+    "echo minimum_role_deployment = ${!var.deploy_acquisition_permissions} | sudo tee -a /home/admin/processor/first_run.cfg",
+    "echo azure_storage_account = ${data.azurerm_storage_account.storage.name} | sudo tee -a /home/admin/processor/first_run.cfg",
+    ],
+    var.deploy_nfs ? [
+      "echo azure_storage_share = ${data.azurerm_storage_share.share[0].name} | sudo tee -a /home/admin/processor/first_run.cfg",
+    ] : [],
+    [
+      for k, v in var.tags :
+      "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
+    ],
+    [
+      join(" ", concat([
+        "${var.finalize_cmd}",
+        var.proxy != "" ? " --proxy ${var.proxy}" : "",
+        var.proxy_cert_url != "" ? " --proxy-cert-url ${var.proxy_cert_url}" : "",
+        length(var.proxy_whitelist) > 0 ? " --proxy-whitelist ${join(",", var.proxy_whitelist)}" : "",
+        "2>&1 | sudo tee /home/admin/processor/init_out"
+      ]))
+    ],
+  )))
 
   admin_ssh_key {
     username   = "adminuser"
@@ -281,51 +314,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
   tags = var.tags
 
   source_image_id = azurerm_image.image.id
-
-  provisioner "remote-exec" {
-    inline = concat([
-      // Set first_run.cfg
-      "echo [FIRST_RUN] | sudo tee /home/admin/processor/first_run.cfg",
-      "echo elastic_hostname = ${self.private_ip_address}:9200 | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo private_ip = ${self.private_ip_address} | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo deployment_mode = terraform | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo worker_instance = ${var.worker_vm_type} | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo feature_flag_platform_upgrade = ${var.feature_flag_platform_upgrade} | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo bucket = ${data.azurerm_storage_container.container.name} | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo PROXY_url = ${var.proxy} | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo PROXY_cert_url = ${var.proxy_cert_url} | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo PROXY_whitelist = ${join(",", var.proxy_whitelist)} | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo -n ${azurerm_key_vault.keyvault.vault_uri} | sudo tee -a /home/admin/processor/envars/KEYVAULT_URI",
-      "echo -n ${var.use_secrets_manager} | sudo tee -a /home/admin/processor/envars/USE_SECRETS_MANAGER",
-      "echo local_workers = ${var.local_workers} | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo minimum_role_deployment = ${!var.deploy_acquisition_permissions} | sudo tee -a /home/admin/processor/first_run.cfg",
-      "echo azure_storage_account = ${data.azurerm_storage_account.storage.name} | sudo tee -a /home/admin/processor/first_run.cfg",
-      ],
-      var.deploy_nfs ? [
-        "echo azure_storage_share = ${data.azurerm_storage_share.share[0].name} | sudo tee -a /home/admin/processor/first_run.cfg",
-      ] : [],
-      [
-        for k, v in var.tags :
-        "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
-      ],
-      [
-        join(" ", concat([
-          "${var.finalize_cmd}",
-          var.proxy != "" ? " --proxy ${var.proxy}" : "",
-          var.proxy_cert_url != "" ? " --proxy-cert-url ${var.proxy_cert_url}" : "",
-          length(var.proxy_whitelist) > 0 ? " --proxy-whitelist ${join(",", var.proxy_whitelist)}" : "",
-          "2>&1 | sudo tee /home/admin/processor/init_out"
-        ]))
-      ],
-    )
-
-    connection {
-      type        = "ssh"
-      user        = "adminuser"
-      private_key = file(var.ssh_key_private)
-      host        = data.azurerm_public_ip.public_ip.ip_address
-    }
-  }
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "data_disk_attachment" {
