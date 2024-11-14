@@ -4,7 +4,7 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 5.10"
+      version = "~> 6.10"
     }
   }
 }
@@ -14,10 +14,6 @@ provider "google" {
   credentials = var.credentials_file != "" ? file(var.credentials_file) : null
   project     = var.project_id
   region      = var.region
-}
-
-locals {
-  use_beta = var.nfs_protocol == "NFS_V4_1"
 }
 
 module "configure" {
@@ -65,7 +61,7 @@ module "deploy" {
   proxy_cert_url                 = var.proxy_cert_url
   proxy_whitelist                = var.proxy_whitelist
   instance_worker_type           = var.instance_worker_type
-  use_beta                       = local.use_beta
+  nfs_protocol                   = var.nfs_protocol
   deploy_nfs                     = var.deploy_nfs
   use_secrets_manager            = var.use_secrets_manager
   local_workers                  = var.local_workers

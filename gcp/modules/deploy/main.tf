@@ -36,8 +36,8 @@ resource "google_compute_instance" "vm_instance" {
     "#!/bin/bash -x",
     "storage_bucket=${google_storage_bucket.bucket.name}",
     "echo [FIRST_RUN] > /home/admin/processor/first_run.cfg",
-    var.deploy_nfs ? "echo filestore_ip = ${local.filestore_instance.networks[0].ip_addresses[0]} >> /home/admin/processor/first_run.cfg" : "",
-    var.deploy_nfs ? "echo filestore_name = ${local.filestore_instance.file_shares[0].name} >> /home/admin/processor/first_run.cfg" : "",
+    var.deploy_nfs ? "echo filestore_ip = ${google_filestore_instance.filestore_instance[0].networks[0].ip_addresses[0]} >> /home/admin/processor/first_run.cfg" : "",
+    var.deploy_nfs ? "echo filestore_name = ${google_filestore_instance.filestore_instance[0].file_shares[0].name} >> /home/admin/processor/first_run.cfg" : "",
     "echo bucket = $storage_bucket >> /home/admin/processor/first_run.cfg",
     "echo service_account_email = ${var.service_account} >> /home/admin/processor/first_run.cfg",
     "echo deployment_mode = terraform >> /home/admin/processor/first_run.cfg",
@@ -87,32 +87,11 @@ resource "google_compute_attached_disk" "attached_data_disk" {
   device_name = google_compute_disk.data_disk.name
 }
 
-resource "google_filestore_instance" "beta_filestore_instance" {
-  count    = (var.use_beta && var.deploy_nfs) ? 1 : 0
-  provider = google-beta
-  project  = var.project_id
-  name     = "cadoresponse-fileshare-${var.unique_name}"
-  location = var.region
-  tier     = "ENTERPRISE"
-
-  file_shares {
-    capacity_gb = 1024
-    name        = "cado_fileshare"
-  }
-
-  networks {
-    network = var.network_name
-    modes   = ["MODE_IPV4"]
-  }
-  protocol   = "NFS_V4_1"
-  depends_on = [var.network_config]
-}
-
 resource "google_filestore_instance" "filestore_instance" {
-  count    = (!var.use_beta && var.deploy_nfs) ? 1 : 0
+  count    = var.deploy_nfs ? 1 : 0
   name     = "cadoresponse-fileshare-${var.unique_name}"
-  location = data.google_compute_zones.available.names[0]
-  tier     = "BASIC_HDD"
+  location = var.nfs_protocol == "NFS_V3" ? data.google_compute_zones.available.names[0] : var.region
+  tier     = var.nfs_protocol == "NFS_V3" ? "BASIC_HDD" : "ENTERPRISE"
 
   file_shares {
     capacity_gb = 1024
@@ -123,13 +102,8 @@ resource "google_filestore_instance" "filestore_instance" {
     network = var.network_name
     modes   = ["MODE_IPV4"]
   }
+  protocol   = var.nfs_protocol
   depends_on = [var.network_config]
-}
-
-locals {
-  filestore_instance = var.use_beta ? google_filestore_instance.beta_filestore_instance[0] : (
-    var.deploy_nfs ? google_filestore_instance.filestore_instance[0] : null
-  )
 }
 
 

@@ -8,7 +8,6 @@ No requirements.
 | Name | Version |
 |------|---------|
 | <a name="provider_google"></a> [google](#provider\_google) | n/a |
-| <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | n/a |
 
 ## Modules
 
@@ -18,7 +17,6 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [google-beta_google_filestore_instance.beta_filestore_instance](https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/google_filestore_instance) | resource |
 | [google_compute_address.ip](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_address) | resource |
 | [google_compute_attached_disk.attached_data_disk](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_attached_disk) | resource |
 | [google_compute_disk.data_disk](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_disk) | resource |
@@ -40,6 +38,7 @@ No modules.
 | <a name="input_local_workers"></a> [local\_workers](#input\_local\_workers) | Deploy without scalable workers. Only limited acquisition types will be available | `bool` | n/a | yes |
 | <a name="input_network_config"></a> [network\_config](#input\_network\_config) | The network configuration for the VM | `string` | n/a | yes |
 | <a name="input_network_name"></a> [network\_name](#input\_network\_name) | The name of the VPC network | `any` | n/a | yes |
+| <a name="input_nfs_protocol"></a> [nfs\_protocol](#input\_nfs\_protocol) | The Filestore NFS Protocol to use | `string` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Value of the project id to deploy to | `string` | n/a | yes |
 | <a name="input_proxy"></a> [proxy](#input\_proxy) | Proxy URL to use for outbound connections in format / User Pass - https://user:pass@1.2.3.4:1234 \| IP Auth - https://1.2.3.4:1234 | `string` | n/a | yes |
 | <a name="input_proxy_cert_url"></a> [proxy\_cert\_url](#input\_proxy\_cert\_url) | Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert. | `string` | n/a | yes |
@@ -49,7 +48,6 @@ No modules.
 | <a name="input_subnetwork_config"></a> [subnetwork\_config](#input\_subnetwork\_config) | The subnetwork configuration for the VM | `any` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to main vm and any spawned workers | `map(string)` | n/a | yes |
 | <a name="input_unique_name"></a> [unique\_name](#input\_unique\_name) | n/a | `string` | n/a | yes |
-| <a name="input_use_beta"></a> [use\_beta](#input\_use\_beta) | Use beta filestore to utilize NFS\_V4\_1 | `bool` | n/a | yes |
 | <a name="input_use_secrets_manager"></a> [use\_secrets\_manager](#input\_use\_secrets\_manager) | Use GCP Secret Manager for storing secrets | `bool` | n/a | yes |
 | <a name="input_vm_size"></a> [vm\_size](#input\_vm\_size) | The size of the VM to deploy | `string` | n/a | yes |
 | <a name="input_vol_size"></a> [vol\_size](#input\_vol\_size) | The size of the volume to attach to the VM | `number` | n/a | yes |

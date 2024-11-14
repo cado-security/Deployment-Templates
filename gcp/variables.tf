@@ -91,13 +91,13 @@ variable "create_cloud_build_role_service_account" {
 }
 
 variable "nfs_protocol" {
-  description = "The Filestore NFS Protocol to use"
+  description = "The Filestore NFS Protocol to use."
   type        = string
-  default     = "NFS_V3"
+  default     = "NFS_V4_1"
 
   validation {
     condition     = can(regex("^(NFS_V3|NFS_V4_1)$", var.nfs_protocol))
-    error_message = "Invalid Filestore Protocol selected, only allowed: 'NFS_V3', 'NFS_V4_1'. Default 'NFS_V3'"
+    error_message = "Invalid Filestore Protocol selected, only allowed: 'NFS_V3', 'NFS_V4_1'. Default 'NFS_V4_1'"
   }
 }
 

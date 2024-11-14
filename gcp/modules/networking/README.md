@@ -29,7 +29,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_allowed_ips"></a> [allowed\_ips](#input\_allowed\_ips) | n/a | `list(string)` | n/a | yes |
-| <a name="input_custom_networking"></a> [custom\_networking](#input\_custom\_networking) | Custom networking configuration. Set to null to create new resources. | <pre>object({<br>    vpc_name           = string<br>    public_subnet_name = string<br>  })</pre> | `null` | no |
+| <a name="input_custom_networking"></a> [custom\_networking](#input\_custom\_networking) | Custom networking configuration. Set to null to create new resources. | <pre>object({<br/>    vpc_name           = string<br/>    public_subnet_name = string<br/>  })</pre> | `null` | no |
 | <a name="input_inbound_ports"></a> [inbound\_ports](#input\_inbound\_ports) | The list of ports to open | `list(string)` | n/a | yes |
 | <a name="input_local_ports"></a> [local\_ports](#input\_local\_ports) | The list of ports to open to speak on the local subnet | `list(string)` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The zone where the VM will be deployed | `string` | n/a | yes |

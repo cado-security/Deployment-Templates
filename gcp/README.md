@@ -32,7 +32,7 @@ This Terraform package contains instructions to configure and deploy CadoRespons
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_google"></a> [google](#requirement\_google) | ~> 5.10 |
+| <a name="requirement_google"></a> [google](#requirement\_google) | ~> 6.10 |
 
 ## Providers
 
@@ -58,17 +58,17 @@ No resources.
 | <a name="input_allowed_ips"></a> [allowed\_ips](#input\_allowed\_ips) | The list of IPs to whitelist | `list(string)` | `[]` | no |
 | <a name="input_create_cloud_build_role_service_account"></a> [create\_cloud\_build\_role\_service\_account](#input\_create\_cloud\_build\_role\_service\_account) | Create a custom Cloud Build role | `bool` | `true` | no |
 | <a name="input_credentials_file"></a> [credentials\_file](#input\_credentials\_file) | Path to the credentials file | `string` | `""` | no |
-| <a name="input_custom_networking"></a> [custom\_networking](#input\_custom\_networking) | Custom networking configuration. Set to null to create new resources. | <pre>object({<br>    vpc_name           = string<br>    public_subnet_name = string<br>  })</pre> | `null` | no |
+| <a name="input_custom_networking"></a> [custom\_networking](#input\_custom\_networking) | Custom networking configuration. Set to null to create new resources. | <pre>object({<br/>    vpc_name           = string<br/>    public_subnet_name = string<br/>  })</pre> | `null` | no |
 | <a name="input_deploy_acquisition_permissions"></a> [deploy\_acquisition\_permissions](#input\_deploy\_acquisition\_permissions) | Deploy instance with permissions needed for same project acquisitions | `bool` | `true` | no |
 | <a name="input_deploy_nfs"></a> [deploy\_nfs](#input\_deploy\_nfs) | Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files. | `bool` | `true` | no |
 | <a name="input_enable_platform_updates"></a> [enable\_platform\_updates](#input\_enable\_platform\_updates) | Enable platform updates, False requires updates via Terraform | `bool` | `true` | no |
 | <a name="input_finalize_cmd"></a> [finalize\_cmd](#input\_finalize\_cmd) | Command to run on the VM after deployment | `string` | `"sudo /home/admin/processor/release/finalize.sh --main"` | no |
 | <a name="input_image"></a> [image](#input\_image) | Cado Response VM image path | `string` | `"projects/cado-public/global/images/cadoresponse"` | no |
-| <a name="input_inbound_ports"></a> [inbound\_ports](#input\_inbound\_ports) | The list of ports to open | `list(string)` | <pre>[<br>  "22",<br>  "443"<br>]</pre> | no |
+| <a name="input_inbound_ports"></a> [inbound\_ports](#input\_inbound\_ports) | The list of ports to open | `list(string)` | <pre>[<br/>  "22",<br/>  "443"<br/>]</pre> | no |
 | <a name="input_instance_worker_type"></a> [instance\_worker\_type](#input\_instance\_worker\_type) | Set Worker instance type | `string` | `"n2-highmem-8"` | no |
-| <a name="input_local_ports"></a> [local\_ports](#input\_local\_ports) | The list of ports to open to speak on the local subnet | `list(string)` | <pre>[<br>  "5432",<br>  "9200",<br>  "6379",<br>  "24224"<br>]</pre> | no |
+| <a name="input_local_ports"></a> [local\_ports](#input\_local\_ports) | The list of ports to open to speak on the local subnet | `list(string)` | <pre>[<br/>  "5432",<br/>  "9200",<br/>  "6379",<br/>  "24224"<br/>]</pre> | no |
 | <a name="input_local_workers"></a> [local\_workers](#input\_local\_workers) | Deploy without scalable workers. Only limited acquisition types will be available | `bool` | `false` | no |
-| <a name="input_nfs_protocol"></a> [nfs\_protocol](#input\_nfs\_protocol) | The Filestore NFS Protocol to use | `string` | `"NFS_V3"` | no |
+| <a name="input_nfs_protocol"></a> [nfs\_protocol](#input\_nfs\_protocol) | The Filestore NFS Protocol to use. | `string` | `"NFS_V4_1"` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project id to deploy to | `string` | n/a | yes |
 | <a name="input_proxy"></a> [proxy](#input\_proxy) | Proxy URL to use for outbound connections in format / User Pass - https://user:pass@1.2.3.4:1234 \| IP Auth - https://1.2.3.4:1234 | `string` | `""` | no |
 | <a name="input_proxy_cert_url"></a> [proxy\_cert\_url](#input\_proxy\_cert\_url) | Location of where to download and trust the proxy certificate, leave blank to use proxy without a cert. | `string` | `""` | no |
