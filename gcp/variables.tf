@@ -53,7 +53,7 @@ variable "vol_size" {
 variable "finalize_cmd" {
   description = "Command to run on the VM after deployment"
   type        = string
-  default     = "sudo /home/admin/processor/release/finalize.sh --main"
+  default     = "sudo /home/admin/processor/release/finalize.sh"
 }
 
 # Networking options

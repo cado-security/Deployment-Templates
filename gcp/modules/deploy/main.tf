@@ -32,39 +32,42 @@ resource "google_compute_instance" "vm_instance" {
     scopes = ["cloud-platform"] # TODO This gives default perms, revisit this if we're having auth issues
   }
 
-  metadata_startup_script = join("\n", concat([
-    "#!/bin/bash -x",
-    "storage_bucket=${google_storage_bucket.bucket.name}",
-    "echo [FIRST_RUN] > /home/admin/processor/first_run.cfg",
-    var.deploy_nfs ? "echo filestore_ip = ${google_filestore_instance.filestore_instance[0].networks[0].ip_addresses[0]} >> /home/admin/processor/first_run.cfg" : "",
-    var.deploy_nfs ? "echo filestore_name = ${google_filestore_instance.filestore_instance[0].file_shares[0].name} >> /home/admin/processor/first_run.cfg" : "",
-    "echo bucket = $storage_bucket >> /home/admin/processor/first_run.cfg",
-    "echo service_account_email = ${var.service_account} >> /home/admin/processor/first_run.cfg",
-    "echo deployment_mode = terraform >> /home/admin/processor/first_run.cfg",
-    "echo feature_flag_platform_upgrade = ${var.enable_platform_updates} >> /home/admin/processor/first_run.cfg",
-    "echo PROXY_url = ${var.proxy} >> /home/admin/processor/first_run.cfg",
-    "echo PROXY_cert_url = ${var.proxy_cert_url} >> /home/admin/processor/first_run.cfg",
-    "echo PROXY_whitelist = ${join(",", var.proxy_whitelist)} >> /home/admin/processor/first_run.cfg",
-    "echo worker_instance = ${var.instance_worker_type} >> /home/admin/processor/first_run.cfg",
-    "echo local_workers = ${var.local_workers} >> /home/admin/processor/first_run.cfg",
-    "echo minimum_role_deployment = ${!var.deploy_acquisition_permissions} >> /home/admin/processor/first_run.cfg",
-    "echo -n ${var.use_secrets_manager} > /home/admin/processor/envars/USE_SECRETS_MANAGER",
-    ],
-    [
-      for k, v in var.tags :
-      "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
-    ],
-    [
-      join(" ", concat([
-        "${var.finalize_cmd}",
-        var.proxy != "" ? " --proxy ${var.proxy}" : "",
-        var.proxy_cert_url != "" ? " --proxy-cert-url ${var.proxy_cert_url}" : "",
-        length(var.proxy_whitelist) > 0 ? " --proxy-whitelist ${join(",", var.proxy_whitelist)}" : "",
-        "2>&1 | sudo tee /home/admin/processor/init_out"
-      ]))
-    ],
+  metadata = {
+    user-data = join("\n", concat([
+      "#!/bin/bash -x",
+      "storage_bucket=${google_storage_bucket.bucket.name}",
+      "echo [FIRST_RUN] > /home/admin/processor/first_run.cfg",
+      var.deploy_nfs ? "echo filestore_ip = ${google_filestore_instance.filestore_instance[0].networks[0].ip_addresses[0]} >> /home/admin/processor/first_run.cfg" : "",
+      var.deploy_nfs ? "echo filestore_name = ${google_filestore_instance.filestore_instance[0].file_shares[0].name} >> /home/admin/processor/first_run.cfg" : "",
+      "echo bucket = $storage_bucket >> /home/admin/processor/first_run.cfg",
+      "echo service_account_email = ${var.service_account} >> /home/admin/processor/first_run.cfg",
+      "echo deployment_mode = terraform >> /home/admin/processor/first_run.cfg",
+      "echo feature_flag_platform_upgrade = ${var.enable_platform_updates} >> /home/admin/processor/first_run.cfg",
+      "echo PROXY_url = ${var.proxy} >> /home/admin/processor/first_run.cfg",
+      "echo PROXY_cert_url = ${var.proxy_cert_url} >> /home/admin/processor/first_run.cfg",
+      "echo PROXY_whitelist = ${join(",", var.proxy_whitelist)} >> /home/admin/processor/first_run.cfg",
+      "echo worker_instance = ${var.instance_worker_type} >> /home/admin/processor/first_run.cfg",
+      "echo local_workers = ${var.local_workers} >> /home/admin/processor/first_run.cfg",
+      "echo minimum_role_deployment = ${!var.deploy_acquisition_permissions} >> /home/admin/processor/first_run.cfg",
+      "echo -n ${var.use_secrets_manager} > /home/admin/processor/envars/USE_SECRETS_MANAGER",
+      ],
+      [
+        for k, v in var.tags :
+        "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
+      ],
+      [
+        join(" ", concat([
+          "${var.finalize_cmd}",
+          var.proxy != "" ? " --proxy ${var.proxy}" : "",
+          var.proxy_cert_url != "" ? " --proxy-cert-url ${var.proxy_cert_url}" : "",
+          length(var.proxy_whitelist) > 0 ? " --proxy-whitelist ${join(",", var.proxy_whitelist)}" : "",
+          "2>&1 | sudo tee /home/admin/processor/init_out"
+        ]))
+      ],
+      )
     )
-  )
+  }
+
 }
 
 resource "google_compute_address" "ip" {

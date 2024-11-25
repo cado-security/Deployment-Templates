@@ -103,7 +103,7 @@ variable "ssh_key_private" {
 variable "finalize_cmd" {
   type        = string
   description = "Finalize command"
-  default     = "sudo /home/admin/processor/release/finalize.sh --main" # Do not change
+  default     = "sudo /home/admin/processor/release/finalize.sh" # Do not change
 }
 
 variable "proxy" {

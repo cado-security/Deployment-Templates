@@ -38,6 +38,7 @@ locals {
     "compute.networks.get",
     "compute.networks.list",
     "compute.instances.setTags",
+    "compute.instances.get",
 
     // Adjusting Settings
     "compute.machineTypes.get",

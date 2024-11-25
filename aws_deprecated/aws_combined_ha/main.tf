@@ -5,10 +5,10 @@ terraform {
       version = "~> 4.45"
     }
   }
-  # Optional: add a backend to store tf state in AWS. Otherwise, make sure to keep you tfstate!  
+  # Optional: add a backend to store tf state in AWS. Otherwise, make sure to keep you tfstate!
 }
 
-# Should be updated 
+# Should be updated
 
 variable "region" {
   type = string
@@ -67,7 +67,7 @@ variable "certificate_arn" {
 variable "finalize_cmd" {
   type        = string
   description = "Finalize command"
-  default     = "sudo /home/admin/processor/release/finalize.sh --main"
+  default     = "sudo /home/admin/processor/release/finalize.sh"
 }
 
 # Configure the AWS Provider

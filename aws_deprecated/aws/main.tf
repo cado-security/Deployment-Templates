@@ -8,7 +8,7 @@ terraform {
 }
 
 
-# Should be updated 
+# Should be updated
 
 variable "region" {
   type    = string
@@ -80,7 +80,7 @@ variable "tags" {
 variable "finalize_cmd" {
   type        = string
   description = "Finalize command"
-  default     = "sudo /home/admin/processor/release/finalize.sh --main"
+  default     = "sudo /home/admin/processor/release/finalize.sh"
 }
 
 variable "proxy" {

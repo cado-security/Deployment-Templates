@@ -101,7 +101,7 @@ variable "proxy_whitelist" {
 variable "finalize_cmd" {
   type        = string
   description = "Finalize command"
-  default     = "sudo /home/admin/processor/release/finalize.sh --main"
+  default     = "sudo /home/admin/processor/release/finalize.sh"
 }
 
 
