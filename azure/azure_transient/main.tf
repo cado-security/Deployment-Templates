@@ -268,9 +268,9 @@ resource "azurerm_linux_virtual_machine" "vm" {
     "echo worker_instance = ${var.worker_vm_type} | sudo tee -a /home/admin/processor/first_run.cfg",
     "echo feature_flag_platform_upgrade = ${var.feature_flag_platform_upgrade} | sudo tee -a /home/admin/processor/first_run.cfg",
     "echo bucket = ${data.azurerm_storage_container.container.name} | sudo tee -a /home/admin/processor/first_run.cfg",
-    "echo PROXY_url = ${var.proxy} | sudo tee -a /home/admin/processor/first_run.cfg",
-    "echo PROXY_cert_url = ${var.proxy_cert_url} | sudo tee -a /home/admin/processor/first_run.cfg",
-    "echo PROXY_whitelist = ${join(",", var.proxy_whitelist)} | sudo tee -a /home/admin/processor/first_run.cfg",
+    var.proxy != "" ? "echo -n ${var.proxy} >> /home/admin/processor/envars/PROXY_url" : "",
+    var.proxy_cert_url != "" ? "echo -n ${var.proxy_cert_url} >> /home/admin/processor/envars/PROXY_cert_url" : "",
+    length(var.proxy_whitelist) > 0 ? "echo -n ${join(",", var.proxy_whitelist)}  >> /home/admin/processor/envars/PROXY_whitelist" : "",
     "echo -n ${azurerm_key_vault.keyvault.vault_uri} | sudo tee -a /home/admin/processor/envars/KEYVAULT_URI",
     "echo -n ${var.use_secrets_manager} | sudo tee -a /home/admin/processor/envars/USE_SECRETS_MANAGER",
     "echo local_workers = ${var.local_workers} | sudo tee -a /home/admin/processor/first_run.cfg",
@@ -351,4 +351,8 @@ resource "azurerm_key_vault" "keyvault" {
   enabled_for_disk_encryption = true
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   sku_name                    = "standard"
+  network_acls {
+    default_action = "Allow"
+    bypass         = "AzureServices"
+  }
 }

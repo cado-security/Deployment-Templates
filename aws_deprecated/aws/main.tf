@@ -407,9 +407,9 @@ resource "aws_instance" "main" {
     "echo external_elastic_hostname = $aws_elastic_endpoint >> /home/admin/processor/first_run.cfg",
     "echo external_elastic_id = $aws_elastic_id >> /home/admin/processor/first_run.cfg",
     "echo aws_stack_id = $aws_stack_id >> /home/admin/processor/first_run.cfg",
-    "echo PROXY_url = $feature_flag_http_proxy >> /home/admin/processor/first_run.cfg",
-    "echo PROXY_cert_url = $proxy_cert_url >> /home/admin/processor/first_run.cfg",
-    "echo PROXY_whitelist = $proxy_whitelist >> /home/admin/processor/first_run.cfg",
+    var.proxy != "" ? "echo -n $feature_flag_http_proxy >> /home/admin/processor/envars/PROXY_url" : "",
+    var.proxy_cert_url != "" ? "echo -n $proxy_cert_url >> /home/admin/processor/envars/PROXY_cert_url" : "",
+    length(var.proxy_whitelist) > 0 ? "echo -n $proxy_whitelist >> /home/admin/processor/envars/PROXY_whitelist" : "",
     "echo worker_instance = ${var.instance_worker_type} >> /home/admin/processor/first_run.cfg",
     ],
     [

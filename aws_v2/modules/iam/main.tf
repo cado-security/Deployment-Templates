@@ -83,14 +83,6 @@ resource "aws_iam_role_policy" "instance_policy" {
             "Resource": "arn:aws:iam::*:role/*CadoResponse*"
         },
         {
-            "Sid": "RequiredForStartup",
-            "Effect": "Allow",
-            "Action": [
-                "ec2:DescribeInstances"
-            ],
-            "Resource": "*"
-        },
-        {
             "Sid": "RequiredForSecretsManagement",
             "Effect": "Allow",
             "Action": [
@@ -118,6 +110,7 @@ resource "aws_iam_role_policy" "instance_policy" {
                 "ec2:StopInstances",
                 "ec2:StartInstances",
                 "ec2:RunInstances",
+                "ec2:DescribeInstances",
                 "ec2:DescribeInstanceStatus",
                 "ec2:CreateTags",
                 "ec2:DescribeAddresses",
@@ -147,6 +140,7 @@ resource "aws_iam_role_policy" "instance_policy" {
                 "ec2:RunInstances",
                 "ec2:CreateTags",
                 "ec2:DescribeInstanceStatus",
+                "ec2:DescribeInstances",
                 "ec2:DescribeAddresses",
                 "ec2:AssociateAddress",
                 "ec2:DescribeImages",
