@@ -97,14 +97,6 @@ variable "proxy_whitelist" {
 }
 
 # DO NOT CHANGE
-
-variable "finalize_cmd" {
-  type        = string
-  description = "Finalize command"
-  default     = "sudo /home/admin/processor/release/finalize.sh"
-}
-
-
 variable "custom_networking" {
   description = "Custom networking configuration. Set to null to create new resources."
   type = object({

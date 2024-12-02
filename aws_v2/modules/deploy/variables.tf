@@ -31,9 +31,6 @@ variable "ami_id" {
   type = string
 }
 
-variable "finalize_cmd" {
-  type = string
-}
 
 variable "vm_size" {
   type = string

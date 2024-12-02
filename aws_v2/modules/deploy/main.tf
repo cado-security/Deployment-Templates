@@ -166,17 +166,14 @@ resource "aws_instance" "main" {
     var.proxy_cert_url != "" ? "echo -n $proxy_cert_url >> /home/admin/processor/envars/PROXY_cert_url" : "",
     length(var.proxy_whitelist) > 0 ? "echo -n $proxy_whitelist >> /home/admin/processor/envars/PROXY_whitelist" : "",
     "echo minimum_role_deployment = ${var.minimum_role_deployment} >> /home/admin/processor/first_run.cfg",
+    "echo -n ${var.use_secrets_manager} > /home/admin/processor/envars/USE_SECRETS_MANAGER",
     ],
     [
       for k, v in var.tags :
       "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
     ],
     [
-      "echo -n ${var.use_secrets_manager} > /home/admin/processor/envars/USE_SECRETS_MANAGER"
-    ],
-    [
       join(" ", concat([
-        "${var.finalize_cmd}",
         var.proxy != "" ? " --proxy ${var.proxy}" : "",
         var.proxy_cert_url != "" ? " --proxy-cert-url ${var.proxy_cert_url}" : "",
         length(var.proxy_whitelist) > 0 ? " --proxy-whitelist ${join(",", var.proxy_whitelist)}" : "",

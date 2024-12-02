@@ -40,7 +40,6 @@ module "deploy" {
   vm_size                       = var.vm_size
   instance_worker_type          = var.instance_worker_type
   tags                          = var.tags
-  finalize_cmd                  = var.finalize_cmd
   feature_flag_platform_upgrade = var.feature_flag_platform_upgrade
   key_name                      = var.key_name
   vol_size                      = var.vol_size

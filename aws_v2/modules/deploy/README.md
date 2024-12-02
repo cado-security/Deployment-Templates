@@ -44,7 +44,6 @@ No modules.
 | <a name="input_configure_cloudwatch"></a> [configure\_cloudwatch](#input\_configure\_cloudwatch) | n/a | `bool` | n/a | yes |
 | <a name="input_deploy_nfs"></a> [deploy\_nfs](#input\_deploy\_nfs) | n/a | `bool` | n/a | yes |
 | <a name="input_feature_flag_platform_upgrade"></a> [feature\_flag\_platform\_upgrade](#input\_feature\_flag\_platform\_upgrade) | n/a | `bool` | n/a | yes |
-| <a name="input_finalize_cmd"></a> [finalize\_cmd](#input\_finalize\_cmd) | n/a | `string` | n/a | yes |
 | <a name="input_instance_role_name"></a> [instance\_role\_name](#input\_instance\_role\_name) | n/a | `string` | n/a | yes |
 | <a name="input_instance_worker_type"></a> [instance\_worker\_type](#input\_instance\_worker\_type) | n/a | `string` | n/a | yes |
 | <a name="input_key_name"></a> [key\_name](#input\_key\_name) | n/a | `string` | n/a | yes |

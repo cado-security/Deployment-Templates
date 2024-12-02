@@ -70,7 +70,6 @@ No resources.
 | <a name="input_custom_networking"></a> [custom\_networking](#input\_custom\_networking) | Custom networking configuration. Set to null to create new resources. | <pre>object({<br>    vpc_id             = string<br>    public_subnet_id   = string<br>    private_subnet_id  = string<br>    public_subnet_b_id = string<br>  })</pre> | `null` | no |
 | <a name="input_deploy_nfs"></a> [deploy\_nfs](#input\_deploy\_nfs) | Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files. | `bool` | `true` | no |
 | <a name="input_feature_flag_platform_upgrade"></a> [feature\_flag\_platform\_upgrade](#input\_feature\_flag\_platform\_upgrade) | n/a | `bool` | `false` | no |
-| <a name="input_finalize_cmd"></a> [finalize\_cmd](#input\_finalize\_cmd) | Finalize command | `string` | `"sudo /home/admin/processor/release/finalize.sh"` | no |
 | <a name="input_http_location"></a> [http\_location](#input\_http\_location) | IP address to allow http access from | `list(string)` | n/a | yes |
 | <a name="input_instance_worker_type"></a> [instance\_worker\_type](#input\_instance\_worker\_type) | Set Worker instance type | `string` | `"i4i.2xlarge"` | no |
 | <a name="input_key_name"></a> [key\_name](#input\_key\_name) | n/a | `string` | n/a | yes |
