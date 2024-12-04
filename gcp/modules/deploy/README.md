@@ -33,7 +33,6 @@ No modules.
 | <a name="input_deploy_acquisition_permissions"></a> [deploy\_acquisition\_permissions](#input\_deploy\_acquisition\_permissions) | Whether to deploy the acquisition permissions | `bool` | n/a | yes |
 | <a name="input_deploy_nfs"></a> [deploy\_nfs](#input\_deploy\_nfs) | Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files. | `bool` | n/a | yes |
 | <a name="input_enable_platform_updates"></a> [enable\_platform\_updates](#input\_enable\_platform\_updates) | Enable platform updates, False requires updates via Terraform | `bool` | n/a | yes |
-| <a name="input_finalize_cmd"></a> [finalize\_cmd](#input\_finalize\_cmd) | Command to run on the VM after deployment | `string` | n/a | yes |
 | <a name="input_instance_worker_type"></a> [instance\_worker\_type](#input\_instance\_worker\_type) | Set Worker instance type | `string` | n/a | yes |
 | <a name="input_local_workers"></a> [local\_workers](#input\_local\_workers) | Deploy without scalable workers. Only limited acquisition types will be available | `bool` | n/a | yes |
 | <a name="input_network_config"></a> [network\_config](#input\_network\_config) | The network configuration for the VM | `string` | n/a | yes |

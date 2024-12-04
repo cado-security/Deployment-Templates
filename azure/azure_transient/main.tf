@@ -59,12 +59,6 @@ variable "ssh_key_private" {
   default     = "~/.ssh/id_rsa"
 }
 
-variable "finalize_cmd" {
-  type        = string
-  description = "Finalize command"
-  default     = "sudo /home/admin/processor/release/finalize.sh"
-}
-
 variable "proxy" {
   type        = string
   description = "Proxy URL to use for outbound connections in format / User Pass - https://user:pass@1.2.3.4:1234 | IP Auth - https://1.2.3.4:1234"
@@ -283,15 +277,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
     [
       for k, v in var.tags :
       "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
-    ],
-    [
-      join(" ", concat([
-        "${var.finalize_cmd}",
-        var.proxy != "" ? " --proxy ${var.proxy}" : "",
-        var.proxy_cert_url != "" ? " --proxy-cert-url ${var.proxy_cert_url}" : "",
-        length(var.proxy_whitelist) > 0 ? " --proxy-whitelist ${join(",", var.proxy_whitelist)}" : "",
-        "2>&1 | sudo tee /home/admin/processor/init_out"
-      ]))
     ],
   )))
 

@@ -55,15 +55,6 @@ resource "google_compute_instance" "vm_instance" {
         for k, v in var.tags :
         "echo CUSTOM_TAG_${k} = ${v} | sudo tee -a /home/admin/processor/first_run.cfg"
       ],
-      [
-        join(" ", concat([
-          "${var.finalize_cmd}",
-          var.proxy != "" ? " --proxy ${var.proxy}" : "",
-          var.proxy_cert_url != "" ? " --proxy-cert-url ${var.proxy_cert_url}" : "",
-          length(var.proxy_whitelist) > 0 ? " --proxy-whitelist ${join(",", var.proxy_whitelist)}" : "",
-          "2>&1 | sudo tee /home/admin/processor/init_out"
-        ]))
-      ],
       )
     )
   }

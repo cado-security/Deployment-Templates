@@ -100,11 +100,6 @@ variable "ssh_key_private" {
   default     = "~/.ssh/id_rsa" # <PATH TO SSH PRIVATE KEY>
 }
 
-variable "finalize_cmd" {
-  type        = string
-  description = "Finalize command"
-  default     = "sudo /home/admin/processor/release/finalize.sh" # Do not change
-}
 
 variable "proxy" {
   type        = string
@@ -169,7 +164,6 @@ module "azure_transient" {
   worker_vm_type                 = var.worker_vm_type
   ssh_key_private                = var.ssh_key_private
   ssh_key_public                 = var.ssh_key_public
-  finalize_cmd                   = var.finalize_cmd
   proxy                          = var.proxy
   proxy_cert_url                 = var.proxy_cert_url
   proxy_whitelist                = var.proxy_whitelist

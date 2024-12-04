@@ -62,7 +62,6 @@ No resources.
 | <a name="input_deploy_acquisition_permissions"></a> [deploy\_acquisition\_permissions](#input\_deploy\_acquisition\_permissions) | Deploy instance with permissions needed for same project acquisitions | `bool` | `true` | no |
 | <a name="input_deploy_nfs"></a> [deploy\_nfs](#input\_deploy\_nfs) | Deploy NFS for storing files after processing. Setting to false will disable the re-running of analysis pipelines and downloading files. | `bool` | `true` | no |
 | <a name="input_enable_platform_updates"></a> [enable\_platform\_updates](#input\_enable\_platform\_updates) | Enable platform updates, False requires updates via Terraform | `bool` | `true` | no |
-| <a name="input_finalize_cmd"></a> [finalize\_cmd](#input\_finalize\_cmd) | Command to run on the VM after deployment | `string` | `"sudo /home/admin/processor/release/finalize.sh"` | no |
 | <a name="input_image"></a> [image](#input\_image) | Cado Response VM image path | `string` | `"projects/cado-public/global/images/cadoresponse"` | no |
 | <a name="input_inbound_ports"></a> [inbound\_ports](#input\_inbound\_ports) | The list of ports to open | `list(string)` | <pre>[<br/>  "22",<br/>  "443"<br/>]</pre> | no |
 | <a name="input_instance_worker_type"></a> [instance\_worker\_type](#input\_instance\_worker\_type) | Set Worker instance type | `string` | `"n2-highmem-8"` | no |

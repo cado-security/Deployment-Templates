@@ -27,11 +27,6 @@ variable "boot_disk_image" {
   type        = string
 }
 
-variable "finalize_cmd" {
-  description = "Command to run on the VM after deployment"
-  type        = string
-}
-
 variable "network_config" {
   description = "The network configuration for the VM"
   type        = string
