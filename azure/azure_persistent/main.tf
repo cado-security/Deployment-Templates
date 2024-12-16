@@ -24,7 +24,7 @@ variable "share_size" {
 variable "main_data_size" {
   type        = number
   description = "Size of main instance persistent disk"
-  default     = 30
+  default     = 100
 }
 
 variable "tags" {

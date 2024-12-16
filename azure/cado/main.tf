@@ -84,7 +84,7 @@ variable "main_size" {
 variable "main_data_size" {
   type        = number
   description = "Size of main instance persistent disk"
-  default     = 30 # "<ENTER SIZE FOR PERSISTANCE DISK>"
+  default     = 100 # "<ENTER SIZE FOR PERSISTANCE DISK>"
 }
 
 
