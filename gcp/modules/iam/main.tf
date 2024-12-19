@@ -56,6 +56,7 @@ locals {
     "compute.instances.detachDisk",
     "compute.instances.deleteAccessConfig",
     "compute.zoneOperations.get",
+    "compute.disks.use",
     "compute.subnetworks.useExternalIp",
   ]
 
