@@ -437,15 +437,8 @@ resource "aws_iam_role_policy" "policy" {
 			"Sid": "RequiredForGuardDutyMonitoring",
 			"Effect": "Allow",
 			"Action": [
-				"guardduty:ListIPSets",
-				"guardduty:ListThreatIntelSets",
 				"guardduty:ListDetectors",
-				"guardduty:ListOrganizationAdminAccounts",
 				"guardduty:ListFindings",
-				"guardduty:ListFilters",
-				"guardduty:ListPublishingDestinations",
-				"guardduty:ListInvitations",
-				"guardduty:ListMembers",
 				"guardduty:GetFindings"
 			],
 			"Resource": "*"

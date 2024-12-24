@@ -166,9 +166,7 @@ resource "aws_iam_role_policy" "instance_policy" {
             "Action": [
                 "s3:PutObject",
                 "s3:GetObject",
-                "s3:RestoreObject",
-                "s3:PutObjectTagging",
-                "s3:GetObjectTagging"
+                "s3:RestoreObject"
             ],
             "Resource": "arn:aws:s3:::${var.s3_bucket_id}/*"
         },
@@ -280,9 +278,7 @@ resource "aws_iam_role_policy" "policy" {
             "Action": [
                 "s3:PutObject",
                 "s3:GetObject",
-                "s3:RestoreObject",
-                "s3:PutObjectTagging",
-                "s3:GetObjectTagging"
+                "s3:RestoreObject"
             ],
             "Resource": "arn:aws:s3:::${var.s3_bucket_id}/*"
         },
@@ -316,7 +312,6 @@ resource "aws_iam_role_policy" "policy" {
                 "s3:ListAllMyBuckets",
                 "s3:GetObject",
                 "s3:RestoreObject",
-                "s3:GetObjectTagging",
                 "s3:ListBucket",
                 "s3:GetBucketLocation"
             ],
@@ -521,15 +516,8 @@ resource "aws_iam_role_policy" "policy" {
             "Sid": "RequiredForGuardDutyMonitoring",
             "Effect": "Allow",
             "Action": [
-                "guardduty:ListIPSets",
-                "guardduty:ListThreatIntelSets",
                 "guardduty:ListDetectors",
-                "guardduty:ListOrganizationAdminAccounts",
                 "guardduty:ListFindings",
-                "guardduty:ListFilters",
-                "guardduty:ListPublishingDestinations",
-                "guardduty:ListInvitations",
-                "guardduty:ListMembers",
                 "guardduty:GetFindings"
             ],
             "Resource": "*"

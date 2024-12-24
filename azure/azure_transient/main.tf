@@ -6,9 +6,15 @@ variable "deploy_nfs" {
   default     = true
 }
 
-variable "image_id" {
+variable "blob_url" {
   type        = string
   description = "Cado Response VHD blobstore URL"
+  default     = ""
+}
+
+variable "image_id" {
+  type        = string
+  description = "A fully scoped resource id for a cado image e.g. /subscriptions/{ID}/resourceGroups/{NAME}/providers/Microsoft.Compute/images/cadoresponse"
   default     = ""
 }
 
@@ -122,6 +128,7 @@ data "azurerm_client_config" "current" {}
 // Network
 
 resource "azurerm_image" "image" {
+  count               = var.image_id != "" ? 0 : 1 # if image_id is set, we won't need an image from a blob
   name                = "cado_response"
   location            = data.azurerm_resource_group.group.location
   resource_group_name = data.azurerm_resource_group.group.name
@@ -129,7 +136,7 @@ resource "azurerm_image" "image" {
   os_disk {
     os_type  = "Linux"
     os_state = "Generalized"
-    blob_uri = var.image_id # azurerm_storage_blob.vhd.url
+    blob_uri = var.blob_url # azurerm_storage_blob.vhd.url
     size_gb  = 30
   }
 }
@@ -298,7 +305,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   tags = var.tags
 
-  source_image_id = azurerm_image.image.id
+  source_image_id = var.image_id != "" ? var.image_id : azurerm_image.image[0].id
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "data_disk_attachment" {

@@ -83,8 +83,6 @@ Properties:
       - s3:PutObject
       - s3:GetObject
       - s3:RestoreObject
-      - s3:PutObjectTagging
-      - s3:GetObjectTagging
       Resource:
         Fn::Join:
         - ''
