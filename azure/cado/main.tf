@@ -27,16 +27,10 @@ variable "deploy_acquisition_permissions" {
   default     = true
 }
 
-variable "blob_url" {
-  type        = string
-  description = "Cado Response VHD blobstore URL"
-  default     = "<VHD BLOBSTORE URL FROM YOUR STORAGE ACCOUNT>"
-}
-
 variable "image_id" {
   type        = string
-  description = "A fully scoped resource id for a cado image e.g. /subscriptions/{ID}/resourceGroups/{NAME}/providers/Microsoft.Compute/images/cadoresponse"
-  default     = ""
+  description = "A Cado Response community image id"
+  default     = "/communityGalleries/cadoplatform-1a38e0c7-afa4-4e0d-9c56-433a12cd67b1/images/CadoResponseV2.0/versions/latest"
 }
 
 variable "ip_pattern_https" {
@@ -161,7 +155,6 @@ module "azure_persistent" {
 module "azure_transient" {
   source                         = "./../azure_transient"
   resource_group                 = var.resource_group
-  blob_url                       = var.blob_url
   image_id                       = var.image_id
   ip_pattern_https               = var.ip_pattern_https
   deploy_nfs                     = var.deploy_nfs
