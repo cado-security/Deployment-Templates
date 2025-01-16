@@ -77,7 +77,7 @@ No resources.
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to main vm and any spawned workers | `map(string)` | `{}` | no |
 | <a name="input_unique_name"></a> [unique\_name](#input\_unique\_name) | Unique name part for GCP deployments | `string` | n/a | yes |
 | <a name="input_use_secrets_manager"></a> [use\_secrets\_manager](#input\_use\_secrets\_manager) | Use GCP Secret Manager for storing secrets | `bool` | `true` | no |
-| <a name="input_vm_size"></a> [vm\_size](#input\_vm\_size) | Vm size to deploy | `string` | `"e2-standard-4"` | no |
+| <a name="input_vm_size"></a> [vm\_size](#input\_vm\_size) | Vm size to deploy | `string` | `"n2-standard-16"` | no |
 | <a name="input_vol_size"></a> [vol\_size](#input\_vol\_size) | The volume size to deploy | `number` | `100` | no |
 
 ## Outputs

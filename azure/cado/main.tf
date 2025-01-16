@@ -48,7 +48,7 @@ variable "ip_pattern_all" {
 variable "instance_type" {
   type        = string
   description = "Instance type to use for main"
-  default     = "Standard_D16ds_v4"
+  default     = "Standard_D16ds_v5"
 }
 
 variable "feature_flag_platform_upgrade" {

@@ -41,7 +41,7 @@ variable "tags" {
 variable "vm_size" {
   description = "Vm size to deploy"
   type        = string
-  default     = "e2-standard-4"
+  default     = "n2-standard-16"
 }
 
 variable "vol_size" {
