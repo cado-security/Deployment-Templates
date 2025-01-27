@@ -29,6 +29,14 @@ variable "region" {
   type = string
 }
 
+variable "tags" {
+  description = "Tags to apply to main vm and any spawned workers"
+  type        = map(string)
+  default = {
+    stack_name = "cadoresponse"
+  }
+}
+
 variable "gcp_image" {
   type        = string
   description = <<EOT
@@ -84,10 +92,12 @@ variable "service_account_email" {
 ###############################################################################
 
 locals {
-  labels = {
-    "cadoresponse" = "minimum_deploy"
-    "date"         = formatdate("MM-DD-YYYY", timestamp())
-  }
+  labels = merge(
+    {
+      "cadoresponse" = "minimum_deploy"
+    },
+    var.tags
+  )
 
   # Handle Service Account
   effective_sa_email = var.service_account_email != "" ? var.service_account_email : (
@@ -153,6 +163,10 @@ data "http" "source_ip_lookup" {
   request_timeout_ms = 5000
 }
 
+data "google_storage_bucket" "provided_bucket" {
+  name = var.bucket
+}
+
 ###############################################################################
 # SERVICE ACCOUNT
 ###############################################################################
@@ -160,14 +174,14 @@ data "http" "source_ip_lookup" {
 # Create a new service account if none is provided
 resource "google_service_account" "vm_service_account" {
   count        = var.service_account_email == "" ? 1 : 0
-  account_id   = "cado-vm-service-acct-${replace(local.labels["date"], "-", "")}"
+  account_id   = substr("cado-sa-${local.labels["stack_name"]}", 0, 30)
   display_name = "VM Service Account"
   project      = var.project_id
 }
 
 resource "google_project_iam_custom_role" "custom_role" {
-  role_id     = replace("myCadoResponseRole_${local.labels["date"]}", "-", "_")
-  title       = "myCadoResponseRole-${local.labels["date"]}"
+  role_id     = replace("myCadoResponseRole_${local.labels["stack_name"]}", "-", "_")
+  title       = "myCadoResponseRole-${local.labels["stack_name"]}"
   description = "CadoResponse Role"
   permissions = [
     // Minimal Permissions To Run
@@ -202,7 +216,7 @@ resource "google_project_iam_member" "project_iam_member_cado" {
 
 # Create a data disk
 resource "google_compute_disk" "data_disk" {
-  name                      = "cadoresponse-data-disk-${local.labels["date"]}"
+  name                      = "cadoresponse-data-disk-${local.labels["stack_name"]}"
   type                      = "pd-standard"
   size                      = 50
   zone                      = data.google_compute_zones.available.names[0]
@@ -215,7 +229,7 @@ resource "google_compute_disk" "data_disk" {
 ###############################################################################
 
 resource "google_compute_instance" "vm_instance" {
-  name         = "cado-response-vm-${local.labels["date"]}"
+  name         = "cado-response-vm-${local.labels["stack_name"]}"
   machine_type = "e2-standard-4"
   zone         = data.google_compute_zones.available.names[0]
   labels       = local.labels
@@ -268,7 +282,7 @@ resource "google_compute_attached_disk" "attached_data_disk" {
 
 resource "google_compute_firewall" "allow_443" {
   count   = local.effective_source_ip == "" ? 0 : 1
-  name    = "allow-443-${local.labels["date"]}"
+  name    = "allow-443-${local.labels["stack_name"]}"
   network = local.effective_network
 
   allow {

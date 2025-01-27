@@ -101,18 +101,7 @@
       "s3:GetObject",
       "s3:RestoreObject"
     ],
-    "Resource": {
-      "Fn::Join": [
-        "",
-        [
-          "arn:aws:s3:::",
-          {
-            "Ref": "CadoS3BucketAlt"
-          },
-          "/*"
-        ]
-      ]
-    }
+    "Resource": "arn:aws:s3:::MY_CADO_BUCKET/*"
   },
   {
     "Sid": "RequiredForCadoHostAndPreservation2",
@@ -122,17 +111,7 @@
       "s3:ListBucket",
       "s3:GetBucketLocation"
     ],
-    "Resource": {
-      "Fn::Join": [
-        "",
-        [
-          "arn:aws:s3:::",
-          {
-            "Ref": "CadoS3BucketAlt"
-          }
-        ]
-      ]
-    }
+    "Resource": "arn:aws:s3:::MY_CADO_BUCKET"
   },
   {
     "Sid": "RequiredForHealthChecks",
@@ -157,30 +136,6 @@
       "logs:CreateLogStream",
       "logs:PutLogEvents"
     ],
-    "Resource": {
-      "Fn::If": [
-        "ConfigureCloudWatch",
-        {
-          "Fn::Join": [
-            ":",
-            [
-              "arn:aws:logs",
-              {
-                "Ref": "AWS::Region"
-              },
-              {
-                "Ref": "AWS::AccountId"
-              },
-              "log-group",
-              {
-                "Ref": "CadoLogGroup"
-              },
-              "*"
-            ]
-          ]
-        },
-        "*"
-      ]
-    }
+    "Resource": "MY_CADO_CLODWATCH_LOG_GROUP"
   }
 ]

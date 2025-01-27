@@ -77,6 +77,25 @@ variable "proxy_whitelist" {
   default     = []
 }
 
+variable "service_principal" {
+  description = "The details of an azure service principal"
+  type = object({
+    client_id     = string
+    tenant_id     = string
+    client_secret = string
+    object_id     = string
+  })
+  default = null
+  validation {
+    condition = (
+      var.service_principal == null ||
+      (var.service_principal.client_id == "" && var.service_principal.tenant_id == "" && var.service_principal.client_secret == "" && var.service_principal.object_id == "") ||
+      (var.service_principal.client_id != "" && var.service_principal.tenant_id != "" && var.service_principal.client_secret != "" && var.service_principal.object_id != "")
+    )
+    error_message = "service_principal must be null or contain client_id, tenant_id, client_secret and object_id"
+  }
+}
+
 variable "worker_vm_type" {
   type        = string
   description = "Default worker vm size"
@@ -105,6 +124,11 @@ variable "deploy_acquisition_permissions" {
   type        = bool
   description = "If set to true, permissions are added at the subscription level, allowing same subscription acquisition."
   default     = true
+}
+
+variable "deploy_identity" {
+  type        = bool
+  description = "If set to true, a user assigned identity will be created and assigned to the VM"
 }
 
 // Resources
@@ -233,6 +257,7 @@ data "azurerm_managed_disk" "data_disk" {
 
 
 data "azurerm_user_assigned_identity" "identity" {
+  count               = var.deploy_identity ? 1 : 0
   name                = "cado-identity"
   resource_group_name = data.azurerm_resource_group.group.name
 }
@@ -262,6 +287,9 @@ resource "azurerm_linux_virtual_machine" "vm" {
     length(var.proxy_whitelist) > 0 ? "echo -n ${join(",", var.proxy_whitelist)}  >> /home/admin/processor/envars/PROXY_whitelist" : "",
     "echo -n ${azurerm_key_vault.keyvault.vault_uri} | sudo tee -a /home/admin/processor/envars/KEYVAULT_URI",
     "echo -n ${var.use_secrets_manager} | sudo tee -a /home/admin/processor/envars/USE_SECRETS_MANAGER",
+    var.service_principal.client_id != "" ? "echo -n ${var.service_principal.client_id} | sudo tee -a /home/admin/processor/envars/AZURE_CLIENT_ID" : "",
+    var.service_principal.tenant_id != "" ? "echo -n ${var.service_principal.tenant_id} | sudo tee -a /home/admin/processor/envars/AZURE_TENANT_ID" : "",
+    var.service_principal.client_secret != "" ? "echo -n ${var.service_principal.client_secret} | sudo tee -a /home/admin/processor/envars/AZURE_CLIENT_SECRET" : "",
     "echo local_workers = ${var.local_workers} | sudo tee -a /home/admin/processor/first_run.cfg",
     "echo minimum_role_deployment = ${!var.deploy_acquisition_permissions} | sudo tee -a /home/admin/processor/first_run.cfg",
     "echo azure_storage_account = ${data.azurerm_storage_account.storage.name} | sudo tee -a /home/admin/processor/first_run.cfg",
@@ -286,11 +314,13 @@ resource "azurerm_linux_virtual_machine" "vm" {
     disk_size_gb         = var.main_size
   }
 
-  identity {
-    type         = "UserAssigned"
-    identity_ids = ["${data.azurerm_user_assigned_identity.identity.id}"]
+  dynamic "identity" {
+    for_each = var.deploy_identity ? [1] : []
+    content {
+      type         = "UserAssigned"
+      identity_ids = ["${data.azurerm_user_assigned_identity.identity[0].id}"]
+    }
   }
-
   tags = var.tags
 
   source_image_id = var.image_id
@@ -312,7 +342,7 @@ resource "random_string" "cado" {
 resource "azurerm_key_vault_access_policy" "cado" {
   key_vault_id = azurerm_key_vault.keyvault.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azurerm_user_assigned_identity.identity.principal_id
+  object_id    = var.deploy_identity ? data.azurerm_user_assigned_identity.identity[0].principal_id : var.service_principal.object_id
 
   secret_permissions = [
     "Get",

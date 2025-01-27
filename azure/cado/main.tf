@@ -117,7 +117,24 @@ variable "proxy_whitelist" {
   description = "List of IPs/domains to be included in the no_proxy environment variable"
   default     = []
 }
-
+variable "service_principal" {
+  description = "The details of an azure service principal"
+  type = object({
+    client_id     = string
+    tenant_id     = string
+    client_secret = string
+    object_id     = string
+  })
+  default = null
+  validation {
+    condition = (
+      var.service_principal == null ||
+      (var.service_principal.client_id == "" && var.service_principal.tenant_id == "" && var.service_principal.client_secret == "" && var.service_principal.object_id == "") ||
+      (var.service_principal.client_id != "" && var.service_principal.tenant_id != "" && var.service_principal.client_secret != "" && var.service_principal.object_id != "")
+    )
+    error_message = "service_principal must be null or contain client_id, tenant_id, client_secret and object_id"
+  }
+}
 variable "worker_vm_type" {
   type        = string
   description = "Default worker vm size"
@@ -150,6 +167,7 @@ module "azure_persistent" {
   main_data_size                 = var.main_data_size
   tags                           = var.tags
   deploy_acquisition_permissions = var.deploy_acquisition_permissions
+  deploy_identity                = var.service_principal == null || (var.service_principal.client_id == "" && var.service_principal.tenant_id == "" && var.service_principal.client_secret == "" && var.service_principal.object_id == "")
 }
 
 module "azure_transient" {
@@ -167,9 +185,11 @@ module "azure_transient" {
   proxy                          = var.proxy
   proxy_cert_url                 = var.proxy_cert_url
   proxy_whitelist                = var.proxy_whitelist
+  service_principal              = var.service_principal
   feature_flag_platform_upgrade  = var.feature_flag_platform_upgrade
   use_secrets_manager            = var.use_secrets_manager
   deploy_acquisition_permissions = var.deploy_acquisition_permissions
+  deploy_identity                = var.service_principal == null || (var.service_principal.client_id == "" && var.service_principal.tenant_id == "" && var.service_principal.client_secret == "" && var.service_principal.object_id == "")
   depends_on = [
     module.azure_persistent
   ]

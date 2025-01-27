@@ -37,6 +37,11 @@ variable "deploy_acquisition_permissions" {
   description = "If set to true, permissions are added at the subscription level, allowing same subscription acquisition."
   default     = true
 }
+
+variable "deploy_identity" {
+  type        = bool
+  description = "If set to true, a user assigned identity will be created and assigned to the VM"
+}
 // Resources
 
 data "azurerm_subscription" "subscription" {
@@ -97,45 +102,47 @@ resource "azurerm_managed_disk" "data_disk" {
 
 resource "azurerm_role_assignment" "role_assignment_group" {
   // Contributor inside our own resource group
+  count                = var.deploy_identity ? 1 : 0
   scope                = azurerm_resource_group.group.id
   role_definition_name = "Contributor"
-  principal_id         = azurerm_user_assigned_identity.identity.principal_id
+  principal_id         = azurerm_user_assigned_identity.identity[0].principal_id
 }
 
 
 resource "azurerm_role_assignment" "role_assignment_storage" {
   // If allowing local acquisition: Storage Account Contributor for entire subscription
-  count                = var.deploy_acquisition_permissions ? 1 : 0
+  count                = var.deploy_identity && var.deploy_acquisition_permissions ? 1 : 0
   scope                = data.azurerm_subscription.subscription.id
   role_definition_name = "Storage Account Contributor"
-  principal_id         = azurerm_user_assigned_identity.identity.principal_id
+  principal_id         = azurerm_user_assigned_identity.identity[0].principal_id
 }
 
 resource "azurerm_role_assignment" "role_assignment_snapshots" {
   // If allowing local acquisition: Disk Snapshot Contributor for entire subscription
-  count                = var.deploy_acquisition_permissions ? 1 : 0
+  count                = var.deploy_identity && var.deploy_acquisition_permissions ? 1 : 0
   scope                = data.azurerm_subscription.subscription.id
   role_definition_name = "Disk Snapshot Contributor"
-  principal_id         = azurerm_user_assigned_identity.identity.principal_id
+  principal_id         = azurerm_user_assigned_identity.identity[0].principal_id
 }
 
 resource "azurerm_role_assignment" "role_assignment_vm" {
   // If allowing local acquisition: Virtual Machine Contributor for entire subscription - needed to list disks
-  count                = var.deploy_acquisition_permissions ? 1 : 0
+  count                = var.deploy_identity && var.deploy_acquisition_permissions ? 1 : 0
   scope                = data.azurerm_subscription.subscription.id
   role_definition_name = "Virtual Machine Contributor"
-  principal_id         = azurerm_user_assigned_identity.identity.principal_id
+  principal_id         = azurerm_user_assigned_identity.identity[0].principal_id
 }
 
 resource "azurerm_role_assignment" "role_assignment_aks" {
   // If allowing local acquisition: Azure Kubernetes Service Contributor for entire subscription - needed to list cluster credentials
-  count                = var.deploy_acquisition_permissions ? 1 : 0
+  count                = var.deploy_identity && var.deploy_acquisition_permissions ? 1 : 0
   scope                = data.azurerm_subscription.subscription.id
   role_definition_name = "Azure Kubernetes Service Cluster Admin Role"
-  principal_id         = azurerm_user_assigned_identity.identity.principal_id
+  principal_id         = azurerm_user_assigned_identity.identity[0].principal_id
 }
 
 resource "azurerm_user_assigned_identity" "identity" {
+  count               = var.deploy_identity ? 1 : 0
   resource_group_name = azurerm_resource_group.group.name
   location            = azurerm_resource_group.group.location
   name                = "cado-identity"
