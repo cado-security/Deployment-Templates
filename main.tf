@@ -200,6 +200,10 @@ resource "google_project_iam_custom_role" "custom_role" {
     "storage.objects.delete",
     "storage.objects.get",
     "storage.objects.list",
+
+    // Project Access
+    "compute.projects.get",
+    "resourcemanager.projects.get",
   ]
 }
 
