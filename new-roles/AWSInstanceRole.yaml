@@ -1,3 +1,5 @@
+Version: '2012-10-17'
+Statement:
 - Sid: IAM
   Effect: Allow
   Action:
@@ -104,4 +106,4 @@
   - logs:CreateLogGroup
   - logs:CreateLogStream
   - logs:PutLogEvents
-  Resource: MY_CADO_CLODWATCH_LOG_GROUP
+  Resource: arn:aws:logs:<CADO_REGION>:<CADO_ACCOUNT_NUMBER>:log-group:/var/logs/cado:*
