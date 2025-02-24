@@ -101,9 +101,10 @@ resource "aws_s3_bucket_public_access_block" "CadoPublicAccessBlockConfiguration
 }
 
 resource "aws_network_interface" "network_interface" {
-  subnet_id       = var.primary_subnet.id
-  security_groups = [var.security_group_id]
-  depends_on      = [var.security_group_id]
+  subnet_id         = var.primary_subnet.id
+  security_groups   = [var.security_group_id]
+  depends_on        = [var.security_group_id]
+  private_ips_count = 1
 }
 
 resource "aws_instance" "main" {
@@ -185,8 +186,8 @@ resource "aws_instance" "main" {
 }
 
 resource "aws_eip" "ip" {
-  count    = var.public_deployment == true ? 1 : 0
-  instance = aws_instance.main.id
+  count             = var.public_deployment == true ? 1 : 0
+  network_interface = aws_network_interface.network_interface.id
   tags = merge(
     var.tags,
     {

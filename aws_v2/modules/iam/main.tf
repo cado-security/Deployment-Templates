@@ -141,6 +141,8 @@ resource "aws_iam_role_policy" "instance_policy" {
                 "ec2:CreateTags",
                 "ec2:DescribeInstanceStatus",
                 "ec2:DescribeInstances",
+                "ec2:UnassignPrivateIpAddresses",
+                "ec2:AssignPrivateIpAddresses",
                 "ec2:DescribeAddresses",
                 "ec2:AssociateAddress",
                 "ec2:DescribeImages",
