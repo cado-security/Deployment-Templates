@@ -186,8 +186,8 @@ resource "aws_instance" "main" {
 }
 
 resource "aws_eip" "ip" {
-  count             = var.public_deployment == true ? 1 : 0
-  network_interface = aws_network_interface.network_interface.id
+  count    = var.public_deployment == true ? 1 : 0
+  instance = aws_instance.main.id
   tags = merge(
     var.tags,
     {
