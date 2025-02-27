@@ -234,7 +234,7 @@ resource "google_compute_disk" "data_disk" {
 
 resource "google_compute_instance" "vm_instance" {
   name         = "cado-response-vm-${local.labels["stack_name"]}"
-  machine_type = "e2-standard-4"
+  machine_type = "n2-standard-16"
   zone         = data.google_compute_zones.available.names[0]
   labels       = local.labels
 
