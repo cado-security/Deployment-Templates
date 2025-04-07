@@ -85,7 +85,8 @@ variable "service_principal" {
     client_secret = string
     object_id     = string
   })
-  default = null
+  sensitive = true
+  default   = null
   validation {
     condition = (
       var.service_principal == null ||
