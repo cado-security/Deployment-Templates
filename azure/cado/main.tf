@@ -29,7 +29,7 @@ variable "deploy_acquisition_permissions" {
 
 variable "image_id" {
   type        = string
-  description = "A Cado Response community image id"
+  description = "A Cado Response image id"
   default     = "/communityGalleries/cadoplatform-1a38e0c7-afa4-4e0d-9c56-433a12cd67b1/images/CadoResponseV2.0/versions/latest"
 }
 

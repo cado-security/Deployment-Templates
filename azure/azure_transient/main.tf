@@ -8,7 +8,7 @@ variable "deploy_nfs" {
 
 variable "image_id" {
   type        = string
-  description = "A Cado Response community image id"
+  description = "A Cado Response image id"
   default     = ""
 }
 
