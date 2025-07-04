@@ -85,6 +85,8 @@ locals {
     "compute.images.get",
     "compute.instances.getSerialPortOutput",
     "compute.projects.get",
+    "compute.subnetworks.list",
+    "compute.subnetworks.get",
 
     // GKE Acquisition
     "container.clusters.get",
