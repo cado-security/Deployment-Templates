@@ -78,15 +78,22 @@ resource "azurerm_storage_account" "storage" {
 
 resource "azurerm_storage_container" "container" {
   name                  = "cadoevidence"
-  storage_account_name  = azurerm_storage_account.storage.name
+  storage_account_id    = azurerm_storage_account.storage.id
   container_access_type = "private"
 }
 
+resource "azurerm_storage_container" "cado_host_container" {
+  name                  = "cadohost"
+  storage_account_id    = azurerm_storage_account.storage.id
+  container_access_type = "private"
+}
+
+# TODO: [DEV-17058] - Increase to 2TB
 resource "azurerm_storage_share" "share" {
-  count                = var.deploy_nfs ? 1 : 0
-  name                 = "cadoshare"
-  storage_account_name = azurerm_storage_account.storage.name
-  quota                = var.share_size # TODO increase to 2TB
+  count              = var.deploy_nfs ? 1 : 0
+  name               = "cadoshare"
+  storage_account_id = azurerm_storage_account.storage.id
+  quota              = var.share_size
 }
 
 resource "azurerm_managed_disk" "data_disk" {
