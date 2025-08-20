@@ -87,14 +87,7 @@ variable "service_principal" {
   })
   sensitive = true
   default   = null
-  validation {
-    condition = (
-      var.service_principal == null ||
-      (var.service_principal.client_id == "" && var.service_principal.tenant_id == "" && var.service_principal.client_secret == "" && var.service_principal.object_id == "") ||
-      (var.service_principal.client_id != "" && var.service_principal.tenant_id != "" && var.service_principal.client_secret != "" && var.service_principal.object_id != "")
-    )
-    error_message = "service_principal must be null or contain client_id, tenant_id, client_secret and object_id"
-  }
+
 }
 
 variable "worker_vm_type" {
@@ -288,9 +281,9 @@ resource "azurerm_linux_virtual_machine" "vm" {
     length(var.proxy_whitelist) > 0 ? "echo -n ${join(",", var.proxy_whitelist)}  >> /home/admin/processor/envars/PROXY_whitelist" : "",
     "echo -n ${azurerm_key_vault.keyvault.vault_uri} | sudo tee -a /home/admin/processor/envars/KEYVAULT_URI",
     "echo -n ${var.use_secrets_manager} | sudo tee -a /home/admin/processor/envars/USE_SECRETS_MANAGER",
-    var.service_principal.client_id != "" ? "echo -n ${var.service_principal.client_id} | sudo tee -a /home/admin/processor/envars/AZURE_CLIENT_ID" : "",
-    var.service_principal.tenant_id != "" ? "echo -n ${var.service_principal.tenant_id} | sudo tee -a /home/admin/processor/envars/AZURE_TENANT_ID" : "",
-    var.service_principal.client_secret != "" ? "echo -n ${var.service_principal.client_secret} | sudo tee -a /home/admin/processor/envars/AZURE_CLIENT_SECRET" : "",
+    try(var.service_principal.client_id, "") != "" ? "echo -n ${var.service_principal.client_id} | sudo tee -a /home/admin/processor/envars/AZURE_CLIENT_ID" : "",
+    try(var.service_principal.tenant_id, "") != "" ? "echo -n ${var.service_principal.tenant_id} | sudo tee -a /home/admin/processor/envars/AZURE_TENANT_ID" : "",
+    try(var.service_principal.client_secret, "") != "" ? "echo -n ${var.service_principal.client_secret} | sudo tee -a /home/admin/processor/envars/AZURE_CLIENT_SECRET" : "",
     "echo local_workers = ${var.local_workers} | sudo tee -a /home/admin/processor/first_run.cfg",
     "echo minimum_role_deployment = ${!var.deploy_acquisition_permissions} | sudo tee -a /home/admin/processor/first_run.cfg",
     "echo azure_storage_account = ${data.azurerm_storage_account.storage.name} | sudo tee -a /home/admin/processor/first_run.cfg",

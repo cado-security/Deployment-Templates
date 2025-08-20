@@ -117,6 +117,7 @@ variable "proxy_whitelist" {
   description = "List of IPs/domains to be included in the no_proxy environment variable"
   default     = []
 }
+
 variable "service_principal" {
   description = "The details of an azure service principal"
   type = object({
@@ -126,15 +127,36 @@ variable "service_principal" {
     object_id     = string
   })
   default = null
-  validation {
-    condition = (
-      var.service_principal == null ||
-      (var.service_principal.client_id == "" && var.service_principal.tenant_id == "" && var.service_principal.client_secret == "" && var.service_principal.object_id == "") ||
-      (var.service_principal.client_id != "" && var.service_principal.tenant_id != "" && var.service_principal.client_secret != "" && var.service_principal.object_id != "")
-    )
-    error_message = "service_principal must be null or contain client_id, tenant_id, client_secret and object_id"
+}
+
+locals {
+  sp = var.service_principal == null ? {
+    client_id     = ""
+    tenant_id     = ""
+    client_secret = ""
+    object_id     = ""
+  } : var.service_principal
+
+  sp_nonempty_count = length(compact([
+    local.sp.client_id,
+    local.sp.tenant_id,
+    local.sp.client_secret,
+    local.sp.object_id
+  ]))
+
+  sp_is_empty = local.sp_nonempty_count == 0
+  sp_is_full  = local.sp_nonempty_count == 4
+}
+
+resource "null_resource" "validate_sp" {
+  lifecycle {
+    precondition {
+      condition     = local.sp_is_empty || local.sp_is_full
+      error_message = "service_principal must be empty or provide client_id, tenant_id, client_secret, and object_id."
+    }
   }
 }
+
 variable "worker_vm_type" {
   type        = string
   description = "Default worker vm size"
@@ -167,7 +189,7 @@ module "azure_persistent" {
   main_data_size                 = var.main_data_size
   tags                           = var.tags
   deploy_acquisition_permissions = var.deploy_acquisition_permissions
-  deploy_identity                = var.service_principal == null || (var.service_principal.client_id == "" && var.service_principal.tenant_id == "" && var.service_principal.client_secret == "" && var.service_principal.object_id == "")
+  deploy_identity                = local.sp_is_empty
 }
 
 module "azure_transient" {
@@ -189,7 +211,7 @@ module "azure_transient" {
   feature_flag_platform_upgrade  = var.feature_flag_platform_upgrade
   use_secrets_manager            = var.use_secrets_manager
   deploy_acquisition_permissions = var.deploy_acquisition_permissions
-  deploy_identity                = var.service_principal == null || (var.service_principal.client_id == "" && var.service_principal.tenant_id == "" && var.service_principal.client_secret == "" && var.service_principal.object_id == "")
+  deploy_identity                = local.sp_is_empty
   depends_on = [
     module.azure_persistent
   ]
