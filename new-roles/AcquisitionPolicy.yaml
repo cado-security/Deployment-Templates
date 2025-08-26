@@ -117,3 +117,10 @@ Statement:
   - arn:aws:ec2:*:*:instance/*
   - arn:aws:ssm:*::document/AWS-RunShellScript
   - arn:aws:ssm:*::document/AWS-RunPowerShellScript
+- Sid: RequiredForGuardDutyMonitoring
+  Effect: Allow
+  Action:
+  - guardduty:ListDetectors
+  - guardduty:ListFindings
+  - guardduty:GetFindings
+  Resource: '*'
