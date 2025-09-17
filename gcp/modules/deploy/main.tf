@@ -84,6 +84,7 @@ resource "google_compute_attached_disk" "attached_data_disk" {
 resource "google_filestore_instance" "filestore_instance" {
   count    = var.deploy_nfs ? 1 : 0
   name     = "cadoresponse-fileshare-${var.unique_name}"
+  labels   = var.tags
   location = var.nfs_protocol == "NFS_V3" ? data.google_compute_zones.available.names[0] : var.region
   tier     = var.nfs_protocol == "NFS_V3" ? "BASIC_HDD" : "ENTERPRISE"
 
