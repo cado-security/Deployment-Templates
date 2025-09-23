@@ -268,6 +268,10 @@ resource "azurerm_linux_virtual_machine" "vm" {
   network_interface_ids = [
     azurerm_network_interface.nic.id,
   ]
+
+  # Set to true to enable encryption
+  # Requires host encryption enabled for the subscription https://learn.microsoft.com/en-us/azure/virtual-machines/disks-enable-host-based-encryption-portal
+  encryption_at_host_enabled = false
   user_data = base64encode(join("\n", concat([
     "#!/bin/bash -x",
     // Set first_run.cfg
