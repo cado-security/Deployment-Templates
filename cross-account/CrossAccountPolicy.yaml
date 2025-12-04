@@ -6,7 +6,6 @@ Statement:
   - ec2:DeleteSnapshot
   - ec2:DeleteTags
   - ec2:TerminateInstances
-  - ec2:AttachVolume
   - ec2:StopInstances
   - ec2:StartInstances
   - ec2:DescribeAddresses
@@ -42,21 +41,6 @@ Statement:
   - s3:ListBucket
   - s3:GetBucketLocation
   Resource: '*'
-- Sid: RequiredForKmsEncryptedEc2Import
-  Effect: Allow
-  Action:
-  - kms:Encrypt
-  - kms:Decrypt
-  - kms:ReEncrypt*
-  - kms:GenerateDataKey*
-  - kms:CreateGrant
-  Resource: '*'
-- Sid: RequiredForKMSKeyTypeDeterminationDuringEncryptedEc2Import
-  Effect: Allow
-  Action:
-  - kms:DescribeKey
-  - kms:ListAliases
-  Resource: '*'
 - Sid: RequiredForLambdaImport
   Effect: Allow
   Action:
@@ -89,32 +73,15 @@ Statement:
   Action:
   - cloudtrail:LookupEvents
   - ec2:DescribeVolumesModifications
-  - ec2:AttachVolume
   - ec2:CopyImage
-  - ec2:CopySnapshot
-  - ec2:CreateSnapshot
-  - ec2:CreateSnapshots
-  - ec2:CreateTags
-  - ec2:CreateVolume
-  - ec2:DescribeAccountAttributes
-  - ec2:DescribeAddresses
-  - ec2:DescribeAvailabilityZones
-  - ec2:DescribeImages
-  - ec2:DescribeInstanceAttribute
-  - ec2:DescribeInstanceStatus
-  - ec2:DescribeInstances
-  - ec2:DescribeInstanceTypes
-  - ec2:DescribeRegions
-  - ec2:DescribeRouteTables
-  - ec2:DescribeSecurityGroups
-  - ec2:DescribeSnapshots
-  - ec2:DescribeSubnets
-  - ec2:DescribeTags
-  - ec2:DescribeVolumes
-  - ec2:ImportImage
-  - ec2:ModifySnapshotAttribute
   - ec2:DescribeFlowLogs
+  - ec2:DescribeSnapshots
+  - ec2:CreateSnapshot
+  - ec2:CreateTags
   - ssm:DescribeInstanceInformation
+  - ec2:DescribeInstances
+  - ec2:DescribeVolumes
+  - ec2:DescribeImages
   - ssm:StartSession
   - ssm:TerminateSession
   - ssm:GetCommandInvocation

@@ -227,8 +227,6 @@ resource "aws_iam_role_policy" "policy" {
                 "ec2:DeleteSnapshot",
                 "ec2:DeleteTags",
                 "ec2:TerminateInstances",
-                "ec2:AttachVolume",
-                "ec2:DetachVolume",
                 "ec2:StopInstances",
                 "ec2:StartInstances",
                 "ec2:DescribeAddresses",
@@ -320,50 +318,25 @@ resource "aws_iam_role_policy" "policy" {
             "Resource": "*"
         },
         {
-            "Sid": "RequiredForKmsEncryptedEc2Import",
+            "Sid": "RequiredForKmsEncryptedEbsImport",
             "Effect": "Allow",
             "Action": [
-                "kms:Encrypt",
                 "kms:Decrypt",
-                "kms:ReEncrypt*",
-                "kms:GenerateDataKey*",
-                "kms:CreateGrant"
+                "kms:GenerateDataKey"
             ],
             "Resource": "*"
         },
         {
-            "Sid": "RequiredForKMSKeyTypeDeterminationDuringEncryptedEc2Import",
+            "Sid": "RequiredForKmsEncryptedEbsImportDelegation",
             "Effect": "Allow",
             "Action": [
-                "kms:DescribeKey",
-                "kms:ListAliases"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "RequiredForCrossAccountDefaultKmsEncryptedEc2Import",
-            "Effect": "Allow",
-            "Action": [
-                "kms:CreateKey",
-                "kms:CreateAlias"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "RequiredForOperationsOnTemporaryKMSResourcesduringDefaultEncryptedEc2Import",
-            "Effect": "Allow",
-            "Action": [
-                "kms:DeleteAlias",
-                "kms:ReplicateKey",
-                "kms:ScheduleKeyDeletion"
+                "kms:CreateGrant",
+                "kms:ReEncrypt*"
             ],
             "Resource": "*",
             "Condition": {
-                "ForAllValues:StringLike": {
-                    "kms:ResourceAliases": "alias/CadoResponse-KMS-Alias*"
-                },
-                "ForAnyValue:StringLike": {
-                    "kms:ResourceAliases": "alias/CadoResponse-KMS-Alias*"
+                "Bool": {
+                    "kms:GrantIsForAwsResource": true
                 }
             }
         },
@@ -409,35 +382,15 @@ resource "aws_iam_role_policy" "policy" {
             "Action": [
                 "cloudtrail:LookupEvents",
                 "ec2:DescribeVolumesModifications",
-                "ec2:AssociateAddress",
-                "ec2:AttachVolume",
                 "ec2:CopyImage",
-                "ec2:CopySnapshot",
-                "ec2:CreateSnapshot",
-                "ec2:CreateSnapshots",
-                "ec2:CreateTags",
-                "ec2:CreateVolume",
-                "ec2:DescribeAccountAttributes",
-                "ec2:DescribeAddresses",
-                "ec2:DescribeAvailabilityZones",
-                "ec2:DescribeImages",
-                "ec2:DescribeInstanceAttribute",
-                "ec2:DescribeInstanceStatus",
-                "ec2:DescribeInstances",
-                "ec2:DescribeInstanceTypes",
-                "ec2:DescribeRegions",
-                "ec2:DescribeRouteTables",
-                "ec2:DescribeSecurityGroups",
-                "ec2:DescribeSnapshots",
-                "ec2:DescribeSubnets",
-                "ec2:DescribeTags",
-                "ec2:DescribeVolumes",
-                "ec2:DetachVolume",
-                "ec2:ImportImage",
-                "ec2:ModifySnapshotAttribute",
-                "ec2:RunInstances",
                 "ec2:DescribeFlowLogs",
+                "ec2:DescribeSnapshots",
+                "ec2:CreateSnapshot",
+                "ec2:CreateTags",
                 "ssm:DescribeInstanceInformation",
+                "ec2:DescribeInstances",
+                "ec2:DescribeVolumes",
+                "ec2:DescribeImages",
                 "ssm:StartSession",
                 "ssm:TerminateSession",
                 "ssm:GetCommandInvocation",
@@ -531,19 +484,6 @@ resource "aws_iam_role_policy" "policy" {
                 "s3:PutObject"
             ],
             "Resource": "arn:aws:s3:::cadologsupload/*"
-        },
-        {
-            "Sid": "RequiredForFirstTimeKMSDefaultencryptedImportCanBeDeletedAfter",
-            "Effect": "Allow",
-            "Action": [
-                "iam:CreateServiceLinkedRole"
-            ],
-            "Resource": "arn:aws:iam::*:role/aws-service-role/mrk.kms.amazonaws.com/AWSServiceRoleForKeyManagementServiceMultiRegionKeys",
-            "Condition": {
-                "StringLike": {
-                    "iam:AWSServiceName": "mrk.kms.amazonaws.com"
-                }
-            }
         },
         {
             "Sid": "RequiredForAWSOrganizationsDiscoverAccounts",
