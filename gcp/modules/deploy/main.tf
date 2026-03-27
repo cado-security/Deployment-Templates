@@ -109,4 +109,11 @@ resource "google_storage_bucket" "bucket" {
   uniform_bucket_level_access = true
   public_access_prevention    = "enforced"
   force_destroy               = true
+
+  cors {
+    origin          = ["*"]
+    method          = ["PUT"]
+    response_header = ["*"]
+    max_age_seconds = 3600
+  }
 }

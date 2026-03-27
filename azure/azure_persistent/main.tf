@@ -73,6 +73,15 @@ resource "azurerm_storage_account" "storage" {
   account_replication_type = "LRS"
   min_tls_version          = "TLS1_2"
 
+  blob_properties {
+    cors_rule {
+      allowed_origins    = ["*"]
+      allowed_methods    = ["PUT"]
+      allowed_headers    = ["*"]
+      exposed_headers    = ["ETag"]
+      max_age_in_seconds = 3600
+    }
+  }
 
 }
 

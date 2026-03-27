@@ -92,6 +92,17 @@ resource "aws_s3_bucket_lifecycle_configuration" "bucket_lifecycle" {
   }
 }
 
+resource "aws_s3_bucket_cors_configuration" "bucket_cors" {
+  bucket = aws_s3_bucket.bucket.id
+
+  cors_rule {
+    allowed_origins = ["*"]
+    allowed_methods = ["PUT"]
+    allowed_headers = ["*"]
+    max_age_seconds = 3600
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "CadoPublicAccessBlockConfiguration" {
   bucket                  = aws_s3_bucket.bucket.id
   block_public_acls       = true
