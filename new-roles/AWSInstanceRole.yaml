@@ -12,7 +12,9 @@ Statement:
   - iam:PassRole
   - sts:GetCallerIdentity
   - sts:GetSessionToken
-  Resource: arn:aws:iam::*:role/*CadoResponse*
+  Resource:
+  - arn:aws:iam::*:role/*CadoResponse*
+  - arn:aws:iam::*:role/*DarktraceForensics*
 - Sid: RequiredForSecretsManagement
   Effect: Allow
   Action:
@@ -45,7 +47,9 @@ Statement:
   Effect: Allow
   Action:
   - iam:PassRole
-  Resource: arn:aws:iam::*:role/*CadoResponse*
+  Resource:
+  - arn:aws:iam::*:role/*CadoResponse*
+  - arn:aws:iam::*:role/*DarktraceForensics*
 - Sid: RequiredForNativeUpdates
   Effect: Allow
   Action:

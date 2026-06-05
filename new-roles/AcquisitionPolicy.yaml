@@ -117,6 +117,16 @@ Statement:
   - arn:aws:ec2:*:*:instance/*
   - arn:aws:ssm:*::document/AWS-RunShellScript
   - arn:aws:ssm:*::document/AWS-RunPowerShellScript
+  - arn:aws:ssm:*:*:document/FAI-RunCadoHost-*
+- Sid: RequiredForCustomSSMDocuments
+  Effect: Allow
+  Action:
+  - ssm:CreateDocument
+  - ssm:DeleteDocument
+  - ssm:DescribeDocument
+  - ssm:GetDocument
+  Resource:
+  - arn:aws:ssm:*:*:document/FAI-RunCadoHost-*
 - Sid: RequiredForGuardDutyMonitoring
   Effect: Allow
   Action:

@@ -80,7 +80,10 @@ resource "aws_iam_role_policy" "instance_policy" {
                 "sts:GetCallerIdentity",
                 "sts:GetSessionToken"
             ],
-            "Resource": "arn:aws:iam::*:role/*CadoResponse*"
+            "Resource": [
+                "arn:aws:iam::*:role/*CadoResponse*",
+                "arn:aws:iam::*:role/*DarktraceForensics*"
+            ]
         },
         {
             "Sid": "RequiredForSecretsManagement",
@@ -124,7 +127,10 @@ resource "aws_iam_role_policy" "instance_policy" {
             "Action": [
                 "iam:PassRole"
             ],
-            "Resource": "arn:aws:iam::*:role/*CadoResponse*"
+            "Resource": [
+                "arn:aws:iam::*:role/*CadoResponse*",
+                "arn:aws:iam::*:role/*DarktraceForensics*"
+            ]
         },
         {
             "Sid": "RequiredForNativeUpdates",
@@ -270,7 +276,10 @@ resource "aws_iam_role_policy" "policy" {
                 "sts:GetCallerIdentity",
                 "sts:GetSessionToken"
             ],
-            "Resource": "arn:aws:iam::*:role/*CadoResponse*"
+            "Resource": [
+                "arn:aws:iam::*:role/*CadoResponse*",
+                "arn:aws:iam::*:role/*DarktraceForensics*"
+            ]
         },
         {
             "Sid": "RequiredForCadoHostAndPreservation",
@@ -302,7 +311,8 @@ resource "aws_iam_role_policy" "policy" {
             "Resource": [
                 "arn:aws:ec2:*:*:instance/*",
                 "arn:aws:ssm:*::document/AWS-RunShellScript",
-                "arn:aws:ssm:*::document/AWS-RunPowerShellScript"
+                "arn:aws:ssm:*::document/AWS-RunPowerShellScript",
+                "arn:aws:ssm:*:*:document/FAI-RunCadoHost-*"
             ]
         },
         {
@@ -416,6 +426,19 @@ resource "aws_iam_role_policy" "policy" {
                     "ec2:Attribute": "BlockDeviceMapping"
                 }
             }
+        },
+        {
+            "Sid": "RequiredForCustomSSMDocuments",
+            "Effect": "Allow",
+            "Action": [
+                "ssm:CreateDocument",
+                "ssm:DeleteDocument",
+                "ssm:DescribeDocument",
+                "ssm:GetDocument"
+            ],
+            "Resource": [
+                "arn:aws:ssm:*:*:document/FAI-RunCadoHost-*"
+            ]
         },
         {
             "Sid": "RequiredForResponseActionIsolateEc2",

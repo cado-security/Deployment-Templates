@@ -15,7 +15,10 @@
         "sts:GetCallerIdentity",
         "sts:GetSessionToken"
       ],
-      "Resource": "arn:aws:iam::*:role/*CadoResponse*"
+      "Resource": [
+        "arn:aws:iam::*:role/*CadoResponse*",
+        "arn:aws:iam::*:role/*DarktraceForensics*"
+      ]
     },
     {
       "Sid": "RequiredForSecretsManagement",
@@ -59,7 +62,10 @@
       "Action": [
         "iam:PassRole"
       ],
-      "Resource": "arn:aws:iam::*:role/*CadoResponse*"
+      "Resource": [
+        "arn:aws:iam::*:role/*CadoResponse*",
+        "arn:aws:iam::*:role/*DarktraceForensics*"
+      ]
     },
     {
       "Sid": "RequiredForNativeUpdates",
