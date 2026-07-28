@@ -97,7 +97,6 @@ resource "azurerm_storage_container" "cado_host_container" {
   container_access_type = "private"
 }
 
-# TODO: [DEV-17058] - Increase to 2TB
 resource "azurerm_storage_share" "share" {
   count              = var.deploy_nfs ? 1 : 0
   name               = "cadoshare"
