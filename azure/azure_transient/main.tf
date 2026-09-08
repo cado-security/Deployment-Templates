@@ -6,6 +6,12 @@ variable "deploy_nfs" {
   default     = true
 }
 
+variable "use_nfs_protocol" {
+  type        = bool
+  description = "Use a Premium FileStorage account with the NFS protocol for the network file share"
+  default     = false
+}
+
 variable "image_id" {
   type        = string
   description = "A Cado Response image id"
@@ -125,6 +131,11 @@ variable "deploy_identity" {
   description = "If set to true, a user assigned identity will be created and assigned to the VM"
 }
 
+variable "subnet_id" {
+  type        = string
+  description = "Subnet id (from azure_persistent) to join the main VM's NIC to"
+}
+
 // Resources
 
 data "azurerm_subscription" "subscription" {
@@ -138,20 +149,6 @@ data "azurerm_client_config" "current" {}
 
 
 // Network
-
-resource "azurerm_virtual_network" "network" {
-  name                = "cado-network"
-  address_space       = ["10.0.0.0/16"]
-  location            = data.azurerm_resource_group.group.location
-  resource_group_name = data.azurerm_resource_group.group.name
-}
-
-resource "azurerm_subnet" "subnet" {
-  name                 = "internal"
-  resource_group_name  = data.azurerm_resource_group.group.name
-  virtual_network_name = azurerm_virtual_network.network.name
-  address_prefixes     = ["10.0.2.0/24"]
-}
 
 resource "azurerm_network_security_group" "nsg" {
   name                = "cado-nsg"
@@ -196,7 +193,7 @@ resource "azurerm_network_security_group" "nsg" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "nsg_assoc" {
-  subnet_id                 = azurerm_subnet.subnet.id
+  subnet_id                 = var.subnet_id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
@@ -212,7 +209,7 @@ resource "azurerm_network_interface" "nic" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.subnet.id
+    subnet_id                     = var.subnet_id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = data.azurerm_public_ip.public_ip.id
     primary                       = true
@@ -220,7 +217,7 @@ resource "azurerm_network_interface" "nic" {
 
   ip_configuration {
     name                          = "static-private-ip"
-    subnet_id                     = azurerm_subnet.subnet.id
+    subnet_id                     = var.subnet_id
     private_ip_address            = "10.0.2.10"
     private_ip_address_allocation = "Static"
   }
@@ -239,9 +236,15 @@ data "azurerm_storage_container" "container" {
 }
 
 data "azurerm_storage_share" "share" {
-  count                = var.deploy_nfs ? 1 : 0
+  count                = var.deploy_nfs && !var.use_nfs_protocol ? 1 : 0
   name                 = "cadoshare"
   storage_account_name = data.azurerm_storage_account.storage.name
+}
+
+data "azurerm_storage_account" "nfs_file_storage" {
+  count               = var.deploy_nfs && var.use_nfs_protocol ? 1 : 0
+  name                = "cadofiles${substr(sha256("${var.resource_group}y"), 0, 13)}"
+  resource_group_name = data.azurerm_resource_group.group.name
 }
 
 data "azurerm_managed_disk" "data_disk" {
@@ -294,8 +297,13 @@ resource "azurerm_linux_virtual_machine" "vm" {
     "echo minimum_role_deployment = ${!var.deploy_acquisition_permissions} | sudo tee -a /home/admin/processor/first_run.cfg",
     "echo azure_storage_account = ${data.azurerm_storage_account.storage.name} | sudo tee -a /home/admin/processor/first_run.cfg",
     ],
-    var.deploy_nfs ? [
+    var.deploy_nfs && !var.use_nfs_protocol ? [
       "echo azure_storage_share = ${data.azurerm_storage_share.share[0].name} | sudo tee -a /home/admin/processor/first_run.cfg",
+    ] : [],
+    var.deploy_nfs && var.use_nfs_protocol ? [
+      # Hardcode share name, Lookup would fail due to networking
+      "echo azure_storage_share = cadoshare | sudo tee -a /home/admin/processor/first_run.cfg",
+      "echo azure_storage_file_account = ${data.azurerm_storage_account.nfs_file_storage[0].name} | sudo tee -a /home/admin/processor/first_run.cfg",
     ] : [],
     [
       for k, v in var.tags :

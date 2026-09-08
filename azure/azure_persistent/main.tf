@@ -11,6 +11,12 @@ variable "deploy_nfs" {
   default     = true
 }
 
+variable "use_nfs_protocol" {
+  type        = bool
+  description = "Use a Premium FileStorage account with the NFS protocol for the network file share."
+  default     = false
+}
+
 variable "region" {
   type        = string
   description = "Region to deploy in"
@@ -62,6 +68,22 @@ resource "azurerm_public_ip" "public_ip" {
   allocation_method   = "Static" // Static required for provisioner, workaround possibl https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/public_ip#example-usage-retrieve-the-dynamic-public-ip-of-a-new-vm
 }
 
+resource "azurerm_virtual_network" "network" {
+  name                = "cado-network"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.group.location
+  resource_group_name = azurerm_resource_group.group.name
+}
+
+resource "azurerm_subnet" "subnet" {
+  name                 = "internal"
+  resource_group_name  = azurerm_resource_group.group.name
+  virtual_network_name = azurerm_virtual_network.network.name
+  address_prefixes     = ["10.0.2.0/24"]
+  # Required for the storage account below to allow this subnet through its firewall.
+  service_endpoints = ["Microsoft.Storage"]
+}
+
 // Storage
 
 resource "azurerm_storage_account" "storage" {
@@ -85,6 +107,25 @@ resource "azurerm_storage_account" "storage" {
 
 }
 
+resource "azurerm_storage_account" "nfs_file_storage" {
+  count = var.deploy_nfs && var.use_nfs_protocol ? 1 : 0
+  # Remove special characters
+  name                       = "cadofiles${substr(sha256("${var.resource_group}y"), 0, 13)}"
+  resource_group_name        = azurerm_resource_group.group.name
+  location                   = azurerm_resource_group.group.location
+  account_kind               = "FileStorage"
+  account_tier               = "Premium"
+  account_replication_type   = "LRS"
+  min_tls_version            = "TLS1_2"
+  https_traffic_only_enabled = true
+
+  network_rules {
+    default_action             = "Deny"
+    virtual_network_subnet_ids = [azurerm_subnet.subnet.id]
+    bypass                     = ["AzureServices"]
+  }
+}
+
 resource "azurerm_storage_container" "container" {
   name                  = "cadoevidence"
   storage_account_id    = azurerm_storage_account.storage.id
@@ -98,10 +139,19 @@ resource "azurerm_storage_container" "cado_host_container" {
 }
 
 resource "azurerm_storage_share" "share" {
-  count              = var.deploy_nfs ? 1 : 0
+  count              = var.deploy_nfs && !var.use_nfs_protocol ? 1 : 0
   name               = "cadoshare"
   storage_account_id = azurerm_storage_account.storage.id
   quota              = var.share_size
+}
+
+resource "azurerm_storage_share" "nfs_share" {
+  count              = var.deploy_nfs && var.use_nfs_protocol ? 1 : 0
+  name               = "cadoshare"
+  storage_account_id = azurerm_storage_account.nfs_file_storage[0].id
+  quota              = var.share_size
+  access_tier        = "Premium"
+  enabled_protocol   = "NFS"
 }
 
 resource "azurerm_managed_disk" "data_disk" {
@@ -161,4 +211,11 @@ resource "azurerm_user_assigned_identity" "identity" {
   resource_group_name = azurerm_resource_group.group.name
   location            = azurerm_resource_group.group.location
   name                = "cado-identity"
+}
+
+// Outputs
+
+output "subnet_id" {
+  value       = azurerm_subnet.subnet.id
+  description = "Subnet id for azure_transient to join the main VM/workers to."
 }

@@ -21,6 +21,12 @@ variable "deploy_nfs" {
   default     = true
 }
 
+variable "use_nfs_protocol" {
+  type        = bool
+  description = "Use a Premium FileStorage account with the NFS protocol for the network file share"
+  default     = false
+}
+
 variable "deploy_acquisition_permissions" {
   type        = bool
   description = "If set to true, permissions are added at the subscription level, allowing same subscription acquisition."
@@ -188,6 +194,8 @@ module "azure_persistent" {
   share_size                     = var.share_size
   main_data_size                 = var.main_data_size
   tags                           = var.tags
+  deploy_nfs                     = var.deploy_nfs
+  use_nfs_protocol               = var.use_nfs_protocol
   deploy_acquisition_permissions = var.deploy_acquisition_permissions
   deploy_identity                = local.sp_is_empty
 }
@@ -198,6 +206,7 @@ module "azure_transient" {
   image_id                       = var.image_id
   ip_pattern_https               = var.ip_pattern_https
   deploy_nfs                     = var.deploy_nfs
+  use_nfs_protocol               = var.use_nfs_protocol
   ip_pattern_all                 = var.ip_pattern_all
   instance_type                  = var.instance_type
   main_size                      = var.main_size
@@ -212,9 +221,22 @@ module "azure_transient" {
   use_secrets_manager            = var.use_secrets_manager
   deploy_acquisition_permissions = var.deploy_acquisition_permissions
   deploy_identity                = local.sp_is_empty
+  subnet_id                      = module.azure_persistent.subnet_id
   depends_on = [
     module.azure_persistent
   ]
   tags          = var.tags
   local_workers = var.local_workers
+}
+
+// Moved blocks: the VNet/subnet used to be declared inside azure_transient and
+// were moved into azure_persistent to facilitate NFS
+moved {
+  from = module.azure_transient.azurerm_virtual_network.network
+  to   = module.azure_persistent.azurerm_virtual_network.network
+}
+
+moved {
+  from = module.azure_transient.azurerm_subnet.subnet
+  to   = module.azure_persistent.azurerm_subnet.subnet
 }
